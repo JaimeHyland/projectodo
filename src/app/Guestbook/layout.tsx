@@ -4,7 +4,7 @@ interface LayoutProps {
   children: ReactNode;
 }
 
-export default function GuestbookLayout({ children }: LayoutProps) {
+export default function ContactLayout({ children }: LayoutProps) {
   return (
     <div>
       {children}

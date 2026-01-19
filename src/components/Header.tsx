@@ -2,37 +2,40 @@
 
 import { useState } from 'react';
 import Image from 'next/image';
+import { HeaderLink } from './HeaderLink';
+import { usePathname } from "next/navigation";
+
 
 export function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
-
+  const pathname = usePathname();
+  const [navOpen, setNavOpen] = useState(false);
   const menuItems = [
-    'Home',
-    'Lessons',
-    'Bands',
-    'Technical',
-    'Production',
-    'News',
-    'Press',
-    'Guestbook',
-    'Contact',
-    'Downloads',
+    { label: "Home", href: "/" },
+    { label: "Lessons", href: "/lessons" },
+    { label: "Bands", href: "/bands" },
+    { label: "Technical", href: "/technical" },
+    { label: "Production", href: "/production" },
+    { label: "News", href: "/news" },
+    { label: "Press", href: "/press" },
+    { label: "Guestbook", href: "/guestbook" },
+    { label: "Contact", href: "/contact" },
   ];
 
   const downloadSubmenu = ['Download 1', 'Download 2', 'Download 3'];
 
   // Example pastel/intense colors
   const tabColors = [
-    'bg-pink-300',
-    'bg-yellow-300',
-    'bg-green-300',
-    'bg-blue-300',
-    'bg-purple-300',
-    'bg-indigo-300',
-    'bg-orange-300',
-    'bg-teal-300',
-    'bg-rose-300',
-    'bg-cyan-300',
+    '#2e744b',
+    '#fabe00',
+    '#7bae37',
+    '#008bae',
+    '#ca8f81',
+    '#fabe00',
+    '#3a5c03',
+    '#f2f3ae',
+    '#fabe00',
+    '#008bae',
   ];
 
   return (
@@ -71,78 +74,35 @@ export function Header() {
 
           {/* Full navbar */}
           <ul className="hidden desktop:flex space-x-2">
-            {menuItems.map((item, index) =>
-              item === 'Downloads' ? (
-                <li key={item} className="relative group">
-                  <span
-                    className={`px-4 py-2 rounded-t-lg cursor-pointer ${tabColors[index % tabColors.length]} font-semibold`}
-                  >
-                    {item}
-                  </span>
-                  <ul className="absolute left-0 mt-1 bg-white text-black rounded shadow-md opacity-0 group-hover:opacity-100 transition-opacity">
-                    {downloadSubmenu.map((sub) => (
-                      <li key={sub} className="px-4 py-2 hover:bg-gray-200">
-                        <a
-                          href={`/downloads/${sub
-                            .toLowerCase()
-                            .replace(/\s+/g, '')}`}
-                        >
-                          {sub}
-                        </a>
-                      </li>
-                    ))}
-                  </ul>
-                </li>
-              ) : (
-                <li key={item}>
-                  <a
-                    href={item === 'Home' ? '/' : `/${item.toLowerCase()}`}
-                    className={`px-4 py-2 rounded-t-lg font-semibold ${tabColors[index % tabColors.length]} hover:brightness-110`}
-                  >
-                    {item}
-                  </a>
-                </li>
-              )
-            )}
+            {menuItems.map((item, index) => (
+              <li key={item.href}>
+                <HeaderLink
+                  href={item.href}
+                  isActive={pathname === item.href}
+                  style={{ backgroundColor: tabColors[index % tabColors.length] }}
+                >
+                  {item.label}
+                </HeaderLink>
+              </li>
+            ))}
           </ul>
         </div>
 
         {/* Mobile menu */}
-        {menuOpen && (
-          <ul className="desktop:hidden bg-gray-700 text-white space-y-2 px-4 py-2">
-            {menuItems.map((item, index) =>
-              item === 'Downloads' ? (
-                <li key={item}>
-                  <span className={`font-semibold ${tabColors[index % tabColors.length]}`}>
-                    {item}
-                  </span>
-                  <ul className="ml-4 space-y-1">
-                    {downloadSubmenu.map((sub) => (
-                      <li key={sub}>
-                        <a
-                          href={`/downloads/${sub
-                            .toLowerCase()
-                            .replace(/\s+/g, '')}`}
-                          className="hover:underline"
-                        >
-                          {sub}
-                        </a>
-                      </li>
-                    ))}
-                  </ul>
-                </li>
-              ) : (
-                <li key={item}>
-                  <a
-                    href={item === 'Home' ? '/' : `/${item.toLowerCase()}`}
-                    className={`px-4 py-2 font-semibold rounded ${tabColors[index % tabColors.length]} hover:brightness-110`}
-                  >
-                    {item}
-                  </a>
-                </li>
-              )
-            )}
-          </ul>
+        {navOpen && (
+          <div className="desktop:hidden absolute top-16 left-0 w-full bg-white border shadow-lg rounded-lg p-4 flex flex-col gap-2 text-lg text-gray-800 z-50">
+            {menuItems.map((item) => (
+              <HeaderLink
+                key={item.href}
+                href={item.href}
+                isActive={pathname === item.href}
+                className="w-full text-left"
+                onClick={() => setNavOpen(false)}
+              >
+                {item.label}
+              </HeaderLink>
+            ))}
+          </div>
         )}
       </nav>
     </header>
