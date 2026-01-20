@@ -1,4 +1,6 @@
 import Link from "next/link";
+import { useParams } from "next/navigation";
+
 
 interface HeaderLinkProps {
   href: string;
@@ -15,10 +17,16 @@ export function HeaderLink({
   className = "",
   style,
   children,
+  onClick,
 }: HeaderLinkProps) {
+  const params = useParams();
+  const locale = params.locale || "en";
+
+  const localizedHref = `/${locale}${href}`;
+  
   return (
     <Link
-      href={href}
+      href={localizedHref}
       className={`
         px-4 py-2 rounded-t-lg font-semibold
         transform hover:brightness-110
@@ -26,6 +34,7 @@ export function HeaderLink({
         ${className}
       `}
       style={style}
+      onClick={onClick}
     >
       {children}
     </Link>
