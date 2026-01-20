@@ -4,7 +4,7 @@ export function Footer() {
       <div className="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center">
         <div className="space-x-4">
           <a href="/impressum" className="hover:underline">
-            Impressum / Legal
+            Impressum
           </a>
           <span>© 2026 jaime-hyland.com</span>
           <span>MIT License</span>

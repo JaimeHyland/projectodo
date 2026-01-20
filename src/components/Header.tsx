@@ -9,7 +9,6 @@ import { usePathname } from "next/navigation";
 export function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
   const pathname = usePathname();
-  const [navOpen, setNavOpen] = useState(false);
   const menuItems = [
     { label: "Home", href: "/" },
     { label: "Lessons", href: "/lessons" },
@@ -62,17 +61,17 @@ export function Header() {
       </div>
 
       {/* Navbar */}
-      <nav className="bg-gray-200">
-        <div className="max-w-7xl mx-auto px-4 flex flex-col desktop:flex-row items-center justify-center h-16">
+      <nav className="bg-gray-200 relative">
+        <div className="max-w-7xl mx-auto px-4 flex items-center justify-end desktop:justify-center h-16">
           {/* Hamburger for mobile */}
           <button
-            className="desktop:hidden mb-2"
+            className="desktop:hidden text-2xl px-2"
             onClick={() => setMenuOpen(!menuOpen)}
           >
             ☰
           </button>
 
-          {/* Full navbar */}
+          {/* Desktop/laptop navbar */}
           <ul className="hidden desktop:flex space-x-2">
             {menuItems.map((item, index) => (
               <li key={item.href}>
@@ -89,20 +88,29 @@ export function Header() {
         </div>
 
         {/* Mobile menu */}
-        {navOpen && (
-          <div className="desktop:hidden absolute top-16 left-0 w-full bg-white border shadow-lg rounded-lg p-4 flex flex-col gap-2 text-lg text-gray-800 z-50">
-            {menuItems.map((item) => (
+        {menuOpen && (
+          <>
+          <div
+            className="fixed inset-0 z-40"
+            onClick={() => setMenuOpen(false)}
+          />
+
+          <div 
+          className="desktop:hidden absolute right-4 top-full mt-2 w-56 bg-white border shadow-lg rounded-lg p-2 flex flex-col gap-1 text-sm z-50">
+            {menuItems.map((item, index) => (
               <HeaderLink
                 key={item.href}
                 href={item.href}
                 isActive={pathname === item.href}
-                className="w-full text-left"
-                onClick={() => setNavOpen(false)}
+                className="w-full text-left rounded-md"
+                style={{ backgroundColor: tabColors[index % tabColors.length] }}
+                onClick={() => setMenuOpen(false)}
               >
                 {item.label}
               </HeaderLink>
             ))}
           </div>
+          </>
         )}
       </nav>
     </header>
