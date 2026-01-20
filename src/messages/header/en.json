@@ -1,10 +1,10 @@
 {
     "menuBands": "Bands",
-    "menuContact": "Kontakt",
-    "menuGuestbook": "Gästebuch",
+    "menuContact": "Contact",
+    "menuGuestbook": "Guestbook",
     "menuLessons": "Lessons",
-    "menuNews": "Nachrichten",
-    "menuPress": "Presse",
-    "menuProduction": "Produktion",
-    "menuTechnical": "Technisch"
+    "menuNews": "News",
+    "menuPress": "Press",
+    "menuProduction": "Production",
+    "menuTechnical": "Technical"
 }
