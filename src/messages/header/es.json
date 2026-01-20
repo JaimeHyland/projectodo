@@ -1,4 +1,8 @@
-{
+{   
+    "localeDe": "Alemán",
+    "localeEn": "Inglés",
+    "localeEs": "Español",
+    "menuHome":"Inicio",
     "menuBands": "Grupos",
     "menuContact": "Contacto",
     "menuGuestbook": "Libro de visitas",

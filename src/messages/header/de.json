@@ -1,8 +1,12 @@
 {
+    "localeDe": "Deutsch",
+    "localeEn": "Englisch",
+    "localeEs": "Spanisch",
+    "menuHome":"Start",
     "menuBands": "Bands",
     "menuContact": "Kontakt",
     "menuGuestbook": "Gästebuch",
-    "menuLessons": "Lessons",
+    "menuLessons": "Unterricht",
     "menuNews": "Nachrichten",
     "menuPress": "Presse",
     "menuProduction": "Produktion",

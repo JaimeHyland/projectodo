@@ -1,4 +1,8 @@
 {
+    "localeDe": "German",
+    "localeEn": "English",
+    "localeEs": "Spanish",
+    "menuHome":"Home",
     "menuBands": "Bands",
     "menuContact": "Contact",
     "menuGuestbook": "Guestbook",

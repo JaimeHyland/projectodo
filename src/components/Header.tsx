@@ -3,22 +3,36 @@
 import { useState } from 'react';
 import Image from 'next/image';
 import { HeaderLink } from './HeaderLink';
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import { getCurrentLocale, switchLocale, SUPPORTED_LOCALES } from "@/lib/locale";
+
+import enMessages from "@/messages/header/en.json";
+import deMessages from "@/messages/header/de.json";
+import esMessages from "@/messages/header/es.json";
 
 
 export function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
   const pathname = usePathname();
+  const router = useRouter();
+  const currentLocale = getCurrentLocale(pathname);
+  const messages = currentLocale === "de"
+  ? deMessages
+  : currentLocale === "es"
+    ? esMessages
+    : enMessages;
+
+  
   const menuItems = [
-    { label: "Home", href: "/" },
-    { label: "Lessons", href: "/lessons" },
-    { label: "Bands", href: "/bands" },
-    { label: "Technical", href: "/technical" },
-    { label: "Production", href: "/production" },
-    { label: "News", href: "/news" },
-    { label: "Press", href: "/press" },
-    { label: "Guestbook", href: "/guestbook" },
-    { label: "Contact", href: "/contact" },
+    { label: messages.menuHome, href: "/" },
+    { label: messages.menuLessons, href: "/lessons" },
+    { label: messages.menuBands, href: "/bands" },
+    { label: messages.menuTechnical, href: "/technical" },
+    { label: messages.menuProduction, href: "/production" },
+    { label: messages.menuNews, href: "/news" },
+    { label: messages.menuPress, href: "/press" },
+    { label: messages.menuGuestbook, href: "/guestbook" },
+    { label: messages.menuContact, href: "/contact" },
   ];
 
   const downloadSubmenu = ['Download 1', 'Download 2', 'Download 3'];
@@ -54,9 +68,16 @@ export function Header() {
 
         {/* Language list overlay */}
         <ul className="absolute top-2 right-2 bg-white bg-opacity-70 p-2 rounded space-y-1 text-sm">
-          <li>German</li>
-          <li>English</li>
-          <li>Spanish</li>
+          {SUPPORTED_LOCALES.map((locale) => (
+            <li key={locale}>
+              <button
+                onClick={() => router.push(switchLocale(pathname, locale))}
+                className={currentLocale === locale ? "font-bold" : ""}
+              >
+                {locale === "en" ? messages.localeEn : locale === "de" ? messages.localeDe : messages.localeEs}
+              </button>
+            </li>
+          ))}
         </ul>
       </div>
 
