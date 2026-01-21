@@ -70,9 +70,12 @@ export function Header() {
         <ul className="absolute top-2 right-2 bg-white bg-opacity-70 p-2 rounded space-y-1 text-sm">
           {SUPPORTED_LOCALES.map((locale) => (
             <li key={locale}>
-              <button
+              <button 
                 onClick={() => router.push(switchLocale(pathname, locale))}
-                className={currentLocale === locale ? "font-bold" : ""}
+                className={`
+                  text-[#3a5c03]
+                  ${currentLocale === locale ? "font-bold" : ""}
+                  `}
               >
                 {locale === "en" ? messages.localeEn : locale === "de" ? messages.localeDe : messages.localeEs}
               </button>
