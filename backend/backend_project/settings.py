@@ -36,6 +36,8 @@ ALLOWED_HOSTS = [
     "projectodo-backend-502a9f884ddc.herokuapp.com"
 ]
 
+APPEND_SLASH = True
+
 
 # Application definition
 
