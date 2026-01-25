@@ -29,7 +29,12 @@ SECRET_KEY = config("DJANGO_SECRET_KEY", default="django-insecure-default")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config("DJANGO_DEBUG", default=False, cast=bool)
 
-ALLOWED_HOSTS = ["localhost", "127.0.0.1", "projectodo.herokuapp.com"]
+ALLOWED_HOSTS = [
+    "localhost",
+    "127.0.0.1",
+    "projectodo.herokuapp.com",
+    "projectodo-backend-502a9f884ddc.herokuapp.com"
+]
 
 
 # Application definition
