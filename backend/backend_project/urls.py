@@ -23,6 +23,8 @@ BASE_PATH = os.getenv('APP_BASE', '')
 if BASE_PATH and not BASE_PATH.endswith('/'):
     BASE_PATH += '/'
 
+
+print(f"DEBUG | BASE_PATH: {BASE_PATH}")
 urlpatterns = [
     path(f'{BASE_PATH}', home),
     path(f'{BASE_PATH}admin/', admin.site.urls),
