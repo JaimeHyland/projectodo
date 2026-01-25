@@ -25,8 +25,12 @@ if BASE_PATH and not BASE_PATH.endswith('/'):
 
 
 print(f"DEBUG | BASE_PATH: {BASE_PATH}")
+
 urlpatterns = [
     path(f'{BASE_PATH}', home),
     path(f'{BASE_PATH}admin/', admin.site.urls),
     path(f'{BASE_PATH}auth/status/', auth_status, name="auth_status"),
 ]
+
+for pattern in urlpatterns:
+    print(pattern)
