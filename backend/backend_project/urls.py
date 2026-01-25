@@ -16,10 +16,11 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from .views import auth_status
+from .views import home, auth_status
 
 
 urlpatterns = [
+    path('', home),
     path('admin/', admin.site.urls),
     path("auth/status/", auth_status, name="auth_status"),
 ]
