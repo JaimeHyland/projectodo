@@ -20,6 +20,8 @@ from django.urls import path
 from .views import home, auth_status
 
 BASE_PATH = os.getenv('APP_BASE', '')
+if BASE_PATH and not BASE_PATH.endswith('/'):
+    BASE_PATH += '/'
 
 urlpatterns = [
     path(f'{BASE_PATH}', home),
