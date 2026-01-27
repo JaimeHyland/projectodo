@@ -140,7 +140,7 @@ USE_TZ = True
 
 
 STATIC_ROOT = BASE_DIR / 'staticfiles'
-STATIC_URL = 'https://projectodo-static-files.s3.amazonaws.com/static/'
+STATIC_URL = 'https://projectodo-static-files.s3.amazonaws.com/'
 
 
 STORAGES = {
@@ -157,4 +157,5 @@ AWS_SECRET_ACCESS_KEY = config('AWS_SECRET_ACCESS_KEY')
 AWS_STORAGE_BUCKET_NAME = config('AWS_STORAGE_BUCKET_NAME')
 AWS_S3_REGION_NAME = config('AWS_S3_REGION_NAME')
 
+AWS_DEFAULT_ACL = "public-read"
 AWS_QUERYSTRING_AUTH = False
