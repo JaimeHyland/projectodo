@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'storages',
+    'user_accounts',
 ]
 
 MIDDLEWARE = [
@@ -141,6 +142,7 @@ USE_TZ = True
 
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 STATIC_URL = 'https://projectodo-static-files.s3.amazonaws.com/'
+STATICFILES_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
 
 
 STORAGES = {
