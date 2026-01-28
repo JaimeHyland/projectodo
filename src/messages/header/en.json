@@ -10,5 +10,8 @@
     "menuNews": "News",
     "menuPress": "Press",
     "menuProduction": "Production",
-    "menuTechnical": "Technical"
+    "menuTechnical": "Technical",
+    "menuAuthorization": "Sign-up/Log-in",
+    "menuSignUp": "Sign up",
+    "menuLogin": "Log in"
 }

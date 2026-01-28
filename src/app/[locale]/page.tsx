@@ -1,4 +1,3 @@
-
 import en from "@/messages/en.json";
 import de from "@/messages/de.json";
 import es from "@/messages/es.json";

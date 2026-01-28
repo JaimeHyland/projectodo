@@ -13,7 +13,7 @@ import esMessages from "@/messages/header/es.json";
 
 export function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
-  const pathname = usePathname();
+  const pathname = usePathname() ?? "/";
   const router = useRouter();
   const currentLocale = getCurrentLocale(pathname);
   const messages = currentLocale === "de"
@@ -34,6 +34,11 @@ export function Header() {
     { label: messages.menuGuestbook, href: "/guestbook" },
     { label: messages.menuContact, href: "/contact" },
   ];
+
+  const authenticationMenuItems = [
+  { label: messages.menuSignUp, href: "/authentication/signup" },
+  { label: messages.menuLogin, href: "/authentication/login" },
+];
 
   const downloadSubmenu = ['Download 1', 'Download 2', 'Download 3'];
 
@@ -86,6 +91,34 @@ export function Header() {
 
       {/* Navbar */}
       <nav className="bg-gray-200 relative">
+        <div className="relative">
+      <button
+        onClick={() => setMenuOpen(!menuOpen)}
+        className="px-3 py-2 rounded hover:bg-gray-300 font-medium text-gray-800"
+      >
+        {messages.menuAuthorization}
+      </button>
+
+      {menuOpen && (
+        <div className="absolute left-0 mt-2 w-36 bg-white border rounded shadow-md z-50">
+          <ul className="flex flex-col">
+            {authenticationMenuItems.map((item) => (
+              <li key={item.href}>
+                <HeaderLink
+                  href={item.href}
+                  isActive={pathname?.startsWith(`/${currentLocale}${item.href}`) ?? false}
+                  className="block px-4 py-2 hover:bg-gray-100"
+                  onClick={() => setMenuOpen(false)}
+                >
+                  {item.label}
+                </HeaderLink>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+    </div>
+        
         <div className="max-w-7xl mx-auto px-4 flex items-center justify-end desktop:justify-center h-16">
           {/* Hamburger for mobile */}
           <button

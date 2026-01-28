@@ -19,7 +19,7 @@ export function HeaderLink({
   children,
   onClick,
 }: HeaderLinkProps) {
-  const params = useParams();
+  const params = useParams() ?? {};
   const locale = params.locale || "en";
 
   const localizedHref = `/${locale}${href}`;

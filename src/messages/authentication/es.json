@@ -1,0 +1,9 @@
+{
+  "login": {
+    "labelTitle": "Iniciar una sesión",
+    "labelUsername": "Nombre de usuario",
+    "labelPassword": "Contraseña",
+    "buttonSubmit": "Iniciar sesión",
+    "textError": "Nombre de usuario o contraseña inválidos"
+  }
+}

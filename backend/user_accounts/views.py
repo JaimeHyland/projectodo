@@ -1,12 +1,16 @@
 import json
-from django.http import JsonResponse
-from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.views.decorators.http import require_POST, require_GET
+from django.http import JsonResponse
+from django.views.decorators.csrf import ensure_csrf_cookie
 
 
-@csrf_exempt
+@ensure_csrf_cookie
+def csrf(request):
+    return JsonResponse({"csrfToken": "Set in cookie"})
+
+
 @require_POST
 def signup_view(request):
     data = json.loads(request.body.decode("utf-8"))
@@ -41,7 +45,6 @@ def signup_view(request):
     })
 
 
-@csrf_exempt
 @require_POST
 def login_view(request):
     data = json.loads(request.body.decode("utf-8"))

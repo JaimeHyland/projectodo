@@ -1,0 +1,9 @@
+{
+  "login": {
+    "labelTitle": "Log-in",
+    "labelUsername": "User name",
+    "labelPassword": "Password",
+    "buttonSubmit": "Log in",
+    "textError": "Invalid user name or password"
+  }
+}
