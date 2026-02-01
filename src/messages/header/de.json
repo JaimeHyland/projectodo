@@ -11,7 +11,8 @@
     "menuPress": "Presse",
     "menuProduction": "Produktion",
     "menuTechnical": "Technisch",
-    "menuAuthorization": "Registrieren/Anmelden",
-    "menuSignUp": "Registrieren",
-    "menuLogin": "Anmelden"
+    "menuAuthentication": "Registrieren/Anmelden",
+    "menuSignup": "Registrieren",
+    "menuLogin": "Anmelden",
+    "menuReset": "Passwort zurücksetzen"
 }

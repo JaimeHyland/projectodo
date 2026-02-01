@@ -1,43 +1,63 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { HeaderLink } from './HeaderLink';
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { getCurrentLocale, switchLocale, SUPPORTED_LOCALES } from "@/lib/locale";
 
-import enMessages from "@/messages/header/en.json";
-import deMessages from "@/messages/header/de.json";
-import esMessages from "@/messages/header/es.json";
+
+
+import enHeaderMessages from "@/messages/header/en.json";
+import deHeaderMessages from "@/messages/header/de.json";
+import esHeaderMessages from "@/messages/header/es.json";
+import enAuthenticationMessages from "@/messages/authentication/en.json";
+import deAuthenticationMessages from "@/messages/authentication/de.json";
+import esAuthenticationMessages from "@/messages/authentication/es.json";
+import AuthenticationModal from '@/components/authentication/AuthenticationModal';
+import LoginForm from "@/components/authentication/LoginForm";
 
 
 export function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [authenticationMenuOpen, setAuthenticationMenuOpen] = useState(false);
+  const searchParams = useSearchParams();
+  const [showLoginModal, setShowLoginModal] = useState(false);
+  const [showSignupModal, setShowSignupModal] = useState(false);
+  const [showResetModal, setShowResetModal] = useState(false);
   const pathname = usePathname() ?? "/";
   const router = useRouter();
   const currentLocale = getCurrentLocale(pathname);
-  const messages = currentLocale === "de"
-  ? deMessages
+
+  const headerMessages = currentLocale === "de"
+  ? deHeaderMessages
   : currentLocale === "es"
-    ? esMessages
-    : enMessages;
+    ? esHeaderMessages
+    : enHeaderMessages;
+
+    const authenticationMessages = currentLocale === "de"
+  ? deAuthenticationMessages
+  : currentLocale === "es"
+    ? esAuthenticationMessages
+    : enAuthenticationMessages;
 
   
   const menuItems = [
-    { label: messages.menuHome, href: "/" },
-    { label: messages.menuLessons, href: "/lessons" },
-    { label: messages.menuBands, href: "/bands" },
-    { label: messages.menuTechnical, href: "/technical" },
-    { label: messages.menuProduction, href: "/production" },
-    { label: messages.menuNews, href: "/news" },
-    { label: messages.menuPress, href: "/press" },
-    { label: messages.menuGuestbook, href: "/guestbook" },
-    { label: messages.menuContact, href: "/contact" },
+    { label: headerMessages.menuHome, href: "/" },
+    { label: headerMessages.menuLessons, href: "/lessons" },
+    { label: headerMessages.menuBands, href: "/bands" },
+    { label: headerMessages.menuTechnical, href: "/technical" },
+    { label: headerMessages.menuProduction, href: "/production" },
+    { label: headerMessages.menuNews, href: "/news" },
+    { label: headerMessages.menuPress, href: "/press" },
+    { label: headerMessages.menuGuestbook, href: "/guestbook" },
+    { label: headerMessages.menuContact, href: "/contact" },
   ];
 
   const authenticationMenuItems = [
-  { label: messages.menuSignUp, href: "/authentication/signup" },
-  { label: messages.menuLogin, href: "/authentication/login" },
+  { label: headerMessages.menuSignup, href: "/authentication/signup" },
+  { label: headerMessages.menuLogin, href: "/authentication/login" },
+  { label: headerMessages.menuReset, href: "/authentication/reset" },
 ];
 
   const downloadSubmenu = ['Download 1', 'Download 2', 'Download 3'];
@@ -55,6 +75,23 @@ export function Header() {
     '#fabe00',
     '#008bae',
   ];
+
+  useEffect(() => {
+    if (searchParams.get("auth") === "login") {
+      setShowLoginModal(true);
+    }
+  }, [searchParams]);
+
+  const openLogin = () => {
+    setAuthenticationMenuOpen(false);
+    setShowLoginModal(true);
+    router.replace(`${pathname}?auth=login`); // App Router compatible
+  };
+
+  const closeLogin = () => {
+    setShowLoginModal(false);
+    router.replace(pathname); // remove ?auth=login suffix
+  };
 
   return (
     <header className="relative">
@@ -82,7 +119,7 @@ export function Header() {
                   ${currentLocale === locale ? "font-bold" : ""}
                   `}
               >
-                {locale === "en" ? messages.localeEn : locale === "de" ? messages.localeDe : messages.localeEs}
+                {locale === "en" ? headerMessages.localeEn : locale === "de" ? headerMessages.localeDe : headerMessages.localeEs}
               </button>
             </li>
           ))}
@@ -92,32 +129,53 @@ export function Header() {
       {/* Navbar */}
       <nav className="bg-gray-200 relative">
         <div className="relative">
-      <button
-        onClick={() => setMenuOpen(!menuOpen)}
-        className="px-3 py-2 rounded hover:bg-gray-300 font-medium text-gray-800"
-      >
-        {messages.menuAuthorization}
-      </button>
+          <button
+            onClick={openLogin}
+            className="px-3 py-2 rounded hover:bg-gray-300 font-medium text-gray-800"
+          >
+            {headerMessages.menuAuthentication}
+          </button>
 
-      {menuOpen && (
-        <div className="absolute left-0 mt-2 w-36 bg-white border rounded shadow-md z-50">
-          <ul className="flex flex-col">
-            {authenticationMenuItems.map((item) => (
-              <li key={item.href}>
-                <HeaderLink
-                  href={item.href}
-                  isActive={pathname?.startsWith(`/${currentLocale}${item.href}`) ?? false}
-                  className="block px-4 py-2 hover:bg-gray-100"
-                  onClick={() => setMenuOpen(false)}
-                >
-                  {item.label}
-                </HeaderLink>
-              </li>
-            ))}
-          </ul>
+          {authenticationMenuOpen && (
+            <div className="absolute left-0 mt-2 w-36 bg-white border rounded shadow-md z-50">
+              <ul className="flex flex-col">
+                <li>
+                  <button
+                    className="block px-4 py-2 hover:bg-gray-100"
+                    onClick={() => {
+                      
+                      setShowLoginModal(true);
+                      router.replace(`${pathname}?auth=login`);
+                    }}
+                  >
+                    {headerMessages.menuLogin}
+                  </button>
+                </li>
+                {/* {authenticationMenuItems.map((item) => (
+                  <li key={item.href}>
+                    <button
+                      className="block px-4 py-2 hover:bg-gray-100"
+                        onClick={() => {
+                          setAuthenticationMenuOpen(false);
+                          setShowLoginModal(true);
+                        }}
+                    >
+                      {item.label}
+                    </button>
+                    {showLoginModal && (
+                      <LoginLayout onClose={() => setShowLoginModal(false)} />
+                    )}
+                  </li>
+                ))} */}
+              </ul>
+            </div>
+          )}
+          {showLoginModal && (
+            <AuthenticationModal onClose={closeLogin}>
+              <LoginForm locale={currentLocale} messages={authenticationMessages} />
+            </AuthenticationModal>
+          )}
         </div>
-      )}
-    </div>
         
         <div className="max-w-7xl mx-auto px-4 flex items-center justify-end desktop:justify-center h-16">
           {/* Hamburger for mobile */}

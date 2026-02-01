@@ -5,5 +5,19 @@
     "labelPassword": "Password",
     "buttonSubmit": "Log in",
     "textError": "Invalid user name or password"
+  },
+  "signup": {
+    "labelTitle": "Log-in",
+    "labelUsername": "User name",
+    "labelPassword": "Password",
+    "buttonSubmit": "Log in",
+    "textError": "Invalid user name or password"
+  },
+  "reset": {
+    "labelTitle": "Log-in",
+    "labelUsername": "User name",
+    "labelPassword": "Password",
+    "buttonSubmit": "Log in",
+    "textError": "Invalid user name or password"
   }
 }
