@@ -14,5 +14,6 @@
     "menuAuthentication": "Registrieren/Anmelden",
     "menuSignup": "Registrieren",
     "menuLogin": "Anmelden",
+    "menuLogout": "Abmelden",
     "menuReset": "Passwort zurücksetzen"
 }

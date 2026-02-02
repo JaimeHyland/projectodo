@@ -6,6 +6,13 @@
     "buttonSubmit": "Iniciar sesión",
     "textError": "Nombre de usuario o contraseña inválidos"
   },
+  "logout": {
+    "labelTitle": "Iniciar una sesión",
+    "labelUsername": "Nombre de usuario",
+    "buttonSubmit": "Terminar sesión",
+    "textUnknownUser": "Usuario desconocido",
+    "textConfirm": "¿Seguro que quieres terminar la sesión?"
+  },
   "signup": {
     "labelTitle": "Log-in",
     "labelUsername": "User name",

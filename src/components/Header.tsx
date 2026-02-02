@@ -16,6 +16,7 @@ import deAuthenticationMessages from "@/messages/authentication/de.json";
 import esAuthenticationMessages from "@/messages/authentication/es.json";
 import AuthenticationModal from '@/components/authentication/AuthenticationModal';
 import LoginForm from "@/components/authentication/LoginForm";
+import LogoutForm from "@/components/authentication/LogoutForm";
 
 
 export function Header() {
@@ -23,6 +24,7 @@ export function Header() {
   const [authenticationMenuOpen, setAuthenticationMenuOpen] = useState(false);
   const searchParams = useSearchParams();
   const [showLoginModal, setShowLoginModal] = useState(false);
+  const [showLogoutModal, setShowLogoutModal] = useState(false);
   const [showSignupModal, setShowSignupModal] = useState(false);
   const [showResetModal, setShowResetModal] = useState(false);
   const pathname = usePathname() ?? "/";
@@ -30,16 +32,16 @@ export function Header() {
   const currentLocale = getCurrentLocale(pathname);
 
   const headerMessages = currentLocale === "de"
-  ? deHeaderMessages
-  : currentLocale === "es"
-    ? esHeaderMessages
-    : enHeaderMessages;
+    ? deHeaderMessages
+    : currentLocale === "es"
+      ? esHeaderMessages
+      : enHeaderMessages;
 
-    const authenticationMessages = currentLocale === "de"
-  ? deAuthenticationMessages
-  : currentLocale === "es"
-    ? esAuthenticationMessages
-    : enAuthenticationMessages;
+  const authenticationMessages = currentLocale === "de"
+    ? deAuthenticationMessages
+    : currentLocale === "es"
+      ? esAuthenticationMessages
+      : enAuthenticationMessages;
 
   
   const menuItems = [
@@ -53,6 +55,10 @@ export function Header() {
     { label: headerMessages.menuGuestbook, href: "/guestbook" },
     { label: headerMessages.menuContact, href: "/contact" },
   ];
+
+  const user = {
+    username: "james", // or whatever default name you like
+  };
 
   const authenticationMenuItems = [
   { label: headerMessages.menuSignup, href: "/authentication/signup" },
@@ -93,6 +99,17 @@ export function Header() {
     router.replace(pathname); // remove ?auth=login suffix
   };
 
+  const openLogout = () => {
+    setAuthenticationMenuOpen(false);
+    setShowLogoutModal(true);
+    router.replace(`${pathname}?auth=logout`);
+  };
+
+  const closeLogout = () => {
+    setShowLogoutModal(false);
+    router.replace(pathname);
+  };
+
   return (
     <header className="relative">
       {/* Banner */}
@@ -130,7 +147,7 @@ export function Header() {
       <nav className="bg-gray-200 relative">
         <div className="relative">
           <button
-            onClick={openLogin}
+            onClick={() => setAuthenticationMenuOpen(prev => !prev)}
             className="px-3 py-2 rounded hover:bg-gray-300 font-medium text-gray-800"
           >
             {headerMessages.menuAuthentication}
@@ -142,37 +159,38 @@ export function Header() {
                 <li>
                   <button
                     className="block px-4 py-2 hover:bg-gray-100"
-                    onClick={() => {
-                      
-                      setShowLoginModal(true);
-                      router.replace(`${pathname}?auth=login`);
-                    }}
+                    onClick={openLogin}
                   >
                     {headerMessages.menuLogin}
                   </button>
                 </li>
-                {/* {authenticationMenuItems.map((item) => (
-                  <li key={item.href}>
-                    <button
-                      className="block px-4 py-2 hover:bg-gray-100"
-                        onClick={() => {
-                          setAuthenticationMenuOpen(false);
-                          setShowLoginModal(true);
-                        }}
-                    >
-                      {item.label}
-                    </button>
-                    {showLoginModal && (
-                      <LoginLayout onClose={() => setShowLoginModal(false)} />
-                    )}
-                  </li>
-                ))} */}
+                <li>
+                  <button
+                    className="block px-4 py-2 hover:bg-gray-100"
+                    onClick={openLogout}
+                  >
+                    {headerMessages.menuLogout}
+                  </button>
+                </li>
               </ul>
             </div>
           )}
           {showLoginModal && (
             <AuthenticationModal onClose={closeLogin}>
               <LoginForm locale={currentLocale} messages={authenticationMessages} />
+            </AuthenticationModal>
+          )}
+          {showLogoutModal && (
+            <AuthenticationModal onClose={closeLogout}>
+              <LogoutForm
+                locale={currentLocale}
+                user={user}
+                messages={authenticationMessages}
+                onConfirm={() => {
+                  console.log("Confirmed logout (dummy)");
+                  closeLogout();
+              }}
+              onCancel={closeLogout}/>
             </AuthenticationModal>
           )}
         </div>

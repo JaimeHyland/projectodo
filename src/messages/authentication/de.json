@@ -6,6 +6,13 @@
     "buttonSubmit": "Anmelden",
     "textError": "Ungültiger Benutzername oder Passwort"
   },
+  "logout": {
+    "labelTitle": "Abmeldung",
+    "labelUsername": "Benutzername",
+    "buttonSubmit": "Abmelden",
+    "textUnknownUser": "Unbekannte Benutzer",
+    "textConfirm": "Möchten Sie sich wirklich abmelden"
+  },
   "signup": {
     "labelTitle": "Log-in",
     "labelUsername": "User name",

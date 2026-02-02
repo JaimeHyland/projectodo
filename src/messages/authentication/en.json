@@ -6,6 +6,13 @@
     "buttonSubmit": "Log in",
     "textError": "Invalid user name or password"
   },
+  "logout": {
+    "labelTitle": "Log-out",
+    "labelUsername": "User name",
+    "buttonSubmit": "Log out",
+    "textUnknownUser": "Unknown user",
+    "textConfirm": "Are you sure you want to log out?"
+  },
   "signup": {
     "labelTitle": "Log-in",
     "labelUsername": "User name",

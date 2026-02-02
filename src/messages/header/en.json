@@ -14,5 +14,6 @@
     "menuAuthentication": "Sign-up/Log-in",
     "menuSignup": "Sign up",
     "menuLogin": "Log in",
+    "menuLogout": "Log out",
     "menuReset": "Reset password"
 }
