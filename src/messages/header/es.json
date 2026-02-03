@@ -11,7 +11,7 @@
     "menuPress": "Prensa",
     "menuProduction": "Producción",
     "menuTechnical": "Técnico",
-    "menuAuthentication": "Registrarse/Iniciar sesión",
+    "menuAuth": "Registrarse/Iniciar sesión",
     "menuSignup": "Registrarse",
     "menuLogin": "Iniciar sesión",
     "menuLogout": "Terminar sesión",

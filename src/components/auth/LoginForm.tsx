@@ -14,6 +14,7 @@ export default function LoginForm({ locale, messages, onSuccess }: LoginFormProp
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://127.0.0.1:8000";
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -22,7 +23,7 @@ export default function LoginForm({ locale, messages, onSuccess }: LoginFormProp
 
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/auth/login/`,
+        `${API_BASE}/api/auth/login/`,
         {
           method: "POST",
           credentials: "include",
@@ -31,10 +32,16 @@ export default function LoginForm({ locale, messages, onSuccess }: LoginFormProp
         }
       );
 
-      if (!response.ok) throw new Error("Login failed");
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || "Login failed");
+      }
+
+      const data = await response.json();
+      console.log("Logged in as:", data.username);
 
       onSuccess?.();
-    } catch (err) {
+    } catch (err: any) {
       setError(messages.login.textError);
     } finally {
       setLoading(false);

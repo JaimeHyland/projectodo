@@ -11,7 +11,7 @@
     "menuPress": "Press",
     "menuProduction": "Production",
     "menuTechnical": "Technical",
-    "menuAuthentication": "Sign-up/Log-in",
+    "menuAuth": "Sign-up/Log-in",
     "menuSignup": "Sign up",
     "menuLogin": "Log in",
     "menuLogout": "Log out",

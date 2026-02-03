@@ -1,12 +1,12 @@
 "use client";
 
-import AuthenticationModal from "@/components/authentication/AuthenticationModal";
+import AuthModal from "@/components/auth/AuthModal";
 
 export default function ResetModalPage({ onClose }: { onClose?: () => void }) {
   return (
-    <AuthenticationModal onClose={onClose ?? (() => {})}>
+    <AuthModal onClose={onClose ?? (() => {})}>
       <h2 className="text-lg font-semibold mb-4">Reset Password</h2>
       {/* Reset form placeholder */}
-    </AuthenticationModal>
+    </AuthModal>
   );
 }

@@ -16,10 +16,26 @@ export default function LogoutForm({
   onCancel,
 }: LogoutFormProps) {
   const displayName = user?.username || messages.logout.textUnknownUser;
+  const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://127.0.0.1:8000";
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    onConfirm?.(); // dummy for now
+    try {
+        const response = await fetch(
+        `${API_BASE}/api/auth/logout/`,
+        {
+            method: "POST",
+            credentials: "include",
+        }
+        );
+
+        if (!response.ok) throw new Error("Logout failed");
+
+        onConfirm?.();
+    } catch (err) {
+        console.error("Logout error:", err);
+
+    }
   }
 
   return (
@@ -49,7 +65,7 @@ export default function LogoutForm({
           onClick={onCancel}
           className="px-4 py-2 rounded border border-gray-300 hover:bg-gray-100"
         >
-          Cancel
+          {messages.logout.buttonConfirm}
         </button>
 
         <button

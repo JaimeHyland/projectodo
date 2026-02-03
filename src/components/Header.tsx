@@ -6,22 +6,26 @@ import { HeaderLink } from './HeaderLink';
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { getCurrentLocale, switchLocale, SUPPORTED_LOCALES } from "@/lib/locale";
 
-
-
 import enHeaderMessages from "@/messages/header/en.json";
 import deHeaderMessages from "@/messages/header/de.json";
 import esHeaderMessages from "@/messages/header/es.json";
-import enAuthenticationMessages from "@/messages/authentication/en.json";
-import deAuthenticationMessages from "@/messages/authentication/de.json";
-import esAuthenticationMessages from "@/messages/authentication/es.json";
-import AuthenticationModal from '@/components/authentication/AuthenticationModal';
-import LoginForm from "@/components/authentication/LoginForm";
-import LogoutForm from "@/components/authentication/LogoutForm";
+import enAuthMessages from "@/messages/auth/en.json";
+import deAuthMessages from "@/messages/auth/de.json";
+import esAuthMessages from "@/messages/auth/es.json";
+import AuthModal from '@/components/auth/AuthModal';
+import LoginForm from "@/components/auth/LoginForm";
+import LogoutForm from "@/components/auth/LogoutForm";
 
 
 export function Header() {
+  type AuthState = {
+    isAuthenticated: boolean;
+    username: string | null;
+    isSuperuser: boolean;
+  };
+
   const [menuOpen, setMenuOpen] = useState(false);
-  const [authenticationMenuOpen, setAuthenticationMenuOpen] = useState(false);
+  const [authMenuOpen, setAuthMenuOpen] = useState(false);
   const searchParams = useSearchParams();
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [showLogoutModal, setShowLogoutModal] = useState(false);
@@ -30,6 +34,7 @@ export function Header() {
   const pathname = usePathname() ?? "/";
   const router = useRouter();
   const currentLocale = getCurrentLocale(pathname);
+  const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:8000";
 
   const headerMessages = currentLocale === "de"
     ? deHeaderMessages
@@ -37,11 +42,11 @@ export function Header() {
       ? esHeaderMessages
       : enHeaderMessages;
 
-  const authenticationMessages = currentLocale === "de"
-    ? deAuthenticationMessages
+  const authMessages = currentLocale === "de"
+    ? deAuthMessages
     : currentLocale === "es"
-      ? esAuthenticationMessages
-      : enAuthenticationMessages;
+      ? esAuthMessages
+      : enAuthMessages;
 
   
   const menuItems = [
@@ -56,14 +61,12 @@ export function Header() {
     { label: headerMessages.menuContact, href: "/contact" },
   ];
 
-  const user = {
-    username: "james", // or whatever default name you like
-  };
+  const [user, setUser] = useState<{ username?: string } | null>(null);
 
-  const authenticationMenuItems = [
-  { label: headerMessages.menuSignup, href: "/authentication/signup" },
-  { label: headerMessages.menuLogin, href: "/authentication/login" },
-  { label: headerMessages.menuReset, href: "/authentication/reset" },
+  const authMenuItems = [
+  { label: headerMessages.menuSignup, href: "/auth/signup" },
+  { label: headerMessages.menuLogin, href: "/auth/login" },
+  { label: headerMessages.menuReset, href: "/auth/reset" },
 ];
 
   const downloadSubmenu = ['Download 1', 'Download 2', 'Download 3'];
@@ -82,25 +85,64 @@ export function Header() {
     '#008bae',
   ];
 
+  const [auth, setAuth] = useState<AuthState>({
+    isAuthenticated: false,
+    username: null,
+    isSuperuser: false,
+  });
+
   useEffect(() => {
     if (searchParams.get("auth") === "login") {
       setShowLoginModal(true);
     }
+
+    // Check current authentication status from backend
+    const fetchAuthStatus = async () => {
+
+      try {
+        const response = await fetch(
+          `${API_BASE}/auth/status/`,
+          {
+            credentials: "include",
+          });
+
+        if (!response.ok) {
+          console.log("Not logged in or backend error:", response.status);
+          setUser(null);
+          return;
+        }
+
+        const data = await response.json();
+
+        if (data.is_authenticated) {
+          console.log("Logged in as:", data.username);
+          setUser({ username: data.username });
+        } else {
+          console.log("Not logged in");
+          setUser(null);
+        }
+      } catch (err) {
+        console.error("Auth status fetch error:", err);
+        setUser(null);
+      }
+    };
+
+    fetchAuthStatus();
   }, [searchParams]);
 
   const openLogin = () => {
-    setAuthenticationMenuOpen(false);
+    setAuthMenuOpen(false);
     setShowLoginModal(true);
-    router.replace(`${pathname}?auth=login`); // App Router compatible
+    router.replace(`${pathname}?auth=login`);
   };
 
   const closeLogin = () => {
     setShowLoginModal(false);
-    router.replace(pathname); // remove ?auth=login suffix
+    router.replace(pathname);
   };
 
   const openLogout = () => {
-    setAuthenticationMenuOpen(false);
+    setAuthMenuOpen(false);
     setShowLogoutModal(true);
     router.replace(`${pathname}?auth=logout`);
   };
@@ -147,51 +189,71 @@ export function Header() {
       <nav className="bg-gray-200 relative">
         <div className="relative">
           <button
-            onClick={() => setAuthenticationMenuOpen(prev => !prev)}
+            onClick={() => setAuthMenuOpen(prev => !prev)}
             className="px-3 py-2 rounded hover:bg-gray-300 font-medium text-gray-800"
           >
-            {headerMessages.menuAuthentication}
+            {headerMessages.menuAuth}
           </button>
 
-          {authenticationMenuOpen && (
+          {authMenuOpen && (
             <div className="absolute left-0 mt-2 w-36 bg-white border rounded shadow-md z-50">
               <ul className="flex flex-col">
-                <li>
-                  <button
-                    className="block px-4 py-2 hover:bg-gray-100"
-                    onClick={openLogin}
-                  >
-                    {headerMessages.menuLogin}
-                  </button>
-                </li>
-                <li>
-                  <button
-                    className="block px-4 py-2 hover:bg-gray-100"
-                    onClick={openLogout}
-                  >
-                    {headerMessages.menuLogout}
-                  </button>
-                </li>
+                {!user && (
+                  <li>
+                    <button
+                      className="block px-4 py-2 hover:bg-gray-100"
+                      onClick={openLogin}
+                    >
+                      {headerMessages.menuLogin}
+                    </button>
+                  </li>
+                )}
+                {user && (
+                  <li>
+                    <button
+                      className="block px-4 py-2 hover:bg-gray-100"
+                      onClick={openLogout}
+                    >
+                      {headerMessages.menuLogout}
+                    </button>
+                  </li>
+                )}
               </ul>
             </div>
           )}
           {showLoginModal && (
-            <AuthenticationModal onClose={closeLogin}>
-              <LoginForm locale={currentLocale} messages={authenticationMessages} />
-            </AuthenticationModal>
+            <AuthModal onClose={closeLogin}>
+              <LoginForm
+                locale={currentLocale}
+                messages={authMessages} 
+                onSuccess={() => {
+                  // Refresh login status
+                  fetch(`${API_BASE}/auth/status/`, {
+                    credentials: "include",
+                  })
+                    .then(res => res.json())
+                    .then(data => {
+                      if (data.is_authenticated) setUser({ username: data.username });
+                      closeLogin();
+                    })
+                    .catch(err => console.error(err));
+                }}
+              
+              />
+            </AuthModal>
           )}
           {showLogoutModal && (
-            <AuthenticationModal onClose={closeLogout}>
+            <AuthModal onClose={closeLogout}>
               <LogoutForm
                 locale={currentLocale}
                 user={user}
-                messages={authenticationMessages}
+                messages={authMessages}
                 onConfirm={() => {
-                  console.log("Confirmed logout (dummy)");
+                  setUser(null);
                   closeLogout();
               }}
               onCancel={closeLogout}/>
-            </AuthenticationModal>
+            </AuthModal>
           )}
         </div>
         
