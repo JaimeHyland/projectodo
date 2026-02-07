@@ -2,7 +2,9 @@ from django.http import JsonResponse
 from django.http import HttpResponse
 
 
-def auth_status(request):
+def api_auth_status(request):
+    import sys
+    print("DEBUG - HIT api_auth_status", file=sys.stderr)
     user = request.user
     return JsonResponse({
         "is_authenticated": user.is_authenticated,

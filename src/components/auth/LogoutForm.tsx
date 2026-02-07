@@ -16,7 +16,7 @@ export default function LogoutForm({
   onCancel,
 }: LogoutFormProps) {
   const displayName = user?.username || messages.logout.textUnknownUser;
-  const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://127.0.0.1:8000";
+  const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost/api";
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();

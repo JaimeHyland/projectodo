@@ -8,7 +8,7 @@ function getPreferredLocale(request: NextRequest): string {
     return cookieLocale;
   }
 
-  // 2️⃣ Check Accept-Language header (first visit)
+  // 2️⃣ Check Accept-Language header
   const acceptLanguage = request.headers.get("accept-language");
   if (acceptLanguage) {
     const preferred = acceptLanguage
@@ -19,20 +19,24 @@ function getPreferredLocale(request: NextRequest): string {
     if (preferred) return preferred;
   }
 
-  // 3️⃣ Fallback
   return DEFAULT_LOCALE;
 }
 
 export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  // Ignore Next internals
+  console.log("DEBUG - [proxy.ts] Incoming pathname:", pathname);
+
+  // ✅ Skip locale redirects for API, Next.js internals, favicon, well-known files, or static assets
   if (
-    pathname.startsWith("/_next") ||
     pathname.startsWith("/api") ||
+    pathname.startsWith("/_next") ||
+    pathname.startsWith("/favicon") ||
+    pathname.startsWith("/.well-known") ||
     pathname.includes(".")
   ) {
-    return;
+    console.log("DEBUG - [proxy.ts] Skipping locale redirect (internal/API/static)");
+    return NextResponse.next(); // important: allow request to continue
   }
 
   // Already localized?
@@ -40,12 +44,17 @@ export function proxy(request: NextRequest) {
     (locale) => pathname === `/${locale}` || pathname.startsWith(`/${locale}/`)
   );
 
-  if (hasLocale) return;
+  if (hasLocale) {
+    console.log("DEBUG - [proxy.ts] Already localized:", pathname);
+    return NextResponse.next();
+  }
 
+  // Apply locale redirect
   const locale = getPreferredLocale(request);
   const url = request.nextUrl.clone();
-
   url.pathname = `/${locale}${pathname}`;
+
+  console.log("DEBUG - [proxy.ts] Redirecting to:", url.pathname);
 
   const response = NextResponse.redirect(url);
   response.cookies.set("NEXT_LOCALE", locale, { maxAge: 60 * 60 * 24 * 365 });
@@ -54,5 +63,5 @@ export function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/((?!_next|favicon.ico).*)"],
+  matcher: ["/((?!_next|favicon.ico|api).*)"], // this matcher remains safe
 };

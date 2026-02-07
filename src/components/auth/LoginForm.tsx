@@ -8,13 +8,25 @@ interface LoginFormProps {
   onSuccess?: () => void;
 }
 
+function getCookie(name: string) {
+  const value = `; ${document.cookie}`;
+  const parts = value.split(`; ${name}=`);
+  if (parts.length === 2) return parts.pop()?.split(';').shift();
+}
 
 export default function LoginForm({ locale, messages, onSuccess }: LoginFormProps) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
-  const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://127.0.0.1:8000";
+  const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost/api";
+
+  async function fetchCsrfToken() {
+    await fetch(`${API_BASE}/api/auth/csrf/`, {
+      method: 'GET',
+      credentials: 'include',
+    });
+  }
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -22,13 +34,24 @@ export default function LoginForm({ locale, messages, onSuccess }: LoginFormProp
     setLoading(true);
 
     try {
+      await fetchCsrfToken(); // ensure csrftoken cookie exists
+      const csrftoken = getCookie('csrftoken');
+
+      const formData = new URLSearchParams();
+        formData.append("username", username);
+        formData.append("password", password);
+
+
       const response = await fetch(
         `${API_BASE}/api/auth/login/`,
         {
           method: "POST",
           credentials: "include",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ username, password }),
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+            "X-CSRFToken": csrftoken ?? "",
+          },
+          body: formData.toString(),
         }
       );
 
@@ -41,10 +64,16 @@ export default function LoginForm({ locale, messages, onSuccess }: LoginFormProp
       console.log("Logged in as:", data.username);
 
       onSuccess?.();
-    } catch (err: any) {
-      setError(messages.login.textError);
+    } catch (err) {
+      console.error("Login error:", err);
+
+      if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError("Unknown error during login");
+      }
     } finally {
-      setLoading(false);
+        setLoading(false);
     }
   }
 
@@ -81,6 +110,6 @@ export default function LoginForm({ locale, messages, onSuccess }: LoginFormProp
       >
         {messages.login.buttonSubmit}
       </button>
-    </form>
+   </form>
   );
 }
