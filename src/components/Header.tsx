@@ -24,6 +24,11 @@ export function Header() {
     isSuperuser: boolean;
   };
 
+  type User = {
+    username: string;
+    isSuperuser: boolean;
+  }
+
   const [menuOpen, setMenuOpen] = useState(false);
   const [authMenuOpen, setAuthMenuOpen] = useState(false);
   const searchParams = useSearchParams();
@@ -34,7 +39,7 @@ export function Header() {
   const pathname = usePathname() ?? "/";
   const router = useRouter();
   const currentLocale = getCurrentLocale(pathname);
-  const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:8000";
+  const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost/api";
 
   const headerMessages = currentLocale === "de"
     ? deHeaderMessages
@@ -61,7 +66,7 @@ export function Header() {
     { label: headerMessages.menuContact, href: "/contact" },
   ];
 
-  const [user, setUser] = useState<{ username?: string } | null>(null);
+  const [user, setUser] = useState<User | null>(null);
 
   const authMenuItems = [
   { label: headerMessages.menuSignup, href: "/auth/signup" },
@@ -92,63 +97,76 @@ export function Header() {
   });
 
   useEffect(() => {
-    if (searchParams.get("auth") === "login") {
-      setShowLoginModal(true);
-    }
+  if (searchParams.get("auth") === "login") {
+    setShowLoginModal(true);
+  }
 
-    // Check current authentication status from backend
-    const fetchAuthStatus = async () => {
+  const fetchAuthStatus = async () => {
+    try {
+      const url = new URL("/api/auth/status/", window.location.origin);
+      console.log("[fetchAuthStatus] Requesting URL:", url.toString());
 
-      try {
-        const response = await fetch(
-          `${API_BASE}/auth/status/`,
-          {
-            credentials: "include",
-          });
+      const response = await fetch(url.toString(), {
+        credentials: "include", // send cookies
+      });
 
-        if (!response.ok) {
-          console.log("Not logged in or backend error:", response.status);
-          setUser(null);
-          return;
-        }
+      console.log("DEBUG - [fetchAuthStatus] Response status:", response.status);
 
-        const data = await response.json();
+      if (!response.ok) {
+        console.warn("[fetchAuthStatus] Response not OK, setting user to null");
+        setUser(null);
+        return;
+      }
 
-        if (data.is_authenticated) {
-          console.log("Logged in as:", data.username);
-          setUser({ username: data.username });
-        } else {
-          console.log("Not logged in");
-          setUser(null);
-        }
-      } catch (err) {
-        console.error("Auth status fetch error:", err);
+      const data = await response.json();
+      console.log("DEBUG - [fetchAuthStatus] Response JSON:", data);
+
+      if (data.is_authenticated) {
+        setUser({
+          username: data.username,
+          isSuperuser: data.is_superuser,
+        });
+      } else {
         setUser(null);
       }
-    };
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        console.error("[fetchAuthStatus] Error during fetch:", err.message, err);
+      } else {
+        console.error("[fetchAuthStatus] Error during fetch (non-Error):", err);
+      }
+      setUser(null);
+    }
+  };
 
-    fetchAuthStatus();
-  }, [searchParams]);
+  fetchAuthStatus();
+}, [searchParams]);
+
+
 
   const openLogin = () => {
     setAuthMenuOpen(false);
     setShowLoginModal(true);
+    console.log('DEBUG - Boo1');
     router.replace(`${pathname}?auth=login`);
   };
 
   const closeLogin = () => {
     setShowLoginModal(false);
+    console.log('DEBUG - Boo2');
     router.replace(pathname);
   };
 
   const openLogout = () => {
     setAuthMenuOpen(false);
     setShowLogoutModal(true);
+    console.log('DEBUG - Boo3');
     router.replace(`${pathname}?auth=logout`);
   };
 
   const closeLogout = () => {
     setShowLogoutModal(false);
+    console.log('DEBUG - Boo4');
     router.replace(pathname);
   };
 
@@ -157,14 +175,18 @@ export function Header() {
       {/* Banner */}
       <div className="relative w-full">
         <div className="w-full relative">
-          <Image
-            src="/banner.jpg"
-            alt="Banner"
-            loading="eager"
-            width={3840}
-            height={960}
-            className="object w-full h-auto"
-          />
+          <picture>
+            <source media="(max-width: 640px)" srcSet="/banner-4-1.jpg" />
+            <source media="(max-width: 1024px)" srcSet="/banner-6-1.jpg" />
+            <Image
+              src="/banner-8-1.jpg"
+              alt="Banner"
+              priority
+              width={3840}
+              height={480}
+              className="banner-image"
+            />
+          </picture>
         </div>
 
         {/* Language list overlay */}
@@ -228,12 +250,19 @@ export function Header() {
                 messages={authMessages} 
                 onSuccess={() => {
                   // Refresh login status
-                  fetch(`${API_BASE}/auth/status/`, {
+                  fetch(`${API_BASE}/api/auth/status/`, {
                     credentials: "include",
                   })
                     .then(res => res.json())
                     .then(data => {
-                      if (data.is_authenticated) setUser({ username: data.username });
+                      if (data.is_authenticated) {
+                        setUser({
+                          username: data.username,
+                          isSuperuser: data.is_superuser
+                        });
+                      } else {
+                        setUser(null);
+                      }
                       closeLogin();
                     })
                     .catch(err => console.error(err));
