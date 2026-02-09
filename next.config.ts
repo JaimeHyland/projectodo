@@ -1,17 +1,18 @@
 import type { NextConfig } from "next";
 
+
+const NEXT_PUBLIC_API_BASE_URL =
+  process.env.NEXT_PUBLIC_API_BASE_URL || "http://127.0.0.1:8000";
+
 const nextConfig: NextConfig = {
   reactCompiler: true,
   trailingSlash: true,
   async rewrites() {
     return [
       {
-        source: "/:locale(en|de|fr)/api/:path*",
-        destination: "http://127.0.0.1:8000/api/:path*",
-      },
-      {
         source: "/api/:path*",
-        destination: "http://127.0.0.1:8000/api/:path*",
+        destination:
+          `${NEXT_PUBLIC_API_BASE_URL}/api/:path*`,
       },
     ];
   },

@@ -107,7 +107,7 @@ export function Header() {
       console.log("[fetchAuthStatus] Requesting URL:", url.toString());
 
       const response = await fetch(url.toString(), {
-        credentials: "include", // send cookies
+        credentials: "include",
       });
 
       console.log("DEBUG - [fetchAuthStatus] Response status:", response.status);
