@@ -1,7 +1,7 @@
 import type { NextConfig } from "next";
 
 console.log(
-  "[next.config] NEXT_PUBLIC_API_BASE_URL =",
+  "DEBUG - [next.config] NEXT_PUBLIC_API_BASE_URL =",
   process.env.NEXT_PUBLIC_API_BASE_URL
 );
 

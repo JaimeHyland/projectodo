@@ -104,7 +104,7 @@ export function Header() {
   const fetchAuthStatus = async () => {
     try {
       const url = new URL("/api/auth/status/", window.location.origin);
-      console.log("[fetchAuthStatus] Requesting URL:", url.toString());
+      console.log("DEBUG - [fetchAuthStatus] Requesting URL:", url.toString());
 
       const response = await fetch(url.toString(), {
         credentials: "include",

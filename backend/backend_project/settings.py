@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'storages',
     'user_accounts',
     'corsheaders',
+    'django_extensions',
 ]
 
 MIDDLEWARE = [
