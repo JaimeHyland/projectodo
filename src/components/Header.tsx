@@ -104,13 +104,10 @@ export function Header() {
   const fetchAuthStatus = async () => {
     try {
       const url = new URL("/api/auth/status/", window.location.origin);
-      console.log("DEBUG - [fetchAuthStatus] Requesting URL:", url.toString());
 
       const response = await fetch(url.toString(), {
         credentials: "include",
       });
-
-      console.log("DEBUG - [fetchAuthStatus] Response status:", response.status);
 
       if (!response.ok) {
         console.warn("[fetchAuthStatus] Response not OK, setting user to null");
@@ -119,7 +116,6 @@ export function Header() {
       }
 
       const data = await response.json();
-      console.log("DEBUG - [fetchAuthStatus] Response JSON:", data);
 
       if (data.is_authenticated) {
         setUser({
@@ -147,26 +143,22 @@ export function Header() {
   const openLogin = () => {
     setAuthMenuOpen(false);
     setShowLoginModal(true);
-    console.log('DEBUG - Boo1');
     router.replace(`${pathname}?auth=login`);
   };
 
   const closeLogin = () => {
     setShowLoginModal(false);
-    console.log('DEBUG - Boo2');
     router.replace(pathname);
   };
 
   const openLogout = () => {
     setAuthMenuOpen(false);
     setShowLogoutModal(true);
-    console.log('DEBUG - Boo3');
     router.replace(`${pathname}?auth=logout`);
   };
 
   const closeLogout = () => {
     setShowLogoutModal(false);
-    console.log('DEBUG - Boo4');
     router.replace(pathname);
   };
 

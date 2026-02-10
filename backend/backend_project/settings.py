@@ -36,6 +36,10 @@ ALLOWED_HOSTS = [
     "projectodo-backend-502a9f884ddc.herokuapp.com"
 ]
 
+CSRF_TRUSTED_ORIGINS = [
+    "http://localhost:3000",
+]
+
 APPEND_SLASH = False
 
 # Application definition

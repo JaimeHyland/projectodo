@@ -22,6 +22,6 @@ from .views import home, api_auth_status
 urlpatterns = [
     path('', home),
     path('admin/', admin.site.urls),
-    path('api/auth/status', api_auth_status, name='api_auth_status'),
+    path('api/auth/status/', api_auth_status, name='api_auth_status'),
     path('api/auth/', include('user_accounts.urls')),
 ]

@@ -25,8 +25,6 @@ function getPreferredLocale(request: NextRequest): string {
 export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  console.log("DEBUG - [proxy.ts] Incoming pathname:", pathname);
-
   // ✅ Skip locale redirects for API, Next.js internals, favicon, well-known files, or static assets
   if (
     pathname.startsWith("/api") ||
@@ -35,7 +33,6 @@ export function proxy(request: NextRequest) {
     pathname.startsWith("/.well-known") ||
     pathname.includes(".")
   ) {
-    console.log("DEBUG - [proxy.ts] Skipping locale redirect (internal/API/static)");
     return NextResponse.next(); // important: allow request to continue
   }
 
@@ -45,7 +42,6 @@ export function proxy(request: NextRequest) {
   );
 
   if (hasLocale) {
-    console.log("DEBUG - [proxy.ts] Already localized:", pathname);
     return NextResponse.next();
   }
 
@@ -53,8 +49,6 @@ export function proxy(request: NextRequest) {
   const locale = getPreferredLocale(request);
   const url = request.nextUrl.clone();
   url.pathname = `/${locale}${pathname}`;
-
-  console.log("DEBUG - [proxy.ts] Redirecting to:", url.pathname);
 
   const response = NextResponse.redirect(url);
   response.cookies.set("NEXT_LOCALE", locale, { maxAge: 60 * 60 * 24 * 365 });

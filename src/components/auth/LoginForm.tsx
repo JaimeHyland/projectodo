@@ -22,7 +22,7 @@ export default function LoginForm({ locale, messages, onSuccess }: LoginFormProp
   const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost/api";
 
   async function fetchCsrfToken() {
-    await fetch(`${API_BASE}/api/auth/csrf/`, {
+    await fetch("/api/auth/csrf/", {
       method: 'GET',
       credentials: 'include',
     });

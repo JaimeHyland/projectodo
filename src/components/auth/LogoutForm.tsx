@@ -16,25 +16,42 @@ export default function LogoutForm({
   onCancel,
 }: LogoutFormProps) {
   const displayName = user?.username || messages.logout.textUnknownUser;
-  const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost/api";
+
+  const csrftoken = document.cookie
+    .split("; ")
+    .find(row => row.startsWith("csrftoken="))
+    ?.split("=")[1];
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     try {
-        const response = await fetch(
-        `${API_BASE}/api/auth/logout/`,
+      await fetch("/api/auth/csrf/", {
+        method: "GET",
+        credentials: "include",
+      });
+
+      const csrftoken = document.cookie
+        .split("; ")
+        .find(row => row.startsWith("csrftoken="))
+        ?.split("=")[1];
+
+
+      const response = await fetch(
+        "/api/auth/logout/",
         {
-            method: "POST",
-            credentials: "include",
+          method: "POST",
+          credentials: "include",
+          headers: {
+            "X-CSRFToken": csrftoken || "",
+          },
         }
-        );
+      );
 
-        if (!response.ok) throw new Error("Logout failed");
+      if (!response.ok) throw new Error("Logout failed");
 
-        onConfirm?.();
+      onConfirm?.();
     } catch (err) {
-        console.error("Logout error:", err);
-
+      console.error("Logout error:", err);
     }
   }
 

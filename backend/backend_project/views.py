@@ -3,8 +3,6 @@ from django.http import HttpResponse
 
 
 def api_auth_status(request):
-    import sys
-    print("DEBUG - HIT api_auth_status", file=sys.stderr)
     user = request.user
     return JsonResponse({
         "is_authenticated": user.is_authenticated,
@@ -14,4 +12,4 @@ def api_auth_status(request):
 
 
 def home(request):
-    return HttpResponse("Projectodo backend is running!")
+    return HttpResponse("The Projectodo backend is running!")
