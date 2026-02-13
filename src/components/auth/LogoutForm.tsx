@@ -1,5 +1,8 @@
 "use client";
 
+import { apiUrl } from "@/lib/api";
+
+
 interface LogoutFormProps {
   locale: string;
   user: {username?: string } | null;
@@ -17,43 +20,35 @@ export default function LogoutForm({
 }: LogoutFormProps) {
   const displayName = user?.username || messages.logout.textUnknownUser;
 
-  const csrftoken = document.cookie
-    .split("; ")
-    .find(row => row.startsWith("csrftoken="))
-    ?.split("=")[1];
-
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     try {
-      await fetch("/api/auth/csrf/", {
+      await fetch(apiUrl("auth/csrf/"), {
         method: "GET",
         credentials: "include",
       });
-
       const csrftoken = document.cookie
         .split("; ")
         .find(row => row.startsWith("csrftoken="))
         ?.split("=")[1];
 
 
-      const response = await fetch(
-        "/api/auth/logout/",
-        {
+      const response = await fetch(apiUrl("auth/logout/"), {
           method: "POST",
           credentials: "include",
-          headers: {
-            "X-CSRFToken": csrftoken || "",
-          },
+          headers: { "X-CSRFToken": csrftoken ?? "" },
+        });
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data.error || "Logout failed");
         }
-      );
 
-      if (!response.ok) throw new Error("Logout failed");
-
-      onConfirm?.();
-    } catch (err) {
-      console.error("Logout error:", err);
+        onConfirm?.();
+      } catch (err) {
+        console.error("Logout error:", err);
+      }
     }
-  }
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">

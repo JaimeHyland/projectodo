@@ -14,11 +14,13 @@
     "textConfirm": "Möchten Sie sich wirklich abmelden"
   },
   "signup": {
-    "labelTitle": "Log-in",
-    "labelUsername": "User name",
-    "labelPassword": "Password",
-    "buttonSubmit": "Log in",
-    "textError": "Invalid user name or password"
+    "labelTitle": "Anmeldung",
+    "labelUsername": "Benutzername",
+    "labelPassword": "Passwort",
+    "buttonSubmit": "Anmelden",
+    "textError": "Ungültiger Benutzername oder Passwort",
+    "textSignupFailed": "Die Anmeldung hat leider nicht geklappt. Bitte wende dich an den Webmaster!",
+    "textSignupSuccess": "Fast geschafft! Wir haben eine Bestätigungs-E-Mail an die von dir angegebene Adresse geschickt. Schau in deinen Posteingang und klick auf den Link, um dein Konto zu aktivieren."
   },
   "reset": {
     "labelTitle": "Log-in",

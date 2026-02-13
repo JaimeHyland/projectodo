@@ -22,18 +22,17 @@ function getPreferredLocale(request: NextRequest): string {
   return DEFAULT_LOCALE;
 }
 
-export function proxy(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  // ✅ Skip locale redirects for API, Next.js internals, favicon, well-known files, or static assets
-  if (
-    pathname.startsWith("/api") ||
+  // Skip locale redirects for API, Next.js internals
+  if (pathname.startsWith("/api") ||
     pathname.startsWith("/_next") ||
     pathname.startsWith("/favicon") ||
     pathname.startsWith("/.well-known") ||
     pathname.includes(".")
   ) {
-    return NextResponse.next(); // important: allow request to continue
+    return NextResponse.next();
   }
 
   // Already localized?

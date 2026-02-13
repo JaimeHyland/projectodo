@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { HeaderLink } from './HeaderLink';
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { getCurrentLocale, switchLocale, SUPPORTED_LOCALES } from "@/lib/locale";
+import { apiUrl } from "@/lib/api";
 
 import enHeaderMessages from "@/messages/header/en.json";
 import deHeaderMessages from "@/messages/header/de.json";
@@ -39,7 +40,7 @@ export function Header() {
   const pathname = usePathname() ?? "/";
   const router = useRouter();
   const currentLocale = getCurrentLocale(pathname);
-  const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost/api";
+  const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://127.0.0.1n/api";
 
   const headerMessages = currentLocale === "de"
     ? deHeaderMessages
@@ -96,18 +97,27 @@ export function Header() {
     isSuperuser: false,
   });
 
-  useEffect(() => {
+useEffect(() => {
   if (searchParams.get("auth") === "login") {
     setShowLoginModal(true);
   }
 
   const fetchAuthStatus = async () => {
     try {
-      const url = new URL("/api/auth/status/", window.location.origin);
+      console.log("DEBUG - Fetching:", apiUrl("auth/status/"));
+      console.log("DEBUG - document.cookie:", document.cookie);
 
-      const response = await fetch(url.toString(), {
+      const response = await fetch(apiUrl("auth/status/"), {
         credentials: "include",
       });
+
+      let data: any = null;
+      try {
+        data = await response.json();
+        console.log("DEBUG - AUTH STATUS RESPONSE:", data);
+      } catch {
+        data = null;
+      }
 
       if (!response.ok) {
         console.warn("[fetchAuthStatus] Response not OK, setting user to null");
@@ -115,9 +125,7 @@ export function Header() {
         return;
       }
 
-      const data = await response.json();
-
-      if (data.is_authenticated) {
+      if (data?.is_authenticated) {
         setUser({
           username: data.username,
           isSuperuser: data.is_superuser,
@@ -137,7 +145,6 @@ export function Header() {
 
   fetchAuthStatus();
 }, [searchParams]);
-
 
 
   const openLogin = () => {
@@ -206,7 +213,10 @@ export function Header() {
             onClick={() => setAuthMenuOpen(prev => !prev)}
             className="px-3 py-2 rounded hover:bg-gray-300 font-medium text-gray-800"
           >
-            {headerMessages.menuAuth}
+            {user
+              ? headerMessages.menuAuthSession  // e.g., "Account" / "Profile"
+              : headerMessages.menuAuthNoSession // e.g., "Sign In" / "Login"
+            }
           </button>
 
           {authMenuOpen && (

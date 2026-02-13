@@ -11,14 +11,17 @@
     "labelUsername": "User name",
     "buttonSubmit": "Log out",
     "textUnknownUser": "Unknown user",
-    "textConfirm": "Are you sure you want to log out?"
+    "textConfirm": "Are you sure you want to log out?",
+    "textLogoutFailed": "Could not log out. Please contact the webmaster?"
   },
   "signup": {
     "labelTitle": "Log-in",
     "labelUsername": "User name",
     "labelPassword": "Password",
     "buttonSubmit": "Log in",
-    "textError": "Invalid user name or password"
+    "textError": "Invalid user name or password",
+    "textSignupFailed": "The sign-up process failed. Please contact the webmaster!",
+    "textSignupSuccess": "Almost done! We’ve sent a confirmation email to the address you provided. Please check your inbox and click the link to activate your account."
   },
   "reset": {
     "labelTitle": "Log-in",
