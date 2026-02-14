@@ -1,15 +1,14 @@
-// src/components/authentication/AuthenticationModal.tsx
 "use client";
 
 import Modal from "../Modal";
 import { ReactNode } from "react";
 
-type AuthenticationModalProps = {
+type AuthModalProps = {
   onClose: () => void;
   children: ReactNode;
 };
 
-export default function AuthenticationModal({ onClose, children }: AuthenticationModalProps) {
+export default function AuthModal({ onClose, children }: AuthModalProps) {
   return (
     <Modal
       onClose={onClose}

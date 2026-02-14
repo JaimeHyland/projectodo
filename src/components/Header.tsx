@@ -16,6 +16,9 @@ import esAuthMessages from "@/messages/auth/es.json";
 import AuthModal from '@/components/auth/AuthModal';
 import LoginForm from "@/components/auth/LoginForm";
 import LogoutForm from "@/components/auth/LogoutForm";
+import SignupForm from "@/components/auth/SignupForm";
+import ResetForm from "@/components/auth/ResetForm";
+
 
 
 export function Header() {
@@ -98,6 +101,13 @@ export function Header() {
   });
 
 useEffect(() => {
+  const authParam = searchParams.get("auth");
+
+  setShowLoginModal(authParam === "login");
+  setShowSignupModal(authParam === "signup");
+  setShowLogoutModal(authParam === "logout");
+  setShowResetModal(authParam === "reset");
+
   if (searchParams.get("auth") === "login") {
     setShowLoginModal(true);
   }
@@ -158,16 +168,38 @@ useEffect(() => {
     router.replace(pathname);
   };
 
-  const openLogout = () => {
-    setAuthMenuOpen(false);
-    setShowLogoutModal(true);
-    router.replace(`${pathname}?auth=logout`);
-  };
+    const openSignup = () => {
+      setAuthMenuOpen(false);
+      setShowSignupModal(true);
+      router.replace(`${pathname}?auth=signup`);
+    };
 
-  const closeLogout = () => {
-    setShowLogoutModal(false);
-    router.replace(pathname);
-  };
+    const closeSignup = () => {
+      setShowSignupModal(false);
+      router.replace(pathname);
+    };
+
+    const openLogout = () => {
+      setAuthMenuOpen(false);
+      setShowLogoutModal(true);
+      router.replace(`${pathname}?auth=logout`);
+    };
+
+    const closeLogout = () => {
+      setShowLogoutModal(false);
+      router.replace(pathname);
+    };
+
+      const openReset = () => {
+      setAuthMenuOpen(false);
+      setShowResetModal(true);
+      router.replace(`${pathname}?auth=reset`);
+    };
+
+    const closeReset = () => {
+      setShowResetModal(false);
+      router.replace(pathname);
+    };
 
   return (
     <header className="relative">
@@ -223,6 +255,7 @@ useEffect(() => {
             <div className="absolute left-0 mt-2 w-36 bg-white border rounded shadow-md z-50">
               <ul className="flex flex-col">
                 {!user && (
+                <>
                   <li>
                     <button
                       className="block px-4 py-2 hover:bg-gray-100"
@@ -231,8 +264,18 @@ useEffect(() => {
                       {headerMessages.menuLogin}
                     </button>
                   </li>
+                  <li>
+                    <button
+                      className="block px-4 py-2 hover:bg-gray-100"
+                      onClick={openSignup}
+                    >
+                      {headerMessages.menuSignup}
+                    </button>
+                  </li>
+                </>
                 )}
                 {user && (
+                  <>
                   <li>
                     <button
                       className="block px-4 py-2 hover:bg-gray-100"
@@ -241,6 +284,15 @@ useEffect(() => {
                       {headerMessages.menuLogout}
                     </button>
                   </li>
+                  <li>
+                    <button
+                      className="block px-4 py-2 hover:bg-gray-100"
+                      onClick={openReset}
+                    >
+                      {headerMessages.menuReset}
+                    </button>
+                  </li>
+                  </>
                 )}
               </ul>
             </div>
@@ -268,11 +320,24 @@ useEffect(() => {
                       closeLogin();
                     })
                     .catch(err => console.error(err));
-                }}
-              
+                }}            
               />
             </AuthModal>
           )}
+
+          {showSignupModal && (
+            <AuthModal onClose={closeSignup}>
+              <SignupForm
+                locale={currentLocale}
+                messages={authMessages}
+                onSuccess={() => {
+                  alert("Signup successful! (dummy logic)");
+                  closeSignup();
+                }}
+              />
+            </AuthModal>
+          )}
+
           {showLogoutModal && (
             <AuthModal onClose={closeLogout}>
               <LogoutForm
@@ -282,8 +347,22 @@ useEffect(() => {
                 onConfirm={() => {
                   setUser(null);
                   closeLogout();
-              }}
-              onCancel={closeLogout}/>
+                }}
+                onCancel={closeLogout}
+              />
+            </AuthModal>
+          )}
+
+          {showResetModal && (
+            <AuthModal onClose={closeReset}>
+              <ResetForm
+                locale={currentLocale}
+                messages={authMessages}
+                onSuccess={() => {
+                  alert("Password reset sent! (dummy logic)");
+                  closeReset();
+                }}
+              />
             </AuthModal>
           )}
         </div>

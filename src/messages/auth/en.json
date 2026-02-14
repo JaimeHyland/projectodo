@@ -9,6 +9,7 @@
   "logout": {
     "labelTitle": "Log-out",
     "labelUsername": "User name",
+    "buttonCancel": "Cancel",
     "buttonSubmit": "Log out",
     "textUnknownUser": "Unknown user",
     "textConfirm": "Are you sure you want to log out?",
@@ -24,10 +25,13 @@
     "textSignupSuccess": "Almost done! We’ve sent a confirmation email to the address you provided. Please check your inbox and click the link to activate your account."
   },
   "reset": {
-    "labelTitle": "Log-in",
-    "labelUsername": "User name",
-    "labelPassword": "Password",
-    "buttonSubmit": "Log in",
-    "textError": "Invalid user name or password"
+    "labelTitle": "Passwort zurücksetzen",
+    "labelUsername": "Benutzername",
+    "labelOldPassword": "Altes Passwort",
+    "labelNewPassword": "Neues Passwort",
+    "labelConfirmNewPassword": "Neues Passwort bestätigen",
+    "buttonSubmit": "Passwort ändern",
+    "buttonForgottenPassword": "Passwort vergessen",
+    "textError": "Ungültiger Benutzername oder Passwort"
   }
 }

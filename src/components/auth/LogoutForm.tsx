@@ -41,7 +41,7 @@ export default function LogoutForm({
         const data = await response.json();
 
         if (!response.ok) {
-          throw new Error(data.error || "Logout failed");
+          throw new Error(data.error || messages.logout.textLogoutFailed);
         }
 
         onConfirm?.();
@@ -77,7 +77,7 @@ export default function LogoutForm({
           onClick={onCancel}
           className="px-4 py-2 rounded border border-gray-300 hover:bg-gray-100"
         >
-          {messages.logout.buttonConfirm}
+          {messages.logout.buttonCancel}
         </button>
 
         <button

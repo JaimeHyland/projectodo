@@ -10,6 +10,7 @@
     "labelTitle": "Iniciar una sesión",
     "labelUsername": "Nombre de usuario",
     "buttonSubmit": "Terminar sesión",
+    "buttonCancel": "Anular",
     "textUnknownUser": "Usuario desconocido",
     "textConfirm": "¿Seguro que quieres terminar la sesión?",
     "textLogoutFailed": "Could not log out. Please contact the webmaster!"
@@ -24,11 +25,13 @@
     "textSignupSuccess": "¡Casi listo! Hemos enviado un correo de confirmación a la dirección que proporcionaste. Por favor, revisa tu bandeja de entrada y haz clic en el enlace para activar tu cuenta."
   },
   "reset": {
-    "labelTitle": "Log-in",
-    "labelUsername": "User name",
-    "labelPassword": "Password",
-    "buttonSubmit": "Log in",
-    "textError": "Invalid user name or password",
-    "textPasswordResetFailed": "Could not log out. Please contact the webmaster!"
+    "labelTitle": "Restablecer contraseña",
+    "labelUsername": "Nombre de usuario",
+    "labelOldPassword": "Contraseña antigua",
+    "labelNewPassword": "Nueva contraseña",
+    "labelConfirmNewPassword": "Confirmar nueva contraseña",
+    "buttonSubmit": "Cambiar contraseña",
+    "buttonForgottenPassword": "¿Olvidaste tu contraseña?",
+    "textError": "Nombre de usuario o contraseña inválidos"
   }
 }
