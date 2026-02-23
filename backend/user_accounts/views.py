@@ -10,10 +10,12 @@ from django.utils import timezone
 from datetime import timedelta
 from .models import AuthToken
 from .utilities import generate_secure_token
+from django.views.decorators.csrf import csrf_exempt
 from django.core.mail import send_mail
 from decouple import config
 
 
+@csrf_exempt
 def test_email_view(request):
     recipient = config("EMAIL_HOST_RECIPIENT")  # send to yourself
     try:
