@@ -42,6 +42,7 @@ CSRF_TRUSTED_ORIGINS = [
     "http://localhost:3000",
     "http://127.0.0.1:3000",
     "https://projectodo.vercel.app",
+    "https://projectodo-backend-502a9f884ddc.herokuapp.com",
 ]
 
 APPEND_SLASH = False
