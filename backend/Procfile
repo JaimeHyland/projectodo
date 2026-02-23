@@ -1,2 +1,2 @@
-release: cd backend && python manage.py collectstatic --noinput
+release: python manage.py collectstatic --noinput
 web: gunicorn backend_project.wsgi --log-file -
