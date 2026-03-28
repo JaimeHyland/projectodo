@@ -1,5 +1,3 @@
-# users/models.py
-
 import uuid
 import hashlib
 from django.db import models

@@ -14,8 +14,10 @@ from pathlib import Path
 from decouple import config
 
 import dj_database_url
-import ssl
-import certifi
+import platform
+
+
+PLATFORM_WINDOWS = platform.system() == "Windows"
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -44,6 +46,12 @@ CSRF_TRUSTED_ORIGINS = [
     "https://projectodo.vercel.app",
     "https://projectodo-backend-502a9f884ddc.herokuapp.com",
 ]
+
+FRONTEND_URL = config(
+    "FRONTEND_URL",
+    default="http://localhost:3000",
+    cast=str
+)
 
 APPEND_SLASH = False
 
@@ -200,21 +208,17 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-# Email settings (my Gmail account for the moment)
-
-EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
-EMAIL_HOST = "smtp.gmail.com"
+EMAIL_BACKEND = (
+    "backend_project.email_backend.strato_email_backend."
+    "StratoEmailBackend"
+)
+EMAIL_HOST = "smtp.strato.de"
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-
+EMAIL_USE_SSL = False
 EMAIL_HOST_USER = config("EMAIL_HOST_USER")
 EMAIL_HOST_PASSWORD = config("EMAIL_HOST_PASSWORD")
-DEFAULT_FROM_EMAIL = config("DEFAULT_FROM_EMAIL", default=EMAIL_HOST_USER)
-
-ssl._create_default_https_context = ssl._create_default_https_context = (
-    lambda: ssl.create_default_context(cafile=certifi.where())
-)
-
+DEFAULT_FROM_EMAIL = f"Projectodo <{EMAIL_HOST_USER}>"
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
