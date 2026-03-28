@@ -16,15 +16,15 @@ export default function SignupForm({ locale, messages, onSuccess }: SignupFormPr
   const [emailConfirm, setEmailConfirm] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState<string | null>(null);
 
-  const isValidEmail = (email: string) => {
-    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-  };
+  const isValidEmail = (email: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
-    setLoading(true);
+    setMessage(null);
+  
 
     if (!username || !email || !emailConfirm) {
       setError("Please fill in all required fields.");
@@ -32,7 +32,7 @@ export default function SignupForm({ locale, messages, onSuccess }: SignupFormPr
       return;
     }
 
-    if (!isValidEmail(email)) {
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       setError("Please enter a valid email address.");
       setLoading(false);
       return;
@@ -44,27 +44,47 @@ export default function SignupForm({ locale, messages, onSuccess }: SignupFormPr
       return;
     }
 
-    // Dummy async simulation
-    setTimeout(() => {
-      setLoading(false);
-      alert("Confirmation email sent (dummy logic).");
+    try {
+      const csrfRes = await fetch("/api/auth/csrf/");
+      const csrfData = await csrfRes.json();
+      const csrfToken = csrfData.csrfToken;
+
+      const response = await fetch("/api/auth/signup/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRFToken": csrfToken,
+        },
+        body: JSON.stringify({ username, email }),
+      });
+
+      const data = await response.json();
+      console.log("DEBUG - Signup response:", data);
+
+      if (!response.ok) {
+        setError(data.error || "Signup failed");
+        setLoading(false);
+        return;
+      }
+
+      alert(data.message || "Verification email sent!");
       onSuccess?.();
-    }, 800);
+
+    } catch (err) {
+      setError("Network error. Please try again." + err);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
-      {error && (
-        <div className="text-red-600 text-center">
-          {error}
-        </div>
-      )}
+      {error && <div className="text-red-600 text-center">{error}</div>}
+      {message && <div className="text-green-600 text-center">{message}</div>}
 
-      {/* Username (Required) */}
+      {/* Username */}
       <div>
-        <label className="block mb-1">
-          {messages.signup.labelUsername} *
-        </label>
+        <label className="block mb-1">{messages.signup.labelUsername} *</label>
         <input
           type="text"
           value={username}
@@ -74,11 +94,9 @@ export default function SignupForm({ locale, messages, onSuccess }: SignupFormPr
         />
       </div>
 
-      {/* First Name (Optional) */}
+      {/* First Name */}
       <div>
-        <label className="block mb-1">
-          {messages.signup.labelFirstName ?? "First name"}
-        </label>
+        <label className="block mb-1">{messages.signup.labelFirstName ?? "First name"}</label>
         <input
           type="text"
           value={firstName}
@@ -87,11 +105,9 @@ export default function SignupForm({ locale, messages, onSuccess }: SignupFormPr
         />
       </div>
 
-      {/* Last Name (Optional) */}
+      {/* Last Name */}
       <div>
-        <label className="block mb-1">
-          {messages.signup.labelLastName ?? "Last name"}
-        </label>
+        <label className="block mb-1">{messages.signup.labelLastName ?? "Last name"}</label>
         <input
           type="text"
           value={lastName}
@@ -100,11 +116,9 @@ export default function SignupForm({ locale, messages, onSuccess }: SignupFormPr
         />
       </div>
 
-      {/* Email (Required) */}
+      {/* Email */}
       <div>
-        <label className="block mb-1">
-          {messages.signup.labelEmail ?? "Email"} *
-        </label>
+        <label className="block mb-1">{messages.signup.labelEmail ?? "Email"} *</label>
         <input
           type="email"
           value={email}
@@ -114,11 +128,9 @@ export default function SignupForm({ locale, messages, onSuccess }: SignupFormPr
         />
       </div>
 
-      {/* Confirm Email (Required) */}
+      {/* Confirm Email */}
       <div>
-        <label className="block mb-1">
-          {messages.signup.labelConfirmEmail ?? "Repeat email"} *
-        </label>
+        <label className="block mb-1">{messages.signup.labelConfirmEmail ?? "Repeat email"} *</label>
         <input
           type="email"
           value={emailConfirm}
@@ -131,14 +143,14 @@ export default function SignupForm({ locale, messages, onSuccess }: SignupFormPr
       <button
         type="submit"
         disabled={loading}
-        className="w-full bg-green-600 text-white py-2 rounded hover:bg-green-700 disabled:opacity-50"
+        className={`w-full py-2 rounded text-white ${
+          loading ? "bg-gray-400" : "bg-green-600 hover:bg-green-700"
+        }`}
       >
         {messages.signup.buttonSubmit}
       </button>
 
-      <p className="text-xs text-gray-500 text-center">
-        * required fields
-      </p>
+      <p className="text-xs text-gray-500 text-center">* required fields</p>
     </form>
   );
 }

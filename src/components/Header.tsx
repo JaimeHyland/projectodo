@@ -201,6 +201,18 @@ useEffect(() => {
       router.replace(pathname);
     };
 
+    const activeIndex = menuItems.findIndex(item => {
+      if (item.href === "/") {
+        return pathname === "/" || pathname.endsWith("/en") || pathname.endsWith("/de") || pathname.endsWith("/es");
+      }
+      return pathname.includes(item.href);
+    });
+
+    const activeColor =
+      activeIndex !== -1
+        ? tabColors[activeIndex % tabColors.length]
+        : "transparent";
+
   return (
     <header className="relative">
       {/* Banner */}
@@ -331,7 +343,7 @@ useEffect(() => {
                 locale={currentLocale}
                 messages={authMessages}
                 onSuccess={() => {
-                  alert("Signup successful! (dummy logic)");
+                  alert("Signup successful! A verification email has been sent to the address you entered. Please check your inbox (including your spam mail folder if applicable) and click the link to activate your account.");
                   closeSignup();
                 }}
               />
@@ -367,7 +379,7 @@ useEffect(() => {
           )}
         </div>
         
-        <div className="max-w-7xl mx-auto px-4 flex items-center justify-end desktop:justify-center h-16">
+        <div className="max-w-7xl mx-auto px-4 flex items-center justify-end desktop:justify-center h-auto">
           {/* Hamburger for mobile */}
           <button
             className="desktop:hidden text-2xl px-2"
@@ -377,20 +389,31 @@ useEffect(() => {
           </button>
 
           {/* Desktop/laptop navbar */}
-          <ul className="hidden desktop:flex space-x-2">
-            {menuItems.map((item, index) => (
-              <li key={item.href}>
-                <HeaderLink
-                  href={item.href}
-                  isActive={pathname === item.href}
-                  style={{ backgroundColor: tabColors[index % tabColors.length] }}
-                >
-                  {item.label}
-                </HeaderLink>
-              </li>
-            ))}
-          </ul>
+          <div className="max-w-7xl mx-auto px-4 desktop:justify-center flex flex-col">
+            {/* Tabs row */}
+            <ul className="hidden desktop:flex space-x-2">
+              {menuItems.map((item, index) => (
+                <li key={item.href}>
+                  <HeaderLink
+                    href={item.href}
+                    isActive={pathname === item.href}
+                    style={{ backgroundColor: tabColors[index % tabColors.length] }}
+                    className="px-4 py-1 rounded-t-lg"
+                  >
+                    {item.label}
+                  </HeaderLink>
+                </li>
+              ))}
+            </ul>
+
+            {/* Active-color bar: now in normal flow under the tabs */}
+            <div
+              className="hidden desktop:block w-full h-2"
+              style={{ backgroundColor: activeColor }}
+            />
+          </div>
         </div>
+
 
         {/* Mobile menu */}
         {menuOpen && (
