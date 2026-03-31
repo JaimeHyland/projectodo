@@ -18,11 +18,19 @@
   "signup": {
     "labelTitle": "Iniciar sesión",
     "labelUsername": "Nombre de usuario",
+    "labelFirstName": "Nombre",
+    "labelLastName": "Primer apellido",
+    "labelEmail": "Correo electrónico",
+    "labelConfirmEmail": "Confirmar correo electrónico",
     "labelPassword": "Contraseña",
     "buttonSubmit": "Enviar",
+    "noteRequiredFields": "* campos requeridos",
     "textError": "Nombre de usuario o contraseña inválidos",
     "textSignupFailed": "The proceso de registro ha fallado. Conéctate con el webmaster, por favor.",
-    "textSignupSuccess": "¡Casi listo! Hemos enviado un correo de confirmación a la dirección que proporcionaste. Por favor, revisa tu bandeja de entrada y haz clic en el enlace para activar tu cuenta."
+    "textSignupSuccess": "¡Casi listo! Hemos enviado un correo de confirmación a la dirección que proporcionaste. Por favor, revisa tu bandeja de entrada y haz clic en el enlace para activar tu cuenta.",
+    "textEmailMismatch": "Las direcciones de correo electrónico no coinciden.",
+    "textInvalidEmail": "Por favor, introduce una dirección de correo electrónico válida.",
+    "textRequiredFields": "Por favor, completa todos los campos requeridos."
   },
   "reset": {
     "labelTitle": "Restablecer contraseña",

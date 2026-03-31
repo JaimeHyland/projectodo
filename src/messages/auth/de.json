@@ -17,11 +17,19 @@
   "signup": {
     "labelTitle": "Anmeldung",
     "labelUsername": "Benutzername",
+    "labelFirstName": "Vorname",
+    "labelLastName": "Nachname",
+    "labelEmail": "Email",
+    "labelConfirmEmail": "Email bestätigen",
     "labelPassword": "Passwort",
     "buttonSubmit": "Anmelden",
+    "noteRequiredFields": "* erforderliche Felder",
     "textError": "Ungültiger Benutzername oder Passwort",
     "textSignupFailed": "Die Anmeldung hat leider nicht geklappt. Bitte wende dich an den Webmaster!",
-    "textSignupSuccess": "Fast geschafft! Wir haben eine Bestätigungs-E-Mail an die von dir angegebene Adresse geschickt. Schau in deinen Posteingang und klick auf den Link, um dein Konto zu aktivieren."
+    "textSignupSuccess": "Fast geschafft! Wir haben eine Bestätigungs-E-Mail an die von dir angegebene Adresse geschickt. Schau in deinen Posteingang und klick auf den Link, um dein Konto zu aktivieren.",
+    "textEmailMismatch": "Die E-Mail-Adressen stimmen nicht überein.",
+    "textInvalidEmail": "Bitte geben Sie eine gültige E-Mail-Adresse ein.",
+    "textRequiredFields": "Bitte füllen Sie alle erforderlichen Felder aus."
   },
   "reset": {
     "labelTitle": "Passwort zurücksetzen",

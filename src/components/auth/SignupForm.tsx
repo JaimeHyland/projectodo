@@ -27,19 +27,19 @@ export default function SignupForm({ locale, messages, onSuccess }: SignupFormPr
   
 
     if (!username || !email || !emailConfirm) {
-      setError("Please fill in all required fields.");
+      setError(messages.signup.textRequiredFields);
       setLoading(false);
       return;
     }
 
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      setError("Please enter a valid email address.");
+      setError(messages.signup.textInvalidEmail);
       setLoading(false);
       return;
     }
 
     if (email !== emailConfirm) {
-      setError("Email addresses do not match.");
+      setError(messages.signup.textEmailMismatch);
       setLoading(false);
       return;
     }
@@ -53,6 +53,7 @@ export default function SignupForm({ locale, messages, onSuccess }: SignupFormPr
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "Accept-Language": locale,
           "X-CSRFToken": csrfToken,
         },
         body: JSON.stringify({ username, email }),
@@ -96,7 +97,7 @@ export default function SignupForm({ locale, messages, onSuccess }: SignupFormPr
 
       {/* First Name */}
       <div>
-        <label className="block mb-1">{messages.signup.labelFirstName ?? "First name"}</label>
+        <label className="block mb-1">{messages.signup.labelFirstName}</label>
         <input
           type="text"
           value={firstName}
@@ -150,7 +151,7 @@ export default function SignupForm({ locale, messages, onSuccess }: SignupFormPr
         {messages.signup.buttonSubmit}
       </button>
 
-      <p className="text-xs text-gray-500 text-center">* required fields</p>
+      <p className="text-xs text-gray-500 text-center">{messages.signup.noteRequiredFields}</p>
     </form>
   );
 }

@@ -343,7 +343,7 @@ useEffect(() => {
                 locale={currentLocale}
                 messages={authMessages}
                 onSuccess={() => {
-                  alert("Signup successful! A verification email has been sent to the address you entered. Please check your inbox (including your spam mail folder if applicable) and click the link to activate your account.");
+                  alert(headerMessages.alertSignupSuccess);
                   closeSignup();
                 }}
               />

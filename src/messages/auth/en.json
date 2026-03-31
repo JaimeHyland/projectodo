@@ -18,11 +18,19 @@
   "signup": {
     "labelTitle": "Log-in",
     "labelUsername": "User name",
+    "labelFirstName": "First name",
+    "labelLastName": "Last name",
+    "labelEmail": "E-mail address",
+    "labelConfirmEmail": "Confirm email address",
     "labelPassword": "Password",
     "buttonSubmit": "Log in",
     "textError": "Invalid user name or password",
+    "noteRequiredFields": "* required fields",
     "textSignupFailed": "The sign-up process failed. Please contact the webmaster!",
-    "textSignupSuccess": "Almost done! We’ve sent a confirmation email to the address you provided. Please check your inbox and click the link to activate your account."
+    "textSignupSuccess": "Almost done! We’ve sent a confirmation email to the address you provided. Please check your inbox and click the link to activate your account.",
+    "textEmailMismatch": "The e-mail addresses do not match.",
+    "textInvalidEmail": "Please enter a valid email address.",
+    "textRequiredFields": "Please fill in all required fields."
   },
   "reset": {
     "labelTitle": "Passwort zurücksetzen",
