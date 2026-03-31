@@ -1,0 +1,111 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-03-31 08:16+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: .\user_accounts\views.py:25
+msgid "Email and username required"
+msgstr "E-Mail und Benutzername sind erforderlich"
+
+#: .\user_accounts\views.py:42
+msgid "Verify your Projectodo account"
+msgstr "Bestätigen Sie Ihr Projectodo-Konto"
+
+#: .\user_accounts\views.py:44
+#, python-format
+msgid ""
+"Hi %(username)s,\n"
+"\n"
+"Please verify your email by clicking the link below:\n"
+"%(verification_url)s\n"
+"\n"
+"If you didn't sign up for Projectodo, you can ignore this email."
+msgstr ""
+"Hallo %(username)s,\n"
+"\n"
+"bitte bestätigen Sie Ihre E-Mail-Adresse, indem Sie auf den folgenden Link klicken:\n"
+"%(verification_url)s\n"
+"\n"
+"Falls Sie sich nicht bei Projectodo registriert haben, können Sie diese E-Mail ignorieren."
+
+#: .\user_accounts\views.py:54
+#, python-format
+msgid ""
+"<p>Hi %(username)s,</p><p>Please verify your email by clicking the link "
+"below:</p><p><a href=\"%(verification_url)s\">%(verification_url)s</a></"
+"p><p>If you didn't sign up for Projectodo, you can ignore this email.</p>"
+msgstr ""
+"<p>Hallo %(username)s,</p><p>bitte bestätigen Sie Ihre E-Mail-Adresse, indem Sie auf den folgenden Link klicken:</p><p><a href=\"%(verification_url)s\">%(verification_url)s</a></p><p>Falls Sie sich nicht bei Projectodo registriert haben, können Sie diese E-Mail ignorieren.</p>"
+
+#: .\user_accounts\views.py:93
+msgid "Invalid JSON"
+msgstr "Ungültiges JSON"
+
+#: .\user_accounts\views.py:97
+msgid "Token and password required"
+msgstr "Token und Passwort sind erforderlich"
+
+#: .\user_accounts\views.py:111
+msgid "Invalid Token"
+msgstr "Ungültiges Token"
+
+#: .\user_accounts\views.py:115 .\user_accounts\views.py:177
+msgid "Token expired"
+msgstr "Token ist abgelaufen"
+
+#: .\user_accounts\views.py:121 .\user_accounts\views.py:200
+msgid "Username already taken"
+msgstr "Benutzername ist bereits vergeben"
+
+#: .\user_accounts\views.py:127 .\user_accounts\views.py:206
+msgid "Email already registered"
+msgstr "E-Mail ist bereits registriert"
+
+#: .\user_accounts\views.py:145
+msgid "Unknown token type"
+msgstr "Unbekannter Token-Typ"
+
+#: .\user_accounts\views.py:160
+msgid "Token and username required"
+msgstr "Token und Benutzername sind erforderlich"
+
+#: .\user_accounts\views.py:173
+msgid "Invalid token"
+msgstr "Ungültiges Token"
+
+#: .\user_accounts\views.py:181
+msgid "Email verified successfully"
+msgstr "E-Mail erfolgreich bestätigt"
+
+#: .\user_accounts\views.py:194
+msgid "Username and email required"
+msgstr "Benutzername und E-Mail sind erforderlich"
+
+#: .\user_accounts\views.py:214
+#, python-format
+msgid "Verification email sent to %(email)s"
+msgstr "Bestätigungs-E-Mail wurde an %(email)s gesendet"
+
+#: .\user_accounts\views.py:223
+#, python-format
+msgid "Failed to send verification email: %(e)s"
+msgstr "Senden der Bestätigungs-E-Mail fehlgeschlagen: %(e)s"
+
+#: .\user_accounts\views.py:239
+msgid "Invalid credentials"
+msgstr "Ungültige Anmeldedaten"

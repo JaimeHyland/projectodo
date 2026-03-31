@@ -1,4 +1,5 @@
 import json
+import logging
 from datetime import timedelta
 from django.contrib.auth import authenticate, login, logout, get_user_model
 from django.conf import settings
@@ -8,6 +9,8 @@ from django.core.exceptions import ValidationError
 from django.views.decorators.http import require_POST, require_GET
 from django.http import JsonResponse
 from django.views.decorators.csrf import ensure_csrf_cookie, csrf_exempt
+from django.utils import translation
+from django.utils.translation import gettext as _
 from django.utils import timezone
 from .models import AuthToken
 from .utilities import generate_secure_token
@@ -16,9 +19,12 @@ from .utilities import generate_secure_token
 User = get_user_model()
 
 
-def send_verification_email(email, username):
+def send_verification_email(email, username, locale):
+
+    translation.activate(locale)
+
     if not email or not username:
-        raise ValueError("Email and username required")
+        raise ValueError(_("Email and username required"))
 
     raw_token, token_hash = generate_secure_token()
 
@@ -35,20 +41,26 @@ def send_verification_email(email, username):
         f"/verify-email?token={raw_token}&username={username}"
     )
 
-    subject = "Verify your Projectodo account"
-    text_content = (
-        f"Hi {username},\n\n"
-        f"Please verify your email by clicking the link below:\n"
-        f"{verification_url}\n\n"
-        f"If you did not sign up for Projectodo, you can ignore this email."
-    )
+    subject = _("Verify your Projectodo account")
+    text_content = _(
+        "Hi %(username)s,\n\n"
+        "Please verify your email by clicking the link below:\n"
+        "%(verification_url)s\n\n"
+        "If you didn't sign up for Projectodo, you can ignore this email."
+    ) % {
+        "username": username,
+        "verification_url": verification_url
+    }
 
-    html_content = (
-        f"<p>Hi {username},</p>"
-        f"<p>Please verify your email by clicking the link below:</p>"
-        f'<p><a href="{verification_url}">{verification_url}</a></p>'
-        f"<p>If you didn't sign up for Projectodo, please ignore this.</p>"
-    )
+    html_content = _(
+        "<p>Hi %(username)s,</p>"
+        "<p>Please verify your email by clicking the link below:</p>"
+        '<p><a href="%(verification_url)s">%(verification_url)s</a></p>'
+        "<p>If you didn't sign up for Projectodo, you can ignore this email.</p>"
+    ) % {
+        "username": username,
+        "verification_url": verification_url
+    }
 
     email_message = EmailMultiAlternatives(
         subject=subject,
@@ -57,7 +69,6 @@ def send_verification_email(email, username):
         to=[email],
         connection=None,  # will use default EMAIL_BACKEND
     )
-    email_message.content_subtype = "plain"  # plain text
 
     email_message.attach_alternative(html_content, "text/html")
 
@@ -79,11 +90,11 @@ def set_password_view(request):
         raw_token = data.get("token")
         password = data.get("password")
     except json.JSONDecodeError:
-        return JsonResponse({"error": "Invalid JSON"}, status=400)
+        return JsonResponse({"error": _("Invalid JSON")}, status=400)
 
     if not raw_token or not password:
         return JsonResponse(
-            {"error": "Token and password required"},
+            {"error": _("Token and password required")},
             status=400
         )
 
@@ -97,23 +108,23 @@ def set_password_view(request):
     try:
         auth_token = AuthToken.objects.get(token_hash=token_hash)
     except AuthToken.DoesNotExist:
-        return JsonResponse({"error": "Invalid Token"}, status=400)
+        return JsonResponse({"error": _("Invalid Token")}, status=400)
 
     if auth_token.is_expired():
         auth_token.delete()
-        return JsonResponse({"error": "Token expired"}, status=400)
+        return JsonResponse({"error": _("Token expired")}, status=400)
 
     if auth_token.token_type == "signup":
         if User.objects.filter(username=auth_token.username).exists():
             auth_token.delete()
             return JsonResponse(
-                {"error": "Username already taken"},
+                {"error": _("Username already taken")},
                 status=400
             )
         if User.objects.filter(email=auth_token.email).exists():
             auth_token.delete()
             return JsonResponse(
-                {"error": "Email already registered"},
+                {"error": _("Email already registered")},
                 status=400
             )
 
@@ -131,7 +142,7 @@ def set_password_view(request):
 
     else:
         auth_token.delete()
-        return JsonResponse({"error": "Unknown token type"}, status=400)
+        return JsonResponse({"error": _("Unknown token type")}, status=400)
 
     auth_token.delete()
 
@@ -146,7 +157,7 @@ def verify_email_view(request):
 
     if not token or not username:
         return JsonResponse(
-            {"error": "Token and username required"},
+            {"error": _("Token and username required")},
             status=400
         )
 
@@ -159,15 +170,15 @@ def verify_email_view(request):
             token_type="signup"
         )
     except AuthToken.DoesNotExist:
-        return JsonResponse({"error": "Invalid token"}, status=400)
+        return JsonResponse({"error": _("Invalid token")}, status=400)
 
     if auth_token.is_expired():
         auth_token.delete()
-        return JsonResponse({"error": "Token expired"}, status=400)
+        return JsonResponse({"error": _("Token expired")}, status=400)
 
     return JsonResponse({
         "success": True,
-        "message": "Email verified successfully"
+        "message": _("Email verified successfully")
     })
 
 
@@ -177,36 +188,44 @@ def signup_request_view(request):
     data = json.loads(request.body.decode("utf-8"))
     username = data.get("username")
     email = data.get("email")
+    locale = request.headers.get("Accept-Language", "en").split(",")[0]
+
+    logger = logging.getLogger(__name__)
+    logger.warning(f"DEBUG - Locale in signup_request_view: {locale}")
+
+    translation.activate(locale)
 
     if not username or not email:
         return JsonResponse(
-            {"error": "Username and email required"},
+            {"error": _("Username and email required")},
             status=400,
         )
 
     if User.objects.filter(username=username).exists():
         return JsonResponse(
-            {"error": "Username already taken"},
+            {"error": _("Username already taken")},
             status=400,
         )
 
     if User.objects.filter(email=email).exists():
         return JsonResponse(
-            {"error": "Email already registered"},
+            {"error": _("Email already registered")},
             status=400,
         )
 
     try:
-        send_verification_email(email, username)
+        send_verification_email(email, username, locale)
+        logger.warning(f"DEBUG -  Locale in send_verification_email: {locale}")
         return JsonResponse({
             "success": True,
-            "message": f"Verification email sent to {email}"
+            "message": _("Verification email sent to %(email)s") % {
+                "email": email
+            }
         })
     except Exception as e:
-        print("DEBUG - Failed to send verification email:", e)
         return JsonResponse({
             "success": False,
-            "error": f"Failed to send verification email: {e}"
+            "error": _("Failed to send verification email: %(e)s") % {"e": e}
         }, status=500)
 
 
@@ -222,7 +241,7 @@ def login_view(request):
 
     if user is None:
         return JsonResponse(
-            {"error": "Invalid credentials"},
+            {"error": _("Invalid credentials")},
             status=401,
         )
 
