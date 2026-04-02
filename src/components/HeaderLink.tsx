@@ -30,7 +30,7 @@ export function HeaderLink({
       className={`
         px-4 py-2 rounded-t-lg font-semibold
         transform hover:brightness-110
-        ${isActive ? "ring-2 ring-offset-2" : ""}
+        ${isActive ? "shadow-sm" : ""}
         ${className}
       `}
       style={style}
