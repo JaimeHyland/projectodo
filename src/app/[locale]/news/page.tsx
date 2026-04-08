@@ -3,13 +3,12 @@ import de from "@/messages/news/de.json";
 import es from "@/messages/news/es.json";
 
 interface NewsPageProps {
-  params: { locale: string };
+  params: Promise<{ locale: string }>;
 }
 
 
 export default async function NewsPage({ params }: NewsPageProps) {
-  const resolvedParams = await params;
-  const locale = resolvedParams.locale;
+  const { locale } = await params;
   const messages = locale === "de" ? de : locale === "es" ? es : en;
 
   return (

@@ -3,12 +3,11 @@ import de from "@/messages/contact/de.json";
 import es from "@/messages/contact/es.json";
 
 interface ContactPageProps {
-  params: { locale: string };
+  params: Promise<{ locale: string }>;
 }
 
 export default async function ContactPage({ params }: ContactPageProps) {
-  const resolvedParams = await params;
-  const locale = resolvedParams.locale;
+  const { locale } = await params;
   const messages = locale === "de" ? de : locale === "es" ? es : en;
   return (
     <main className="p-8 text-center">

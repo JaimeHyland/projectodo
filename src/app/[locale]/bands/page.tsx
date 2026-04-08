@@ -3,12 +3,11 @@ import de from "@/messages/bands/de.json";
 import es from "@/messages/bands/es.json";
 
 interface BandsPageProps {
-  params: { locale: string };
+  params: Promise<{ locale: string }>;
 }
 
 export default async function BandsPage({ params }: BandsPageProps) {
-  const resolvedParams = await params;
-  const locale = resolvedParams.locale;
+  const { locale } =  await params;
   const messages = locale === "de" ? de : locale === "es" ? es : en;
 
   return (

@@ -3,13 +3,12 @@ import de from "@/messages/technical/de.json";
 import es from "@/messages/technical/es.json";
 
 interface TechnicalPageProps {
-  params: { locale: string };
+  params: Promise<{ locale: string }>;
 }
 
 
 export default async function TechnicalPage({ params }: TechnicalPageProps) {
-  const resolvedParams = await params;
-  const locale = resolvedParams.locale;
+  const { locale } = await params ;
   const messages = locale === "de" ? de : locale === "es" ? es : en;
 
   return (

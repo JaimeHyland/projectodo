@@ -3,13 +3,12 @@ import de from "@/messages/press/de.json";
 import es from "@/messages/press/es.json";
 
 interface PressPageProps {
-  params: { locale: string };
+  params: Promise<{ locale: string }>;
 }
 
 
 export default async function PressPage({ params }: PressPageProps) {
-  const resolvedParams = await params;
-  const locale = resolvedParams.locale;
+  const { locale } = await params;
   const messages = locale === "de" ? de : locale === "es" ? es : en;
 
   return (
