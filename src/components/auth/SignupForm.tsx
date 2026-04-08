@@ -20,7 +20,7 @@ export default function SignupForm({ locale, messages, onSuccess }: SignupFormPr
 
   const isValidEmail = (email: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError(null);
     setMessage(null);
@@ -59,7 +59,16 @@ export default function SignupForm({ locale, messages, onSuccess }: SignupFormPr
         body: JSON.stringify({ username, email }),
       });
 
-      const data = await response.json();
+      let data: any = null;
+      const contentType = response.headers.get("content-type") || "";
+
+      if (contentType.includes("application/json")) {
+        data = await response.json();
+      } else {
+        const text = await response.text();
+        throw new Error(text.slice(0, 200));
+      }
+
       console.log("DEBUG - Signup response:", data);
 
       if (!response.ok) {

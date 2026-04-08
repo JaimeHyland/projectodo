@@ -105,5 +105,5 @@ msgid "Failed to send verification email: %(e)s"
 msgstr "Error al enviar el correo de verificación: %(e)s"
 
 #: .\user_accounts\views.py:239
-msgid "Invalid credentials"
+msgid "Invalid credentials DEBUG2"
 msgstr "Credenciales no válidas"

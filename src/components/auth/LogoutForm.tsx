@@ -38,7 +38,15 @@ export default function LogoutForm({
           credentials: "include",
           headers: { "X-CSRFToken": csrftoken ?? "" },
         });
-        const data = await response.json();
+        let data: any = null;
+        const contentType = response.headers.get("content-type") || "";
+
+        if (contentType.includes("application/json")) {
+          data = await response.json();
+        } else {
+          const text = await response.text();
+          throw new Error(text.slice(0, 200));
+        }
 
         if (!response.ok) {
           throw new Error(data.error || messages.logout.textLogoutFailed);

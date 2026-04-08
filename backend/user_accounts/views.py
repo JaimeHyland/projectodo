@@ -9,9 +9,11 @@ from django.core.exceptions import ValidationError
 from django.views.decorators.http import require_POST, require_GET
 from django.http import JsonResponse
 from django.views.decorators.csrf import ensure_csrf_cookie, csrf_exempt
+from django.middleware.csrf import get_token
 from django.utils import translation
 from django.utils.translation import gettext as _
 from django.utils import timezone
+from urllib.parse import urlencode
 from .models import AuthToken
 from .utilities import generate_secure_token
 
@@ -36,10 +38,14 @@ def send_verification_email(email, username, locale):
         expires_at=timezone.now() + timedelta(minutes=30)
     )
 
-    verification_url = (
-        f"{settings.FRONTEND_URL}"
-        f"/verify-email?token={raw_token}&username={username}"
-    )
+    params = urlencode({
+        "auth": "set-password",
+        "token": raw_token,
+        "username": username,
+        "locale": locale
+    })
+
+    verification_url = f"{settings.FRONTEND_URL}/{locale}?{params}"
 
     subject = _("Verify your Projectodo account")
     text_content = _(
@@ -77,7 +83,7 @@ def send_verification_email(email, username, locale):
 
 @ensure_csrf_cookie
 def csrf(request):
-    return JsonResponse({"csrfToken": "Set in cookie"})
+    return JsonResponse({"csrfToken": get_token(request)})
 
 
 @require_POST
@@ -132,7 +138,7 @@ def set_password_view(request):
             username=auth_token.username,
             email=auth_token.email,
             password=password,
-            is_active=False
+            is_active=True,
         )
 
     elif auth_token.token_type == "password_reset":
@@ -241,7 +247,7 @@ def login_view(request):
 
     if user is None:
         return JsonResponse(
-            {"error": _("Invalid credentials")},
+            {"error": _("Invalid credentials DEBUG3")},
             status=401,
         )
 

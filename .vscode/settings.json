@@ -4,6 +4,7 @@
         "corsheaders",
         "esnext",
         "maximizable",
+        "nplurals",
         "postgresql",
         "projectodo",
         "Projectodo",
