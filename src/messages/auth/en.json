@@ -1,10 +1,13 @@
 {
   "login": {
     "labelTitle": "Log-in",
-    "labelUsername": "User name",
+    "labelUsername": "Username",
     "labelPassword": "Password",
     "buttonSubmit": "Log in",
-    "textError": "Invalid user name or password"
+    "buttonSubmitting": "Logging in...",
+    "textErrorLoginFailed": "Login failed.",
+    "textErrorInvalidCredentials": "Invalid username or password.",
+    "textErrorUnknown": "An unknown error occurred. Please try again later.  If the problem persists, please contact the webmaster."
   },
   "logout": {
     "labelTitle": "Log-out",
@@ -13,8 +16,27 @@
     "buttonSubmit": "Log out",
     "textUnknownUser": "Unknown user",
     "textConfirm": "Are you sure you want to log out?",
-    "textLogoutFailed": "Could not log out. Please contact the webmaster?"
+    "textErrorLogoutFailed": "Could not log out. Please contact the webmaster?"
   },
+  "setPassword": {  
+    "labelTitle": "Set Password",
+    "titleSuccess": "Password Set Successfully",
+    "textSuccess": "Your password has been set successfully.",
+    "textSettingPasswordFor": "Setting password for",
+    "textMissingToken": "Missing token. Please click the link in the email we sent you.",
+    "textRequiredFields": "Please fill in all required fields.",
+    "textPasswordMismatch": "The passwords do not match.",
+    "textSetPasswordFailed": "Failed to set password.",
+    "textErrorLoginFailed": "Login failed.",
+    "textNetworkError": "A network error has occurred. Please try again.",
+    "labelPassword": "Password",
+    "labelConfirmPassword": "Confirm Password",
+    "labelAutoLogin": "Auto Login",
+    "buttonSubmit": "Submit",
+    "buttonSubmitting": "Submitting...",
+    "buttonContinue": "Continue"
+  },
+  
   "signup": {
     "labelTitle": "Log-in",
     "labelUsername": "User name",
@@ -26,20 +48,42 @@
     "buttonSubmit": "Log in",
     "textError": "Invalid user name or password",
     "noteRequiredFields": "* required fields",
+    "textMissingToken": "Missing token. Please click  the link in the email we sent you.",
     "textSignupFailed": "The sign-up process failed. Please contact the webmaster!",
     "textSignupSuccess": "Almost done! We’ve sent a confirmation email to the address you provided. Please check your inbox and click the link to activate your account.",
     "textEmailMismatch": "The e-mail addresses do not match.",
     "textInvalidEmail": "Please enter a valid email address.",
-    "textRequiredFields": "Please fill in all required fields."
+    "textRequiredFields": "Please fill in all required fields.",
+    "textNetworkError": "A network error has occurred. Please try again. ",
+    "textErrorUnknown": "An unknown error occurred. Please try again later. If the problem persists, please contact the webmaster."
   },
-  "reset": {
-    "labelTitle": "Passwort zurücksetzen",
-    "labelUsername": "Benutzername",
-    "labelOldPassword": "Altes Passwort",
-    "labelNewPassword": "Neues Passwort",
-    "labelConfirmNewPassword": "Neues Passwort bestätigen",
-    "buttonSubmit": "Passwort ändern",
-    "buttonForgottenPassword": "Passwort vergessen",
-    "textError": "Ungültiger Benutzername oder Passwort"
+  "changePassword": {
+    "labelTitle": "Change Password",
+    "labelUsername": "Username",
+    "labelOldPassword": "Old password",
+    "buttonForgottenPassword": "Forgot password",
+    "labelNewPassword": "New password",
+    "labelConfirmNewPassword": "Confirm new password",
+    "buttonSubmit": "Change password",
+    "buttonSubmitting": "Changing password...",
+    "textInvalidPasswordError": "Invalid password",
+    "textPasswordMismatch": "The passwords do not match.",
+    "textSuccess": "Your password has been changed successfully.",
+    "textChangeFailed": "Failed to change password.",
+    "textNetworkError": "A network error has occurred. Please try again.",
+    "textRequiredFields": "Please fill in all required fields.",
+    "noteRequiredFields": "* required fields",
+    "textPasswordMatch": "Passwords match.",
+    "textPasswordMismatchLive": "Passwords do not match."
+  },
+  "resetPassword": {
+    "labelTitle": "Reset password",
+    "labelUsername": "Username",
+    "labelEmail": "E-mail address",
+    "labelNewPassword": "New password",
+    "labelConfirmNewPassword": "Confirm new password",
+    "buttonSubmit": "Reset password",
+    "textInvalidEmailAddress": "Invalid email address",
+    "textUnknownEmailAddress": "Cannot find a user with this email address. Please check the email address you entered and try again."
   }
 }

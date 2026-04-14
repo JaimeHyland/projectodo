@@ -1,45 +1,70 @@
-{
-  "login": {
-    "labelTitle": "Iniciar una sesión",
-    "labelUsername": "Nombre de usuario",
-    "labelPassword": "Contraseña",
-    "buttonSubmit": "Iniciar sesión",
-    "textError": "Nombre de usuario o contraseña inválidos"
-  },
-  "logout": {
-    "labelTitle": "Iniciar una sesión",
-    "labelUsername": "Nombre de usuario",
-    "buttonSubmit": "Terminar sesión",
-    "buttonCancel": "Anular",
-    "textUnknownUser": "Usuario desconocido",
-    "textConfirm": "¿Seguro que quieres terminar la sesión?",
-    "textLogoutFailed": "Could not log out. Please contact the webmaster!"
-  },
-  "signup": {
-    "labelTitle": "Iniciar sesión",
-    "labelUsername": "Nombre de usuario",
-    "labelFirstName": "Nombre",
-    "labelLastName": "Primer apellido",
-    "labelEmail": "Correo electrónico",
-    "labelConfirmEmail": "Confirmar correo electrónico",
-    "labelPassword": "Contraseña",
-    "buttonSubmit": "Enviar",
-    "noteRequiredFields": "* campos requeridos",
-    "textError": "Nombre de usuario o contraseña inválidos",
-    "textSignupFailed": "The proceso de registro ha fallado. Conéctate con el webmaster, por favor.",
-    "textSignupSuccess": "¡Casi listo! Hemos enviado un correo de confirmación a la dirección que proporcionaste. Por favor, revisa tu bandeja de entrada y haz clic en el enlace para activar tu cuenta.",
-    "textEmailMismatch": "Las direcciones de correo electrónico no coinciden.",
-    "textInvalidEmail": "Por favor, introduce una dirección de correo electrónico válida.",
-    "textRequiredFields": "Por favor, completa todos los campos requeridos."
-  },
-  "reset": {
-    "labelTitle": "Restablecer contraseña",
-    "labelUsername": "Nombre de usuario",
-    "labelOldPassword": "Contraseña antigua",
-    "labelNewPassword": "Nueva contraseña",
-    "labelConfirmNewPassword": "Confirmar nueva contraseña",
-    "buttonSubmit": "Cambiar contraseña",
-    "buttonForgottenPassword": "¿Olvidaste tu contraseña?",
-    "textError": "Nombre de usuario o contraseña inválidos"
+  {
+      "login": {
+      "labelTitle": "Iniciar una sesión",
+      "labelUsername": "Nombre de usuario",
+      "labelPassword": "Contraseña",
+      "buttonSubmit": "Iniciar sesión",
+      "buttonSubmitting": "Iniciando sesión...",
+      "textErrorLoginFailed": "Error al iniciar sesión.",
+      "textErrorInvalidCredentials": "Nombre de usuario o contraseña inválidos.",
+      "textErrorUnknown": "Ocurrió un error desconocido. Por favor, inténtalo de nuevo más tarde. Si el problema persiste, por favor contacta con el webmaster."
+    },
+    "logout": {
+      "labelTitle": "Iniciar una sesión",
+      "labelUsername": "Nombre de usuario",
+      "buttonSubmit": "Terminar sesión",
+      "buttonCancel": "Anular",
+      "textUnknownUser": "Usuario desconocido",
+      "textConfirm": "¿Seguro que quieres terminar la sesión?",
+      "textErrorLogoutFailed": "No se pudo cerrar la sesión. Por favor, contacta con el webmaster."
+    },
+    "signup": {
+      "labelTitle": "Iniciar sesión",
+      "labelUsername": "Nombre de usuario",
+      "labelFirstName": "Nombre",
+      "labelLastName": "Primer apellido",
+      "labelEmail": "Correo electrónico",
+      "labelConfirmEmail": "Confirmar correo electrónico",
+      "labelPassword": "Contraseña",
+      "buttonSubmit": "Enviar",
+      "noteRequiredFields": "* campos requeridos",
+      "textError": "Nombre de usuario o contraseña inválidos",
+      "textMissingToken": "Falta el token. Por favor, haz clic en el enlace del correo que te enviamos.",
+      "textSignupFailed": "The proceso de registro ha fallado. Conéctate con el webmaster, por favor.",
+      "textSignupSuccess": "¡Casi listo! Hemos enviado un correo de confirmación a la dirección que proporcionaste. Por favor, revisa tu bandeja de entrada y haz clic en el enlace para activar tu cuenta.",
+      "textEmailMismatch": "Las direcciones de correo electrónico no coinciden.",
+      "textInvalidEmail": "Por favor, introduce una dirección de correo electrónico válida.",
+      "textRequiredFields": "Por favor, completa todos los campos requeridos.",
+      "textNetworkError": "Ocurrió un error de red. Por favor, inténtalo de nuevo. ",
+      "textErrorUnknown": "Ocurrió un error desconocido. Por favor, inténtalo de nuevo más tarde. Si el problema persiste, por favor contacta con el webmaster."
+    },
+    "changePassword": {
+      "labelTitle": "Cambiar contraseña",
+      "labelUsername": "Nombre de usuario",
+      "labelOldPassword": "Contraseña antigua",
+      "buttonForgottenPassword": "¿Olvidaste tu contraseña?",
+      "labelNewPassword": "Nueva contraseña",
+      "labelConfirmNewPassword": "Confirmar nueva contraseña",
+      "buttonSubmit": "Cambiar contraseña",
+      "buttonSubmitting": "Cambiando contraseña...",
+      "textInvalidPasswordError": "Contraseña inválida",
+      "textPasswordMismatch": "Las contraseñas no coinciden.",
+      "textSuccess": "Tu contraseña ha sido cambiada exitosamente.",
+      "textChangeFailed": "No se pudo cambiar la contraseña.",
+      "textNetworkError": "Ocurrió un error de red. Por favor, inténtalo de nuevo.",
+      "textRequiredFields": "Por favor, completa todos los campos requeridos.",
+      "noteRequiredFields": "* campos requeridos",
+      "textPasswordMatch": "Las contraseñas coinciden.",
+      "textPasswordMismatchLive": "Las contraseñas no coinciden."
+    },
+    "resetPassword": {
+      "labelTitle": "Restablecer contraseña",
+      "labelUsername": "Nombre de usuario",
+      "labelEmail": "Dirección de correo electrónico",
+      "labelNewPassword": "Nueva contraseña",
+      "labelConfirmNewPassword": "Confirmar nueva contraseña",
+      "buttonSubmit": "Restablecer contraseña",
+      "textInvalidEmailAddress": "Dirección de correo electrónico inválida",
+      "textUnknownEmailAddress": "No se puede encontrar un usuario con esta dirección de correo electrónico. Por favor, verifica la dirección de correo electrónico que ingresaste y vuelve a intentarlo."
+    }
   }
-}

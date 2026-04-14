@@ -1,14 +1,27 @@
 "use client";
 
 import { apiUrl } from "@/lib/api";
+import { useState } from "react";
 
 
 interface LogoutFormProps {
   locale: string;
   user: {username?: string } | null;
-  messages: any;
+  messages: LogoutMessages;
   onConfirm?: () => void;
   onCancel: () => void;
+}
+
+interface LogoutMessages {
+  logout: {
+    labelTitle: string;
+    labelUsername: string;
+    textConfirm: string;
+    buttonCancel: string;
+    buttonSubmit: string;
+    textUnknownUser: string;
+    textErrorLogoutFailed: string;
+  };
 }
 
 export default function LogoutForm({
@@ -18,14 +31,17 @@ export default function LogoutForm({
   onConfirm,
   onCancel,
 }: LogoutFormProps) {
+
+  const [error, setError] = useState<string | null>(null);
   const displayName = user?.username || messages.logout.textUnknownUser;
 
-  async function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.SyntheticEvent<HTMLFormElement>) {
     e.preventDefault();
     try {
       await fetch(apiUrl("auth/csrf/"), {
         method: "GET",
         credentials: "include",
+        headers: { "Accept-Language": locale },
       });
       const csrftoken = document.cookie
         .split("; ")
@@ -36,8 +52,12 @@ export default function LogoutForm({
       const response = await fetch(apiUrl("auth/logout/"), {
           method: "POST",
           credentials: "include",
-          headers: { "X-CSRFToken": csrftoken ?? "" },
+          headers: {
+            "X-CSRFToken": csrftoken ?? "",
+            "Accept-Language": locale,
+          },
         });
+        
         let data: any = null;
         const contentType = response.headers.get("content-type") || "";
 
@@ -49,12 +69,17 @@ export default function LogoutForm({
         }
 
         if (!response.ok) {
-          throw new Error(data.error || messages.logout.textLogoutFailed);
+          throw new Error(data.error || messages.logout.textErrorLogoutFailed);
         }
 
         onConfirm?.();
       } catch (err) {
-        console.error("Logout error:", err);
+        console.error("[logout] error:", err);
+        if (err instanceof Error) {
+          setError(err.message);
+        } else {
+          setError(messages.logout.textErrorLogoutFailed);
+        }
       }
     }
 

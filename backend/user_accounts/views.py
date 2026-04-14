@@ -1,7 +1,12 @@
 import json
-import logging
 from datetime import timedelta
-from django.contrib.auth import authenticate, login, logout, get_user_model
+from django.contrib.auth import (
+    authenticate,
+    login,
+    logout,
+    get_user_model,
+    update_session_auth_hash
+)
 from django.conf import settings
 from django.contrib.auth.password_validation import validate_password
 from django.core.mail import EmailMultiAlternatives
@@ -196,9 +201,6 @@ def signup_request_view(request):
     email = data.get("email")
     locale = request.headers.get("Accept-Language", "en").split(",")[0]
 
-    logger = logging.getLogger(__name__)
-    logger.warning(f"DEBUG - Locale in signup_request_view: {locale}")
-
     translation.activate(locale)
 
     if not username or not email:
@@ -221,7 +223,6 @@ def signup_request_view(request):
 
     try:
         send_verification_email(email, username, locale)
-        logger.warning(f"DEBUG -  Locale in send_verification_email: {locale}")
         return JsonResponse({
             "success": True,
             "message": _("Verification email sent to %(email)s") % {
@@ -247,7 +248,7 @@ def login_view(request):
 
     if user is None:
         return JsonResponse(
-            {"error": _("Invalid credentials DEBUG3")},
+            {"error": _("Invalid credentials")},
             status=401,
         )
 
@@ -263,6 +264,50 @@ def login_view(request):
 def logout_view(request):
     logout(request)
     return JsonResponse({"success": True})
+
+
+@require_POST
+def change_password_view(request):
+    if not request.user.is_authenticated:
+        return JsonResponse(
+            {"error": _("Authentication required")},
+            status=401,
+        )
+
+    data = json.loads(request.body.decode("utf-8"))
+    old_password = data.get("old_password")
+    new_password = data.get("new_password")
+
+    if not old_password or not new_password:
+        return JsonResponse(
+            {"error": _(
+                "You must provide both your current and new passwords. "
+                "If you can't remember your current password, use the 'Forgot Password' "
+                "option to reset it."
+            )},
+            status=400,
+        )
+
+    if not request.user.check_password(old_password):
+        return JsonResponse(
+            {"error": _("Current password is incorrect")},
+            status=400,
+        )
+
+    try:
+        validate_password(new_password, user=request.user)
+    except ValidationError as e:
+        return JsonResponse({"error": list(e.messages)}, status=400)
+
+    request.user.set_password(new_password)
+    request.user.save()
+
+    update_session_auth_hash(request, request.user)
+
+    return JsonResponse({
+        "success": True,
+        "message": _("Password changed successfully"),
+    })
 
 
 @require_GET

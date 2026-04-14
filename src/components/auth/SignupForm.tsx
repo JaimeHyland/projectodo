@@ -4,8 +4,29 @@ import { useState } from "react";
 
 interface SignupFormProps {
   locale: string;
-  messages: any;
+  messages: SignupMessages;
   onSuccess?: () => void;
+}
+
+interface SignupMessages {
+  signup: {
+    labelUsername: string;
+    labelFirstName: string;
+    labelLastName: string;
+    labelEmail: string;
+    labelConfirmEmail: string;
+    labelPassword: string;
+    buttonSubmit: string;
+    textError: string;
+    noteRequiredFields: string;
+    textSignupFailed: string;
+    textSignupSuccess: string;
+    textEmailMismatch: string;
+    textInvalidEmail: string;
+    textRequiredFields: string;
+    textNetworkError: string;
+    textErrorUnknown: string;
+  };
 }
 
 export default function SignupForm({ locale, messages, onSuccess }: SignupFormProps) {
@@ -69,19 +90,18 @@ export default function SignupForm({ locale, messages, onSuccess }: SignupFormPr
         throw new Error(text.slice(0, 200));
       }
 
-      console.log("DEBUG - Signup response:", data);
 
       if (!response.ok) {
-        setError(data.error || "Signup failed");
+        setError(data.error || messages.signup.textSignupFailed);
         setLoading(false);
         return;
       }
 
-      alert(data.message || "Verification email sent!");
+      alert(data.message || messages.signup.textSignupSuccess);
       onSuccess?.();
 
     } catch (err) {
-      setError("Network error. Please try again." + err);
+      setError(messages.signup.textNetworkError + err);
     } finally {
       setLoading(false);
     }
@@ -117,7 +137,7 @@ export default function SignupForm({ locale, messages, onSuccess }: SignupFormPr
 
       {/* Last Name */}
       <div>
-        <label className="block mb-1">{messages.signup.labelLastName ?? "Last name"}</label>
+        <label className="block mb-1">{messages.signup.labelLastName}</label>
         <input
           type="text"
           value={lastName}
@@ -128,7 +148,7 @@ export default function SignupForm({ locale, messages, onSuccess }: SignupFormPr
 
       {/* Email */}
       <div>
-        <label className="block mb-1">{messages.signup.labelEmail ?? "Email"} *</label>
+        <label className="block mb-1">{messages.signup.labelEmail} *</label>
         <input
           type="email"
           value={email}
@@ -140,7 +160,7 @@ export default function SignupForm({ locale, messages, onSuccess }: SignupFormPr
 
       {/* Confirm Email */}
       <div>
-        <label className="block mb-1">{messages.signup.labelConfirmEmail ?? "Repeat email"} *</label>
+        <label className="block mb-1">{messages.signup.labelConfirmEmail} *</label>
         <input
           type="email"
           value={emailConfirm}

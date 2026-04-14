@@ -1,10 +1,13 @@
 {
-  "login": {
+    "login": {
     "labelTitle": "Anmeldung",
     "labelUsername": "Benutzername",
     "labelPassword": "Passwort",
     "buttonSubmit": "Anmelden",
-    "textError": "Ungültiger Benutzername oder Passwort"
+    "buttonSubmitting": "Anmelde...",
+    "textErrorLoginFailed": "Anmeldung fehlgeschlagen.",
+    "textErrorInvalidCredentials": "Ungültiger Benutzername oder Passwort.",
+    "textErrorUnknown": "Ein unbekannter Fehler ist aufgetreten. Bitte versuchen Sie es später erneut.  Wenn das Problem weiterhin besteht, kontaktieren Sie den Webmaster."
   },
   "logout": {
     "labelTitle": "Abmeldung",
@@ -12,7 +15,8 @@
     "buttonSubmit": "Abmelden",
     "buttonCancel": "Stornieren",
     "textUnknownUser": "Unbekannte Benutzer",
-    "textConfirm": "Möchten Sie sich wirklich abmelden"
+    "textConfirm": "Möchten Sie sich wirklich abmelden",
+    "textErrorLogoutFailed": "Abmeldung fehlgeschlagen. Bitte kontaktieren Sie den Webmaster."
   },
   "signup": {
     "labelTitle": "Anmeldung",
@@ -25,20 +29,42 @@
     "buttonSubmit": "Anmelden",
     "noteRequiredFields": "* erforderliche Felder",
     "textError": "Ungültiger Benutzername oder Passwort",
+    "textMissingToken": "Fehlender Token. Bitte klicken Sie auf den Link in der von uns gesendeten E-Mail.",
     "textSignupFailed": "Die Anmeldung hat leider nicht geklappt. Bitte wende dich an den Webmaster!",
     "textSignupSuccess": "Fast geschafft! Wir haben eine Bestätigungs-E-Mail an die von dir angegebene Adresse geschickt. Schau in deinen Posteingang und klick auf den Link, um dein Konto zu aktivieren.",
     "textEmailMismatch": "Die E-Mail-Adressen stimmen nicht überein.",
     "textInvalidEmail": "Bitte geben Sie eine gültige E-Mail-Adresse ein.",
-    "textRequiredFields": "Bitte füllen Sie alle erforderlichen Felder aus."
+    "textRequiredFields": "Bitte füllen Sie alle erforderlichen Felder aus.",
+    "textNetworkError": "Ein Netzwerkfehler ist aufgetreten. Bitte versuchen Sie es erneut. ",
+    "textErrorUnknown": "Ein unbekannter Fehler ist aufgetreten. Bitte versuchen Sie es später erneut.  Wenn das Problem weiterhin besteht, kontaktieren Sie den Webmaster."
   },
-  "reset": {
-    "labelTitle": "Passwort zurücksetzen",
+    "changePassword": {
+    "labelTitle": "Passwort ändern",
     "labelUsername": "Benutzername",
     "labelOldPassword": "Altes Passwort",
+    "buttonForgottenPassword": "Passwort vergessen",
     "labelNewPassword": "Neues Passwort",
     "labelConfirmNewPassword": "Neues Passwort bestätigen",
     "buttonSubmit": "Passwort ändern",
-    "buttonForgottenPassword": "Passwort vergessen",
-    "textError": "Ungültiger Benutzername oder Passwort"
+    "buttonSubmitting": "Passwort wird geändert...",
+    "textInvalidPasswordError": "Ungültiges Passwort",
+    "textPasswordMismatch": "Die Passwörter stimmen nicht überein.",
+    "textSuccess": "Ihr Passwort wurde erfolgreich geändert.",
+    "textChangeFailed": "Fehler beim Ändern des Passworts.",
+    "textNetworkError": "Ein Netzwerkfehler ist aufgetreten. Bitte versuchen Sie es erneut.",
+    "textRequiredFields": "Bitte füllen Sie alle erforderlichen Felder aus.",
+    "noteRequiredFields": "* erforderliche Felder",
+    "textPasswordMatch": "Passwörter stimmen überein.",
+    "textPasswordMismatchLive": "Passwörter stimmen nicht überein."
+  },
+  "resetPassword": {
+    "labelTitle": "Passwort zurücksetzen",
+    "labelUsername": "Benutzername",
+    "labelEmail": "Email-Adresse",
+    "labelNewPassword": "Neues Passwort",
+    "labelConfirmNewPassword": "Neues Passwort bestätigen",
+    "buttonSubmit": "Passwort zurücksetzen",
+    "textInvalidEmailAddress": "Ungültige E-Mail-Adresse",
+    "textUnknownEmailAddress": "Konnte keinen Benutzer mit dieser E-Mail-Adresse finden. Bitte überprüfen Sie die von Ihnen eingegebene E-Mail-Adresse und versuchen Sie es erneut."
   }
 }

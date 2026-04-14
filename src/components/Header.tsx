@@ -17,7 +17,9 @@ import AuthModal from '@/components/auth/AuthModal';
 import LoginForm from '@/components/auth/LoginForm';
 import LogoutForm from '@/components/auth/LogoutForm';
 import SignupForm from '@/components/auth/SignupForm';
-import ResetForm from '@/components/auth/ResetForm';
+import ChangePasswordForm from '@/components/auth/ChangePasswordForm';
+import ResetPasswordForm from '@/components/auth/ResetPasswordForm';
+
 
 export function Header() {
   type AuthState = {
@@ -36,8 +38,9 @@ export function Header() {
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [showLogoutModal, setShowLogoutModal] = useState(false);
   const [showSignupModal, setShowSignupModal] = useState(false);
-  const [showResetModal, setShowResetModal] = useState(false);
+  const [showResetPasswordModal, setShowResetPasswordModal] = useState(false);
   const [localeMenuOpen, setLocaleMenuOpen] = useState(false);
+  const [showChangePasswordModal, setShowChangePasswordModal] = useState(false);
   const [user, setUser] = useState<User | null>(null);
 
   const searchParams = useSearchParams();
@@ -74,14 +77,6 @@ export function Header() {
     { label: headerMessages.menuContact, href: '/contact' },
   ];
 
-  // const authMenuItems = [
-  //   { label: headerMessages.menuSignup, href: '/auth/signup' },
-  //   { label: headerMessages.menuLogin, href: '/auth/login' },
-  //   { label: headerMessages.menuReset, href: '/auth/reset' },
-  // ];
-
-  // const downloadSubmenu = ['Download 1', 'Download 2', 'Download 3'];
-
   const tabColors = [
     '#2e744b',
     '#fabe00',
@@ -95,25 +90,17 @@ export function Header() {
     '#008bae',
   ];
 
-  // const [auth, setAuth] = useState<AuthState>({
-  //   isAuthenticated: false,
-  //   username: null,
-  //   isSuperuser: false,
-  // });
-
   useEffect(() => {
     const authParam = searchParams.get('auth');
 
     setShowLoginModal(authParam === 'login');
     setShowSignupModal(authParam === 'signup');
     setShowLogoutModal(authParam === 'logout');
-    setShowResetModal(authParam === 'reset');
+    setShowChangePasswordModal(authParam === 'change_password');
+    setShowResetPasswordModal(authParam === 'reset_password');
 
     const fetchAuthStatus = async () => {
       try {
-        console.log('DEBUG - Fetching:', apiUrl('auth/status/'));
-        console.log('DEBUG - document.cookie:', document.cookie);
-
         const response = await fetch(apiUrl('auth/status/'), {
           credentials: 'include',
         });
@@ -121,7 +108,6 @@ export function Header() {
         let data: any = null;
         try {
           data = await response.json();
-          console.log('DEBUG - AUTH STATUS RESPONSE:', data);
         } catch {
           data = null;
         }
@@ -203,14 +189,25 @@ export function Header() {
     router.replace(pathname);
   };
 
-  const openReset = () => {
+  const openChangePassword = () => {
     setAuthMenuOpen(false);
-    setShowResetModal(true);
-    router.replace(`${pathname}?auth=reset`);
+    setShowChangePasswordModal(true);
+    router.replace(`${pathname}?auth=change_password`);
   };
 
-  const closeReset = () => {
-    setShowResetModal(false);
+  const closeChangePassword = () => {
+    setShowChangePasswordModal(false);
+    router.replace(pathname);
+  };
+
+    const openResetPassword = () => {
+    setAuthMenuOpen(false);
+    setShowResetPasswordModal(true);
+    router.replace(`${pathname}?auth=reset_password`);
+  };
+
+  const closeResetPassword = () => {
+    setShowResetPasswordModal(false);
     router.replace(pathname);
   };
 
@@ -230,7 +227,6 @@ export function Header() {
     return pathname || '/';
   })();
 
-  // CHANGED: one shared active-state function for both tabs and active-color bar
   const isItemActive = (href: string) => {
     if (href === '/') {
       return pathWithoutLocale === '/';
@@ -242,10 +238,8 @@ export function Header() {
     );
   };
 
-  // CHANGED: activeIndex now uses the shared active-state function
   const activeIndex = menuItems.findIndex((item) => isItemActive(item.href));
 
-  // CHANGED: activeColor is derived from the same active item
   const activeColor =
     activeIndex !== -1
       ? tabColors[activeIndex % tabColors.length]
@@ -369,9 +363,9 @@ export function Header() {
                       <li>
                         <button
                           className="block px-4 py-2 hover:bg-gray-100"
-                          onClick={openReset}
+                          onClick={openChangePassword}
                         >
-                          {headerMessages.menuReset}
+                          {headerMessages.menuChangePassword}
                         </button>
                       </li>
                     </>
@@ -453,6 +447,19 @@ export function Header() {
             </AuthModal>
           )}
 
+          {showChangePasswordModal && (
+            <AuthModal onClose={closeChangePassword}>
+              <ChangePasswordForm
+                locale={currentLocale}
+                messages={authMessages}
+                onSuccess={() => {
+                  alert(authMessages.changePassword.textSuccess);
+                  closeChangePassword();
+                }}
+              />
+            </AuthModal>
+          )}
+
           {showLogoutModal && (
             <AuthModal onClose={closeLogout}>
               <LogoutForm
@@ -468,14 +475,14 @@ export function Header() {
             </AuthModal>
           )}
 
-          {showResetModal && (
-            <AuthModal onClose={closeReset}>
-              <ResetForm
+          {showResetPasswordModal && (
+            <AuthModal onClose={closeResetPassword}>
+              <ResetPasswordForm
                 locale={currentLocale}
                 messages={authMessages}
                 onSuccess={() => {
                   alert("Password reset sent! (dummy logic)");
-                  closeReset();
+                  closeResetPassword();
                 }}
               />
             </AuthModal>

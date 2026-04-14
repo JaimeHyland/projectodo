@@ -18,4 +18,14 @@ urlpatterns = [
         views.verify_email_view,
         name="verify-email-confirm"
     ),
+    path(
+        "change_password/",
+        views.change_password_view,
+        name="change_password"
+    ),
+    # path(
+    #     "reset_password_request/",
+    #     views.reset_password_request_view,
+    #     name="reset_password_request"
+    # ),
 ]

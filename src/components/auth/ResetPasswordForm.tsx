@@ -2,18 +2,31 @@
 
 import { useState } from "react";
 
-interface ResetFormProps {
+interface ResetPasswordMessages {
+  resetPassword: {
+    labelTitle: string;
+    labelUsername: string;
+    labelEmail: string;
+    labelNewPassword: string;
+    labelConfirmNewPassword: string;
+    buttonSubmit: string;
+    textInvalidEmailAddress: string;
+    textUnknownEmailAddress: string;
+  };
+}
+
+interface ResetPasswordFormProps {
   locale: string;
-  messages: any;
+  messages: ResetPasswordMessages;
   onSuccess?: () => void;
 }
 
-export default function ResetForm({ locale, messages, onSuccess }: ResetFormProps) {
+export default function ResetPasswordForm({ locale, messages, onSuccess }: ResetPasswordFormProps) {
   const [username, setUsername] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e: React.SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError(null);
     setLoading(true);
@@ -32,7 +45,7 @@ export default function ResetForm({ locale, messages, onSuccess }: ResetFormProp
       {error && <div className="text-red-600 text-center">{error}</div>}
 
       <div>
-        <label className="block mb-1">{messages.reset.labelUsername}</label>
+        <label className="block mb-1">{messages.resetPassword.labelUsername}</label>
         <input
           type="text"
           value={username}
@@ -47,7 +60,7 @@ export default function ResetForm({ locale, messages, onSuccess }: ResetFormProp
         disabled={loading}
         className="w-full bg-orange-600 text-white py-2 rounded hover:bg-orange-700 disabled:opacity-50"
       >
-        {messages.reset.buttonSubmit}
+        {messages.resetPassword.buttonSubmit}
       </button>
     </form>
   );

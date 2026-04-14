@@ -6,9 +6,30 @@ interface SetPasswordProps {
   token: string;
   username?: string;
   locale: string;
-  messages: any;
+  messages: SetPasswordMessages;
   onSuccess?: (data?: any) => void;
   onClose?: () => void;
+}
+
+interface SetPasswordMessages {
+  setPassword: {
+    labelTitle: string;
+    titleSuccess: string;
+    textSuccess: string;
+    textSettingPasswordFor: string;
+    textMissingToken: string;
+    textRequiredFields: string;
+    textPasswordMismatch: string;
+    textSetPasswordFailed: string;
+    textErrorLoginFailed: string;
+    textNetworkError: string;
+    labelPassword: string;
+    labelConfirmPassword: string;
+    labelAutoLogin: string;
+    buttonSubmit: string;
+    buttonSubmitting: string;
+    buttonContinue: string;
+  };
 }
 
 export default function SetPassword({
@@ -43,28 +64,25 @@ export default function SetPassword({
     return <div className="text-red-600 text-center">{error}</div>;
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError(null);
     setLoading(true);
 
     if (!token) {
-      setError(messages?.setPassword?.textMissingToken ?? "Missing token.");
+      setError(messages.setPassword.textMissingToken);
       setLoading(false);
       return;
     }
 
     if (!password || !passwordConfirm) {
-      setError(messages?.setPassword?.textRequiredFields ?? "Please complete all required fields.");
+      setError(messages.setPassword.textRequiredFields);
       setLoading(false);
       return;
     }
 
     if (password !== passwordConfirm) {
-      setError(
-        messages?.setPassword?.textPasswordMismatch ?? 
-        "Passwords do not match."
-      );
+      setError(messages.setPassword.textPasswordMismatch);
       setLoading(false);
       return;
     }
@@ -102,7 +120,7 @@ export default function SetPassword({
       }
 
       if (!response.ok) {
-        setError(data.error || "Failed to set password.");
+        setError(data.error || messages.setPassword.textSetPasswordFailed);
         setLoading(false);
         return;
       }
@@ -111,7 +129,7 @@ export default function SetPassword({
       setStep("success");
       onSuccess?.(data);
     } catch (err) {
-      setError("Network error. Please try again. " + err);
+      setError(messages.setPassword.textNetworkError);
     } finally {
       setLoading(false);
     }
@@ -155,13 +173,13 @@ export default function SetPassword({
       }
 
       if (!response.ok) {
-        setError(data.error || "Failed to log in.");
+        setError(messages.setPassword.textErrorLoginFailed);
         return;
       }
 
       onClose?.();
     } catch (err) {
-      setError("Network error. Please try again. " + err);
+      setError(messages.setPassword.textNetworkError);
     };
   };
   
@@ -169,12 +187,11 @@ export default function SetPassword({
     return(
       <div className="space-y-4">
         <h2 className="text-xl font-semibold text-center">
-          {messages?.setPassword?.titleSuccess ?? "Account created successfully"}
+          {messages.setPassword.titleSuccess}
         </h2>
 
         <p className="text-center text-gray-700">
-          {messages?.setPassword?.textSuccess ??
-            "Your password has been set and your account is ready."}
+          {messages.setPassword.textSuccess}
         </p>
 
         <label className="flex items-center gap-2 text-sm justify-center">
@@ -183,7 +200,7 @@ export default function SetPassword({
             checked={autoLogin}
             onChange={(e) => setAutoLogin(e.target.checked)}
           />
-          {messages?.setPassword?.labelAutoLogin ?? "Log me in now"}
+          {messages.setPassword.labelAutoLogin}
         </label>
 
         {error && <div className="text-red-600 text-center">{error}</div>}
@@ -193,7 +210,7 @@ export default function SetPassword({
           onClick={handleContinue}
           className="w-full py-2 rounded text-white bg-green-600 hover:bg-green-700"
         >
-          {messages?.setPassword?.buttonContinue ?? "Continue"}
+          {messages.setPassword.buttonContinue}
         </button>
       </div>
     );
@@ -204,20 +221,19 @@ export default function SetPassword({
       {renderError()}
 
       <h2 className="text-xl font-semibold text-center">
-        {messages?.setPassword?.title ?? "Set password"}
+        {messages.setPassword.labelTitle}
       </h2>
 
       {username && (
         <div className="text-sm text-gray-600 text-center">
-          {messages?.setPassword?.textSettingPasswordFor ??
-            "Setting password for"}{" "}
+          {messages.setPassword.textSettingPasswordFor}{" "}
           <span className="font-semibold">{username}</span>
         </div>
       )}
 
       <div>
         <label className="block mb-1">
-          {messages?.setPassword?.labelPassword ?? "Password"} *
+          {messages.setPassword.labelPassword} *
         </label>
         <input
           type="password"
@@ -231,7 +247,7 @@ export default function SetPassword({
 
       <div>
         <label className="block mb-1">
-          {messages?.setPassword?.labelConfirmPassword ?? "Repeat password"} *
+          {messages.setPassword.labelConfirmPassword} *
         </label>
         <input
           type="password"
@@ -251,8 +267,8 @@ export default function SetPassword({
         }`}
       >
         {loading
-          ? (messages?.setPassword?.buttonSubmitting ?? "Saving...")
-          : (messages?.setPassword?.buttonSubmit ?? "Set password")}
+          ? (messages.setPassword.buttonSubmitting)
+          : (messages.setPassword.buttonSubmit)}
       </button>
     </form>
   );
