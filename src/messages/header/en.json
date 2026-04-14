@@ -12,7 +12,7 @@
     "menuProduction": "Production",
     "menuTechnical": "Technical",
     "menuAuthNoSession": "Log in / Sign up",
-    "menuAuthSession": "My account",
+    "menuAuthSession": "Hi, {username}!",
     "menuSignup": "Sign up",
     "menuLogin": "Log in",
     "menuLogout": "Log out",

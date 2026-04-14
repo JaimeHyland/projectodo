@@ -319,21 +319,27 @@ export function Header() {
           <div className="relative">
             <button
               onClick={() => setAuthMenuOpen((prev) => !prev)}
-              className="px-3 py-2 rounded hover:bg-gray-300 font-medium text-gray-800 whitespace-nowrap"
+              className="px-3 py-2 rounded hover:bg-gray-300 font-medium text-gray-800 whitespace-nowrap flex items-center gap-2"
             >
-              {user
-                ? headerMessages.menuAuthSession
-                : headerMessages.menuAuthNoSession}
+              <span aria-hidden="true">
+                {user ? "👤" : "🔐"}
+              </span>
+
+              <span>
+                {user
+                  ? headerMessages.menuAuthSession.replace("{username}", user.username)
+                  : headerMessages.menuAuthNoSession}
+              </span>
             </button>
 
             {authMenuOpen && (
-              <div className="absolute left-0 top-full mt-2 w-36 bg-white border rounded shadow-md z-50">
+              <div className="absolute left-0 top-full mt-2 min-w-[160px] w-max bg-white border rounded shadow-md z-50">
                 <ul className="flex flex-col">
                   {!user && (
                     <>
                       <li>
                         <button
-                          className="block px-4 py-2 hover:bg-gray-100"
+                          className="block w-full text-left px-4 py-2 hover:bg-gray-100 whitespace-nowrap"
                           onClick={openLogin}
                         >
                           {headerMessages.menuLogin}
@@ -341,7 +347,7 @@ export function Header() {
                       </li>
                       <li>
                         <button
-                          className="block px-4 py-2 hover:bg-gray-100"
+                          className="block w-full text-left px-4 py-2 hover:bg-gray-100 whitespace-nowrap"
                           onClick={openSignup}
                         >
                           {headerMessages.menuSignup}
@@ -354,7 +360,7 @@ export function Header() {
                     <>
                       <li>
                         <button
-                          className="block px-4 py-2 hover:bg-gray-100"
+                          className="block w-full text-left px-4 py-2 hover:bg-gray-100 whitespace-nowrap"
                           onClick={openLogout}
                         >
                           {headerMessages.menuLogout}
@@ -362,7 +368,7 @@ export function Header() {
                       </li>
                       <li>
                         <button
-                          className="block px-4 py-2 hover:bg-gray-100"
+                          className="block w-full text-left px-4 py-2 hover:bg-gray-100 whitespace-nowrap"
                           onClick={openChangePassword}
                         >
                           {headerMessages.menuChangePassword}
@@ -377,10 +383,29 @@ export function Header() {
 
           {/* Hamburger for mobile */}
           <button
-            className="desktop:hidden text-2xl px-2"
+            type="button"
+            className="desktop:hidden absolute right-4 top-1/2 -translate-y-1/2 px-3 py-2"
             onClick={() => setMenuOpen(!menuOpen)}
+            aria-label={menuOpen ? "Close menu" : "Open menu"}
+            aria-expanded={menuOpen}
           >
-            ☰
+            <span className="relative block w-6 h-5">
+              <span
+                className={`absolute left-0 top-0 h-0.5 w-6 bg-black transition-all duration-200 ease-out ${
+                  menuOpen ? "top-2 rotate-45" : ""
+                }`}
+              />
+              <span
+                className={`absolute left-0 top-2 h-0.5 w-6 bg-black transition-all duration-200 ease-out ${
+                  menuOpen ? "opacity-0" : "opacity-100"
+                }`}
+              />
+              <span
+                className={`absolute left-0 top-4 h-0.5 w-6 bg-black transition-all duration-200 ease-out ${
+                  menuOpen ? "top-2 -rotate-45" : ""
+                }`}
+              />
+            </span>
           </button>
 
           {/* Desktop/laptop navbar */}
@@ -401,12 +426,12 @@ export function Header() {
             </ul>
 
             <div
-              className="hidden desktop:block w-full h-4 -mt-1"
+              className="hidden desktop:block w-full h-4"
               style={{ backgroundColor: activeColor }}
             />
           </div>
 
-          {/* Auth modals can stay here or below */}
+          {/* Auth modals */}
           {showLoginModal && (
             <AuthModal onClose={closeLogin}>
               <LoginForm

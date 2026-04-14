@@ -12,7 +12,7 @@
     "menuProduction": "Produktion",
     "menuTechnical": "Technisch",
     "menuAuthNoSession": "Registrieren/Anmelden",
-    "menuAuthSession": "Nutzerkonto",
+    "menuAuthSession": "Hallo, {username}!",
     "menuSignup": "Registrieren",
     "menuLogin": "Anmelden",
     "menuLogout": "Abmelden",
