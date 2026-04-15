@@ -5,6 +5,7 @@
     "labelPassword": "Password",
     "buttonSubmit": "Log in",
     "buttonSubmitting": "Logging in...",
+    "buttonForgottenPassword": "Forgot your password?",
     "textErrorLoginFailed": "Login failed.",
     "textErrorInvalidCredentials": "Invalid username or password.",
     "textErrorUnknown": "An unknown error occurred. Please try again later.  If the problem persists, please contact the webmaster."

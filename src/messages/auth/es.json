@@ -5,6 +5,7 @@
       "labelPassword": "Contraseña",
       "buttonSubmit": "Iniciar sesión",
       "buttonSubmitting": "Iniciando sesión...",
+      "buttonForgottenPassword": "¿Has olvidado tu contraseña?",
       "textErrorLoginFailed": "Error al iniciar sesión.",
       "textErrorInvalidCredentials": "Nombre de usuario o contraseña inválidos.",
       "textErrorUnknown": "Ocurrió un error desconocido. Por favor, inténtalo de nuevo más tarde. Si el problema persiste, por favor contacta con el webmaster."

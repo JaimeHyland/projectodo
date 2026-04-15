@@ -17,5 +17,6 @@
     "menuLogin": "Iniciar sesión",
     "menuLogout": "Terminar sesión",
     "menuChangePassword": "Cambiar contraseña",
+    "menuResetPassword": "Restablecer contraseña",
     "alertSignupSuccess": "¡Registro exitoso! Se ha enviado un correo electrónico de verificación a la dirección que proporcionaste. Revisa tu bandeja de entrada (incluida la carpeta de correo no deseado, si corresponde) y haz clic en el enlace para activar tu cuenta. Si tienes alguna pregunta o necesitas ayuda, ponte en contacto con nuestro equipo de soporte."
 }

@@ -211,6 +211,15 @@ export function Header() {
     router.replace(pathname);
   };
 
+  const switchToResetPassword = () => {
+    setShowLoginModal(false);
+    setShowChangePasswordModal(false);
+    setShowSignupModal(false);
+    setShowLogoutModal(false);
+    setShowResetPasswordModal(true);
+    router.replace(`${pathname}?auth=reset_password`);
+  };
+
     // CHANGED: normalize pathname by removing locale prefix
   const pathWithoutLocale = (() => {
     const segments = pathname.split('/').filter(Boolean);
@@ -353,6 +362,14 @@ export function Header() {
                           {headerMessages.menuSignup}
                         </button>
                       </li>
+                      <li>
+                        <button
+                          className="block w-full text-left px-4 py-2 hover:bg-gray-100 whitespace-nowrap"
+                          onClick={openResetPassword}
+                        >
+                          {headerMessages.menuResetPassword}
+                        </button>
+                      </li>
                     </>
                   )}
 
@@ -426,7 +443,7 @@ export function Header() {
             </ul>
 
             <div
-              className="hidden desktop:block w-full h-4"
+              className="hidden desktop:block w-full h-1"
               style={{ backgroundColor: activeColor }}
             />
           </div>
@@ -437,6 +454,7 @@ export function Header() {
               <LoginForm
                 locale={currentLocale}
                 messages={authMessages}
+                onForgotPassword={switchToResetPassword}
                 onSuccess={() => {
                   fetch(`${API_BASE}/api/auth/status/`, {
                     credentials: "include",
@@ -477,6 +495,7 @@ export function Header() {
               <ChangePasswordForm
                 locale={currentLocale}
                 messages={authMessages}
+                onForgotPassword={switchToResetPassword}
                 onSuccess={() => {
                   alert(authMessages.changePassword.textSuccess);
                   closeChangePassword();

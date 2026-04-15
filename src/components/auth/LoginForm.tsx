@@ -10,6 +10,7 @@ interface LoginMessages {
     labelPassword: string;
     buttonSubmit: string;
     buttonSubmitting: string;
+    buttonForgottenPassword: string;
     textErrorLoginFailed: string,
     textErrorInvalidCredentials: string,
     textErrorUnknown: string;
@@ -20,6 +21,7 @@ interface LoginFormProps {
   locale: string;
   messages: LoginMessages;
   onSuccess?: () => void;
+  onForgotPassword?: () => void;
 }
 
 function getCookie(name: string): string | undefined {
@@ -29,7 +31,12 @@ function getCookie(name: string): string | undefined {
 };
 
 
-export default function LoginForm({ locale, messages, onSuccess }: LoginFormProps) {
+export default function LoginForm({
+  locale,
+  messages,
+  onSuccess,
+  onForgotPassword
+}: LoginFormProps) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -145,6 +152,13 @@ export default function LoginForm({ locale, messages, onSuccess }: LoginFormProp
         className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 disabled:opacity-50"
       >
         {loading ? messages.login.buttonSubmitting : messages.login.buttonSubmit}
+      </button>
+      <button
+        type="button"
+        onClick={onForgotPassword}
+        className="w-full text-sm text-blue-600 hover:underline"
+      >
+        {messages.login.buttonForgottenPassword}
       </button>
    </form>
   );

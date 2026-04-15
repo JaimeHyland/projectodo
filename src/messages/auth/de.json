@@ -5,6 +5,7 @@
     "labelPassword": "Passwort",
     "buttonSubmit": "Anmelden",
     "buttonSubmitting": "Anmelde...",
+    "buttonForgottenPassword": "Passwort vergessen?",
     "textErrorLoginFailed": "Anmeldung fehlgeschlagen.",
     "textErrorInvalidCredentials": "Ungültiger Benutzername oder Passwort.",
     "textErrorUnknown": "Ein unbekannter Fehler ist aufgetreten. Bitte versuchen Sie es später erneut.  Wenn das Problem weiterhin besteht, kontaktieren Sie den Webmaster."

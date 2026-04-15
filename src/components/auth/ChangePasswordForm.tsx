@@ -6,6 +6,7 @@ interface ChangePasswordFormProps {
   locale: string;
   messages: ChangePasswordMessages;
   onSuccess?: () => void;
+  onForgotPassword?: () => void;
 }
 
 interface ChangePasswordMessages {
@@ -34,6 +35,7 @@ export default function ChangePasswordForm({
   locale,
   messages,
   onSuccess,
+  onForgotPassword,
 }: ChangePasswordFormProps) {
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
@@ -166,6 +168,16 @@ export default function ChangePasswordForm({
             {showOldPassword ? "🙈" : "👁"}
           </button>
         </div>
+        <div className="text-right">
+            <button
+                type="button"
+                onClick={onForgotPassword}
+                className="text-sm text-blue-600 hover:underline"
+            >
+                {messages.changePassword.buttonForgottenPassword}
+            </button>
+        </div>
+
       </div>
 
       <div>
