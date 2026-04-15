@@ -169,13 +169,13 @@ export default function ChangePasswordForm({
           </button>
         </div>
         <div className="text-right">
-            <button
-                type="button"
-                onClick={onForgotPassword}
-                className="text-sm text-blue-600 hover:underline"
-            >
-                {messages.changePassword.buttonForgottenPassword}
-            </button>
+          <button
+            type="button"
+            onClick={onForgotPassword}
+            className="text-sm text-blue-600 hover:underline"
+          >
+            {messages.changePassword.buttonForgottenPassword}
+          </button>
         </div>
 
       </div>

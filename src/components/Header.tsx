@@ -17,6 +17,7 @@ import AuthModal from '@/components/auth/AuthModal';
 import LoginForm from '@/components/auth/LoginForm';
 import LogoutForm from '@/components/auth/LogoutForm';
 import SignupForm from '@/components/auth/SignupForm';
+import SetPasswordEntry from './auth/SetPasswordEntry';
 import ChangePasswordForm from '@/components/auth/ChangePasswordForm';
 import ResetPasswordForm from '@/components/auth/ResetPasswordForm';
 
@@ -449,6 +450,7 @@ export function Header() {
           </div>
 
           {/* Auth modals */}
+          <SetPasswordEntry locale={currentLocale} messages={authMessages} />
           {showLoginModal && (
             <AuthModal onClose={closeLogin}>
               <LoginForm

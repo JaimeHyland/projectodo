@@ -39,6 +39,24 @@
       "textNetworkError": "Ocurrió un error de red. Por favor, inténtalo de nuevo. ",
       "textErrorUnknown": "Ocurrió un error desconocido. Por favor, inténtalo de nuevo más tarde. Si el problema persiste, por favor contacta con el webmaster."
     },
+    "setPassword": {  
+      "labelTitle": "Establecer contraseña",
+      "titleSuccess": "Contraseña establecida correctamente",
+      "textSuccess": "Tu contraseña ha sido establecida correctamente.",
+      "textSettingPasswordFor": "Estableciendo contraseña para",
+      "textMissingToken": "Falta el token. Por favor, haz clic en el enlace del correo que te enviamos.",
+      "textRequiredFields": "Por favor, completa todos los campos requeridos.",
+      "textPasswordMismatch": "Las contraseñas no coinciden.",
+      "textSetPasswordFailed": "No se pudo establecer la contraseña.",
+      "textErrorLoginFailed": "Error al iniciar sesión.",
+      "textNetworkError": "Ocurrió un error de red. Por favor, inténtalo de nuevo.",
+      "labelPassword": "Contraseña",
+      "labelConfirmPassword": "Confirmar contraseña",
+      "labelAutoLogin": "Iniciar sesión automáticamente",
+      "buttonSubmit": "Enviar",
+      "buttonSubmitting": "Enviando...",
+      "buttonContinue": "Continuar"
+    },
     "changePassword": {
       "labelTitle": "Cambiar contraseña",
       "labelUsername": "Nombre de usuario",

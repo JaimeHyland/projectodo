@@ -33,6 +33,9 @@ export default function SetPasswordEntry({
     router.replace(next);
   };
 
+  console.log("SetPasswordEntry messages:", messages);
+  console.log("SetPasswordEntry messages.setPassword:", messages?.setPassword);
+
   if (!isOpen || !token) return null;
 
   return (

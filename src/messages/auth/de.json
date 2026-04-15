@@ -39,7 +39,25 @@
     "textNetworkError": "Ein Netzwerkfehler ist aufgetreten. Bitte versuchen Sie es erneut. ",
     "textErrorUnknown": "Ein unbekannter Fehler ist aufgetreten. Bitte versuchen Sie es später erneut.  Wenn das Problem weiterhin besteht, kontaktieren Sie den Webmaster."
   },
-    "changePassword": {
+  "setPassword": {  
+    "labelTitle": "Passwort festlegen",
+    "titleSuccess": "Passwort erfolgreich festgelegt",
+    "textSuccess": "Ihr Passwort wurde erfolgreich festgelegt.",
+    "textSettingPasswordFor": "Passwort wird festgelegt für",
+    "textMissingToken": "Fehlender Token. Bitte klicken Sie auf den Link in der von uns gesendeten E-Mail.",
+    "textRequiredFields": "Bitte füllen Sie alle erforderlichen Felder aus.",
+    "textPasswordMismatch": "Die Passwörter stimmen nicht überein.",
+    "textSetPasswordFailed": "Fehler beim Festlegen des Passworts.",
+    "textErrorLoginFailed": "Anmeldung fehlgeschlagen.",
+    "textNetworkError": "Ein Netzwerkfehler ist aufgetreten. Bitte versuchen Sie es erneut.",
+    "labelPassword": "Passwort",
+    "labelConfirmPassword": "Passwort bestätigen",
+    "labelAutoLogin": "Automatisch anmelden",
+    "buttonSubmit": "Absenden",
+    "buttonSubmitting": "Wird gesendet...",
+    "buttonContinue": "Weiter"
+  },
+  "changePassword": {
     "labelTitle": "Passwort ändern",
     "labelUsername": "Benutzername",
     "labelOldPassword": "Altes Passwort",

@@ -19,25 +19,7 @@
     "textConfirm": "Are you sure you want to log out?",
     "textErrorLogoutFailed": "Could not log out. Please contact the webmaster?"
   },
-  "setPassword": {  
-    "labelTitle": "Set Password",
-    "titleSuccess": "Password Set Successfully",
-    "textSuccess": "Your password has been set successfully.",
-    "textSettingPasswordFor": "Setting password for",
-    "textMissingToken": "Missing token. Please click the link in the email we sent you.",
-    "textRequiredFields": "Please fill in all required fields.",
-    "textPasswordMismatch": "The passwords do not match.",
-    "textSetPasswordFailed": "Failed to set password.",
-    "textErrorLoginFailed": "Login failed.",
-    "textNetworkError": "A network error has occurred. Please try again.",
-    "labelPassword": "Password",
-    "labelConfirmPassword": "Confirm Password",
-    "labelAutoLogin": "Auto Login",
-    "buttonSubmit": "Submit",
-    "buttonSubmitting": "Submitting...",
-    "buttonContinue": "Continue"
-  },
-  
+
   "signup": {
     "labelTitle": "Log-in",
     "labelUsername": "User name",
@@ -57,6 +39,24 @@
     "textRequiredFields": "Please fill in all required fields.",
     "textNetworkError": "A network error has occurred. Please try again. ",
     "textErrorUnknown": "An unknown error occurred. Please try again later. If the problem persists, please contact the webmaster."
+  },
+  "setPassword": {  
+    "labelTitle": "Set Password",
+    "titleSuccess": "Password Set Successfully",
+    "textSuccess": "Your password has been set successfully.",
+    "textSettingPasswordFor": "Setting password for",
+    "textMissingToken": "Missing token. Please click the link in the email we sent you.",
+    "textRequiredFields": "Please fill in all required fields.",
+    "textPasswordMismatch": "The passwords do not match.",
+    "textSetPasswordFailed": "Failed to set password.",
+    "textErrorLoginFailed": "Login failed.",
+    "textNetworkError": "A network error has occurred. Please try again.",
+    "labelPassword": "Password",
+    "labelConfirmPassword": "Confirm Password",
+    "labelAutoLogin": "Auto Login",
+    "buttonSubmit": "Submit",
+    "buttonSubmitting": "Submitting...",
+    "buttonContinue": "Continue"
   },
   "changePassword": {
     "labelTitle": "Change Password",
