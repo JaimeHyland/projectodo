@@ -94,8 +94,6 @@ export default function ResetPasswordForm({
         throw new Error(text.slice(0, 200));
       }
 
-      console.log("DEBUG -- request_password_reset response:", response.status, data);
-
       if (!response.ok) {
         setError(data.error || messages.resetPassword.textResetFailed);
         setLoading(false);
@@ -106,7 +104,6 @@ export default function ResetPasswordForm({
       setEmail("");
       setEmailConfirm("");
     } catch (err) {
-      console.error("DEBUG -- Password reset request failed:", err);
       setError(messages.resetPassword.textUnknownError);
     } finally {
       setLoading(false);
