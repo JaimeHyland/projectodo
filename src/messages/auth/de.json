@@ -78,12 +78,34 @@
   },
   "resetPassword": {
     "labelTitle": "Passwort zurücksetzen",
-    "labelUsername": "Benutzername",
-    "labelEmail": "Email-Adresse",
-    "labelNewPassword": "Neues Passwort",
-    "labelConfirmNewPassword": "Neues Passwort bestätigen",
-    "buttonSubmit": "Passwort zurücksetzen",
-    "textInvalidEmailAddress": "Ungültige E-Mail-Adresse",
-    "textUnknownEmailAddress": "Konnte keinen Benutzer mit dieser E-Mail-Adresse finden. Bitte überprüfen Sie die von Ihnen eingegebene E-Mail-Adresse und versuchen Sie es erneut."
+    "labelEmail": "E-Mail-Adresse",
+    "labelConfirmEmail": "E-Mail-Adresse bestätigen",
+    "buttonSubmit": "Link zum Zurücksetzen senden",
+    "buttonSubmitting": "Link wird gesendet...",
+    "textInvalidEmailAddress": "Bitte geben Sie eine gültige E-Mail-Adresse ein.",
+    "textEmailMismatch": "Die E-Mail-Adressen stimmen nicht überein.",
+    "textRequiredFields": "Bitte füllen Sie alle erforderlichen Felder aus.",
+    "textResetFailed": "Die E-Mail zum Zurücksetzen konnte nicht gesendet werden.",
+    "textResetSuccess": "Falls ein Konto mit dieser E-Mail-Adresse existiert, wurde ein Link zum Zurücksetzen gesendet.",
+    "textUnknownError": "Ein unbekannter Fehler ist aufgetreten. Bitte versuchen Sie es später erneut.",
+    "noteRequiredFields": "* erforderliche Felder"
+  },
+  "resetPasswordConfirm": {
+    "labelTitle": "Passwort zurücksetzen",
+    "titleSuccess": "Passwort erfolgreich zurückgesetzt",
+    "textSuccess": "Ihr Passwort wurde erfolgreich zurückgesetzt.",
+    "textResettingPasswordFor": "Passwort wird zurückgesetzt für",
+    "textMissingToken": "Fehlender Token. Bitte klicken Sie auf den Link in der von uns gesendeten E-Mail.",
+    "textRequiredFields": "Bitte füllen Sie alle erforderlichen Felder aus.",
+    "textPasswordMismatch": "Die Passwörter stimmen nicht überein.",
+    "textResetPasswordFailed": "Fehler beim Zurücksetzen des Passworts.",
+    "textErrorLoginFailed": "Anmeldung fehlgeschlagen.",
+    "textNetworkError": "Ein Netzwerkfehler ist aufgetreten.",
+    "labelPassword": "Passwort",
+    "labelConfirmPassword": "Passwort bestätigen",
+    "labelAutoLogin": "Automatisch anmelden",
+    "buttonSubmit": "Absenden",
+    "buttonSubmitting": "Wird gesendet...",
+    "buttonContinue": "Weiter"
   }
 }

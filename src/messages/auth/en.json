@@ -79,12 +79,34 @@
   },
   "resetPassword": {
     "labelTitle": "Reset password",
-    "labelUsername": "Username",
-    "labelEmail": "E-mail address",
-    "labelNewPassword": "New password",
-    "labelConfirmNewPassword": "Confirm new password",
-    "buttonSubmit": "Reset password",
-    "textInvalidEmailAddress": "Invalid email address",
-    "textUnknownEmailAddress": "Cannot find a user with this email address. Please check the email address you entered and try again."
+    "labelEmail": "Email address",
+    "labelConfirmEmail": "Confirm email address",
+    "buttonSubmit": "Send reset link",
+    "buttonSubmitting": "Sending reset link...",
+    "textInvalidEmailAddress": "Please enter a valid email address.",
+    "textEmailMismatch": "The email addresses do not match.",
+    "textRequiredFields": "Please fill in all required fields.",
+    "textResetFailed": "Failed to send reset email.",
+    "textResetSuccess": "If an account exists for that email address, a reset link has been sent.",
+    "textUnknownError": "An unknown error occurred. Please try again later.",
+    "noteRequiredFields": "* required fields"
+  },
+  "resetPasswordConfirm": {
+    "labelTitle": "Reset Password",
+    "titleSuccess": "Password Reset Successfully",
+    "textSuccess": "Your password has been reset successfully.",
+    "textResettingPasswordFor": "Resetting password for",
+    "textMissingToken": "Missing token. Please click the link in the email we sent you.",
+    "textRequiredFields": "Please fill in all required fields.",
+    "textPasswordMismatch": "The passwords do not match.",
+    "textResetPasswordFailed": "Failed to reset password.",
+    "textErrorLoginFailed": "Login failed.",
+    "textNetworkError": "A network error has occurred.",
+    "labelPassword": "Password",
+    "labelConfirmPassword": "Confirm Password",
+    "labelAutoLogin": "Auto Login",
+    "buttonSubmit": "Submit",
+    "buttonSubmitting": "Submitting...",
+    "buttonContinue": "Continue"
   }
 }

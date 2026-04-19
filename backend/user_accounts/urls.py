@@ -23,9 +23,14 @@ urlpatterns = [
         views.change_password_view,
         name="change_password"
     ),
-    # path(
-    #     "reset_password_request/",
-    #     views.reset_password_request_view,
-    #     name="reset_password_request"
-    # ),
+    path(
+        "request_password_reset/",
+        views.request_password_reset_view,
+        name="request_password_reset"
+    ),
+    path(
+        "reset_password_confirm/",
+        views.reset_password_confirm_view,
+        name="reset_password_confirm"
+    ),
 ]

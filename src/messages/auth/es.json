@@ -78,12 +78,34 @@
     },
     "resetPassword": {
       "labelTitle": "Restablecer contraseña",
-      "labelUsername": "Nombre de usuario",
-      "labelEmail": "Dirección de correo electrónico",
-      "labelNewPassword": "Nueva contraseña",
-      "labelConfirmNewPassword": "Confirmar nueva contraseña",
-      "buttonSubmit": "Restablecer contraseña",
-      "textInvalidEmailAddress": "Dirección de correo electrónico inválida",
-      "textUnknownEmailAddress": "No se puede encontrar un usuario con esta dirección de correo electrónico. Por favor, verifica la dirección de correo electrónico que ingresaste y vuelve a intentarlo."
+      "labelEmail": "Correo electrónico",
+      "labelConfirmEmail": "Confirmar correo electrónico",
+      "buttonSubmit": "Enviar enlace de restablecimiento",
+      "buttonSubmitting": "Enviando enlace...",
+      "textInvalidEmailAddress": "Introduce una dirección de correo electrónico válida.",
+      "textEmailMismatch": "Las direcciones de correo no coinciden.",
+      "textRequiredFields": "Por favor, completa todos los campos obligatorios.",
+      "textResetFailed": "No se pudo enviar el correo de restablecimiento.",
+      "textResetSuccess": "Si existe una cuenta con esa dirección de correo, se ha enviado un enlace de restablecimiento.",
+      "textUnknownError": "Se ha producido un error desconocido. Inténtalo de nuevo más tarde.",
+      "noteRequiredFields": "* campos obligatorios"
+    },
+    "resetPasswordConfirm": {
+      "labelTitle": "Restablecer contraseña",
+      "titleSuccess": "Contraseña restablecida correctamente",
+      "textSuccess": "Tu contraseña ha sido restablecida correctamente.",
+      "textResettingPasswordFor": "Restableciendo contraseña para",
+      "textMissingToken": "Falta el token. Por favor, haz clic en el enlace del correo que te enviamos.",
+      "textRequiredFields": "Por favor, completa todos los campos requeridos.",
+      "textPasswordMismatch": "Las contraseñas no coinciden.",
+      "textResetPasswordFailed": "No se pudo restablecer la contraseña.",
+      "textErrorLoginFailed": "Error al iniciar sesión.",
+      "textNetworkError": "Ocurrió un error de red. Por favor, inténtalo de nuevo.",
+      "labelPassword": "Contraseña",
+      "labelConfirmPassword": "Confirmar contraseña",
+      "labelAutoLogin": "Iniciar sesión automáticamente",
+      "buttonSubmit": "Enviar",
+      "buttonSubmitting": "Enviando...",
+      "buttonContinue": "Continuar"
     }
   }

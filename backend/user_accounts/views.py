@@ -1,19 +1,20 @@
 import json
 from datetime import timedelta
+from urllib.parse import quote
 from django.contrib.auth import (
     authenticate,
     login,
     logout,
     get_user_model,
-    update_session_auth_hash
+    update_session_auth_hash,
 )
 from django.conf import settings
 from django.contrib.auth.password_validation import validate_password
-from django.core.mail import EmailMultiAlternatives
+from django.core.mail import EmailMultiAlternatives, send_mail
 from django.core.exceptions import ValidationError
 from django.views.decorators.http import require_POST, require_GET
 from django.http import JsonResponse
-from django.views.decorators.csrf import ensure_csrf_cookie, csrf_exempt
+from django.views.decorators.csrf import ensure_csrf_cookie
 from django.middleware.csrf import get_token
 from django.utils import translation
 from django.utils.translation import gettext as _
@@ -193,7 +194,6 @@ def verify_email_view(request):
     })
 
 
-@csrf_exempt
 @require_POST
 def signup_request_view(request):
     data = json.loads(request.body.decode("utf-8"))
@@ -307,6 +307,94 @@ def change_password_view(request):
     return JsonResponse({
         "success": True,
         "message": _("Password changed successfully"),
+    })
+
+
+@require_POST
+def request_password_reset_view(request):
+    try:
+        data = json.loads(request.body.decode("utf-8"))
+        email = (data.get("email") or "").strip().lower()
+    except json.JSONDecodeError:
+        return JsonResponse({"error": _("Invalid JSON")}, status=400)
+
+    if not email:
+        return JsonResponse(
+            {"error": _("Please provide an email address.")},
+            status=400,
+        )
+
+    user = User.objects.filter(email__iexact=email, is_active=True).first()
+
+    if user:
+        raw_token, token_hash = generate_secure_token()
+
+        AuthToken.objects.create(
+            user=user,
+            token_hash=token_hash,
+            token_type="password_reset",
+            expires_at=timezone.now() + timedelta(minutes=30),
+        )
+
+        reset_link = (
+            f"{settings.FRONTEND_URL}/{request.headers.get('Accept-Language', 'en').split(',')[0]}"
+            f"?auth=reset-password-confirm"
+            f"&token={raw_token}"
+            f"&username={quote(user.username)}"
+        )
+
+        send_mail(
+            subject=_("Reset your password"),
+            message=_(
+                "Use this link to reset your password:\n%(link)s"
+            ) % {"link": reset_link},
+            from_email=settings.DEFAULT_FROM_EMAIL,
+            recipient_list=[user.email],
+        )
+
+    return JsonResponse({
+        "success": True,
+        "message": _(
+            "If an account exists for that email address, a reset link has been sent."
+        ),
+    })
+
+
+@require_GET
+def reset_password_confirm_view(request):
+    token = request.GET.get("token")
+    username = request.GET.get("username")
+
+    if not token or not username:
+        return JsonResponse(
+            {"error": _("Token and username required")},
+            status=400,
+        )
+
+    token_hash = AuthToken.hash_token(token)
+
+    try:
+        auth_token = AuthToken.objects.get(
+            token_hash=token_hash,
+            token_type="password_reset",
+            user__username=username,
+        )
+    except AuthToken.DoesNotExist:
+        return JsonResponse(
+            {"error": _("Invalid token")},
+            status=400,
+        )
+
+    if auth_token.is_expired():
+        auth_token.delete()
+        return JsonResponse(
+            {"error": _("Token expired")},
+            status=400,
+        )
+
+    return JsonResponse({
+        "success": True,
+        "message": _("Password reset token is valid."),
     })
 
 

@@ -20,14 +20,11 @@ import SignupForm from '@/components/auth/SignupForm';
 import SetPasswordEntry from './auth/SetPasswordEntry';
 import ChangePasswordForm from '@/components/auth/ChangePasswordForm';
 import ResetPasswordForm from '@/components/auth/ResetPasswordForm';
+import ResetPasswordEntry from "@/components/auth/ResetPasswordEntry";
+import ResetPasswordConfirm from '@/components/auth/ResetPasswordConfirm';
 
 
 export function Header() {
-  type AuthState = {
-    isAuthenticated: boolean;
-    username: string | null;
-    isSuperuser: boolean;
-  };
 
   type User = {
     username: string;
@@ -98,7 +95,7 @@ export function Header() {
     setShowSignupModal(authParam === 'signup');
     setShowLogoutModal(authParam === 'logout');
     setShowChangePasswordModal(authParam === 'change_password');
-    setShowResetPasswordModal(authParam === 'reset_password');
+    setShowResetPasswordModal(authParam === 'request_password_reset');
 
     const fetchAuthStatus = async () => {
       try {
@@ -204,7 +201,7 @@ export function Header() {
     const openResetPassword = () => {
     setAuthMenuOpen(false);
     setShowResetPasswordModal(true);
-    router.replace(`${pathname}?auth=reset_password`);
+    router.replace(`${pathname}?auth=request_password_reset`);
   };
 
   const closeResetPassword = () => {
@@ -218,7 +215,7 @@ export function Header() {
     setShowSignupModal(false);
     setShowLogoutModal(false);
     setShowResetPasswordModal(true);
-    router.replace(`${pathname}?auth=reset_password`);
+    router.replace(`${pathname}?auth=request_password_reset`);
   };
 
     // CHANGED: normalize pathname by removing locale prefix
@@ -448,7 +445,7 @@ export function Header() {
               style={{ backgroundColor: activeColor }}
             />
           </div>
-
+          
           {/* Auth modals */}
           <SetPasswordEntry locale={currentLocale} messages={authMessages} />
           {showLoginModal && (
@@ -458,7 +455,7 @@ export function Header() {
                 messages={authMessages}
                 onForgotPassword={switchToResetPassword}
                 onSuccess={() => {
-                  fetch(`${API_BASE}/api/auth/status/`, {
+                  fetch(`${API_BASE}auth/status/`, {
                     credentials: "include",
                   })
                     .then((res) => res.json())
@@ -521,15 +518,12 @@ export function Header() {
             </AuthModal>
           )}
 
+          <ResetPasswordEntry locale={currentLocale} messages={authMessages} />
           {showResetPasswordModal && (
             <AuthModal onClose={closeResetPassword}>
               <ResetPasswordForm
                 locale={currentLocale}
                 messages={authMessages}
-                onSuccess={() => {
-                  alert("Password reset sent! (dummy logic)");
-                  closeResetPassword();
-                }}
               />
             </AuthModal>
           )}

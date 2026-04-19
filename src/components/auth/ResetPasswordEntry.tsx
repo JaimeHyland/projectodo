@@ -2,17 +2,17 @@
 
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import AuthModal from "./AuthModal";
-import SetPassword from "./SetPassword";
+import ResetPasswordConfirm from "./ResetPasswordConfirm";
 
-interface SetPasswordEntryProps {
+interface ResetPasswordEntryProps {
   locale: string;
   messages: any;
 }
 
-export default function SetPasswordEntry({
+export default function ResetPasswordEntry({
   locale,
   messages,
-}: SetPasswordEntryProps) {
+}: ResetPasswordEntryProps) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -21,7 +21,7 @@ export default function SetPasswordEntry({
   const token = searchParams.get("token");
   const username = searchParams.get("username");
 
-  const isOpen = auth === "set-password" && !!token;
+  const isOpen = auth === "reset-password-confirm" && !!token;
 
   const closeModal = () => {
     const params = new URLSearchParams(searchParams.toString());
@@ -33,13 +33,16 @@ export default function SetPasswordEntry({
     router.replace(next);
   };
 
-  console.log("SetPasswordEntry messages.setPassword:", messages?.setPassword);
-
   if (!isOpen || !token) return null;
+
+  if (!messages?.resetPasswordConfirm) {
+    console.error("Missing resetPasswordConfirm messages:", messages);
+    return null;
+  }
 
   return (
     <AuthModal onClose={closeModal}>
-      <SetPassword
+      <ResetPasswordConfirm
         token={token}
         username={username ?? undefined}
         locale={locale}
