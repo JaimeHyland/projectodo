@@ -5,15 +5,14 @@ import { useState } from "react";
 
 interface LoginMessages {
   login: {
-    labelTitle: string;
     labelUsername: string;
     labelPassword: string;
     buttonSubmit: string;
     buttonSubmitting: string;
     buttonForgottenPassword: string;
-    textErrorLoginFailed: string,
-    textErrorInvalidCredentials: string,
-    textErrorUnknown: string;
+    messageErrorLoginFailed: string;
+    messageErrorInvalidCredentials: string;
+    messageErrorUnknown: string;
   };
 }
 
@@ -27,20 +26,22 @@ interface LoginFormProps {
 function getCookie(name: string): string | undefined {
   const value = `; ${document.cookie}`;
   const parts = value.split(`; ${name}=`);
-  return parts.length === 2 ? parts.pop()?.split(';').shift() : undefined;
-};
-
+  return parts.length === 2 ? parts.pop()?.split(";").shift() : undefined;
+}
 
 export default function LoginForm({
   locale,
   messages,
   onSuccess,
-  onForgotPassword
+  onForgotPassword,
 }: LoginFormProps) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+
+  const canSubmit = !loading && !!username.trim() && !!password;
 
   async function handleSubmit(e: React.SyntheticEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -52,11 +53,11 @@ export default function LoginForm({
         method: "GET",
         credentials: "include",
         headers: {
-          "Accept-Language": locale
+          "Accept-Language": locale,
         },
       });
-      
-      const csrftoken = getCookie('csrftoken');
+
+      const csrftoken = getCookie("csrftoken");
 
       const response = await fetch(apiUrl("auth/login/"), {
         method: "POST",
@@ -72,7 +73,7 @@ export default function LoginForm({
         }),
       });
 
-      let data: unknown = null;
+      let data: any = null;
 
       try {
         data = await response.json();
@@ -81,17 +82,19 @@ export default function LoginForm({
       }
 
       if (!response.ok) {
-        const apiError = typeof data === "object" &&
-        data !== null &&
-        "error" in data &&
-        typeof data.error === "string"
-          ? data.error
-          : null;
+        const apiError =
+          typeof data === "object" &&
+          data !== null &&
+          "error" in data &&
+          typeof data.error === "string"
+            ? data.error
+            : null;
 
         if (response.status === 401) {
-          throw new Error(messages.login.textErrorInvalidCredentials);
+          throw new Error(messages.login.messageErrorInvalidCredentials);
         }
-        throw new Error(apiError ?? messages.login.textErrorLoginFailed);
+
+        throw new Error(apiError ?? messages.login.messageErrorLoginFailed);
       }
 
       onSuccess?.();
@@ -99,7 +102,7 @@ export default function LoginForm({
       if (err instanceof Error) {
         setError(err.message);
       } else {
-        setError(messages.login.textErrorUnknown);
+        setError(messages.login.messageErrorUnknown);
       }
     } finally {
       setLoading(false);
@@ -115,7 +118,7 @@ export default function LoginForm({
       )}
 
       <div>
-        <label  htmlFor="login-username" className="block mb-1">
+        <label htmlFor="login-username" className="block mb-1">
           {messages.login.labelUsername}
         </label>
         <input
@@ -134,32 +137,46 @@ export default function LoginForm({
         <label htmlFor="login-password" className="block mb-1">
           {messages.login.labelPassword}
         </label>
-        <input
-          id="login-password"
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-          disabled={loading}
-          autoComplete="current-password"
-          className="w-full border px-3 py-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
+        <div className="relative">
+          <input
+            id="login-password"
+            type={showPassword ? "text" : "password"}
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+            disabled={loading}
+            autoComplete="current-password"
+            className="w-full border px-3 py-2 pr-10 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
+          />
+          <button
+            type="button"
+            onClick={() => setShowPassword((prev) => !prev)}
+            disabled={loading}
+            className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 disabled:opacity-50"
+          >
+            {showPassword ? "🙈" : "👁"}
+          </button>
+        </div>
       </div>
 
       <button
         type="submit"
-        disabled={loading}
-        className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 disabled:opacity-50"
+        disabled={!canSubmit}
+        className={`w-full py-2 rounded text-white ${
+          canSubmit ? "bg-blue-600 hover:bg-blue-700" : "bg-gray-400"
+        }`}
       >
         {loading ? messages.login.buttonSubmitting : messages.login.buttonSubmit}
       </button>
+
       <button
         type="button"
         onClick={onForgotPassword}
-        className="w-full text-sm text-blue-600 hover:underline"
+        disabled={loading}
+        className="w-full text-sm text-blue-600 hover:underline disabled:opacity-50"
       >
         {messages.login.buttonForgottenPassword}
       </button>
-   </form>
+    </form>
   );
 }

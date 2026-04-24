@@ -1,6 +1,6 @@
 "use client";
 
-import { useRouter, useSearchParams, usePathname } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import AuthModal from "./AuthModal";
 import ResetPasswordConfirm from "./ResetPasswordConfirm";
 
@@ -25,11 +25,15 @@ export default function ResetPasswordEntry({
 
   const closeModal = () => {
     const params = new URLSearchParams(searchParams.toString());
+
     params.delete("auth");
     params.delete("token");
     params.delete("username");
 
-    const next = params.toString() ? `${pathname}?${params.toString()}` : pathname;
+    const next = params.toString()
+      ? `${pathname}?${params.toString()}`
+      : pathname;
+
     router.replace(next);
   };
 

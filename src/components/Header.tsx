@@ -21,7 +21,6 @@ import SetPasswordEntry from './auth/SetPasswordEntry';
 import ChangePasswordForm from '@/components/auth/ChangePasswordForm';
 import ResetPasswordForm from '@/components/auth/ResetPasswordForm';
 import ResetPasswordEntry from "@/components/auth/ResetPasswordEntry";
-import ResetPasswordConfirm from '@/components/auth/ResetPasswordConfirm';
 
 
 export function Header() {
@@ -47,7 +46,7 @@ export function Header() {
   const localeMenuRef = useRef<HTMLDivElement | null>(null);
 
   const currentLocale = getCurrentLocale(pathname);
-  const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL ?? 'http://127.0.0.1/api';
+  const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL + "/api";
 
   const headerMessages =
     currentLocale === 'de'
@@ -424,22 +423,23 @@ export function Header() {
           </button>
 
           {/* Desktop/laptop navbar */}
-          <div className="max-w-7xl mx-auto px-4 desktop:justify-center flex flex-col items-center">
-            <ul className="hidden desktop:flex space-x-2">
-              {menuItems.map((item, index) => (
-                <li key={item.href}>
-                  <HeaderLink
-                    href={item.href}
-                    isActive={isItemActive(item.href)}
-                    style={{ backgroundColor: tabColors[index % tabColors.length] }}
-                    className="px-4 py-1 rounded-t-lg relative z-10"
-                  >
-                    {item.label}
-                  </HeaderLink>
-                </li>
-              ))}
-            </ul>
-
+          <div className="max-w-7xl mx-auto flex flex-col items-center">
+            <div className="px-4 w-full flex justify-center"> 
+              <ul className="hidden desktop:flex space-x-2">
+                {menuItems.map((item, index) => (
+                  <li key={item.href}>
+                    <HeaderLink
+                      href={item.href}
+                      isActive={isItemActive(item.href)}
+                      style={{ backgroundColor: tabColors[index % tabColors.length] }}
+                      className="px-4 py-1 rounded-t-lg relative z-10 whitespace-nowrap"
+                    >
+                      {item.label}
+                    </HeaderLink>
+                  </li>
+                ))}
+              </ul>
+            </div>
             <div
               className="hidden desktop:block w-full h-1"
               style={{ backgroundColor: activeColor }}
@@ -455,7 +455,7 @@ export function Header() {
                 messages={authMessages}
                 onForgotPassword={switchToResetPassword}
                 onSuccess={() => {
-                  fetch(`${API_BASE}auth/status/`, {
+                  fetch(`${API_BASE}/auth/status/`, {
                     credentials: "include",
                   })
                     .then((res) => res.json())
@@ -480,7 +480,7 @@ export function Header() {
             <AuthModal onClose={closeSignup}>
               <SignupForm
                 locale={currentLocale}
-                messages={authMessages}
+                messages={authMessages} 
                 onSuccess={() => {
                   alert(headerMessages.alertSignupSuccess);
                   closeSignup();
@@ -496,7 +496,7 @@ export function Header() {
                 messages={authMessages}
                 onForgotPassword={switchToResetPassword}
                 onSuccess={() => {
-                  alert(authMessages.changePassword.textSuccess);
+                  alert(authMessages.changePassword.messageSuccess);
                   closeChangePassword();
                 }}
               />
@@ -524,6 +524,7 @@ export function Header() {
               <ResetPasswordForm
                 locale={currentLocale}
                 messages={authMessages}
+                onClose={closeResetPassword}
               />
             </AuthModal>
           )}

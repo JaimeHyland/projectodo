@@ -33,7 +33,11 @@ export function HeaderLink({
         px-4 py-2 rounded-t-lg
         origin-bottom
         transition-transform duration-200 ease-out
-        ${isActive ? "scale-[1.025]" : "hover:scale-[1.02] active:scale-[1.03]"}
+        ${
+          isActive
+            ? "scale-[1.04] translate-y-[2px]" 
+            : "hover:scale-[1.03] active:scale-[1.04]"
+        }
         ${className}
       `}
     >
@@ -43,8 +47,8 @@ export function HeaderLink({
           transition-all duration-200 ease-out
           ${
             isActive
-              ? "font-semibold scale-[1.02]"
-              : "font-medium group-hover:font-semibold group-hover:scale-[1.015] group-active:scale-[1.02]"
+              ? "font-bold scale-[1.03]"
+              : "font-medium group-hover:font-semibold group-hover:scale-[1.02] group-active:scale-[1.03]"
           }
         `}
       >

@@ -72,7 +72,7 @@ msgstr "El nombre de usuario ya está en uso"
 
 #: .\user_accounts\views.py:127 .\user_accounts\views.py:206
 msgid "Email already registered"
-msgstr "El correo electrónico ya está registrado"
+msgstr "Este correo electrónico ya está registrado"
 
 #: .\user_accounts\views.py:145
 msgid "Unknown token type"
@@ -80,7 +80,7 @@ msgstr "Tipo de token desconocido"
 
 #: .\user_accounts\views.py:160
 msgid "Token and username required"
-msgstr "Se requieren token y nombre de usuario"
+msgstr "Se requieren un token y un nombre de usuario"
 
 #: .\user_accounts\views.py:173
 msgid "Invalid token"

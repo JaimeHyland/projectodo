@@ -33,4 +33,9 @@ urlpatterns = [
         views.reset_password_confirm_view,
         name="reset_password_confirm"
     ),
+    path(
+        'status/',
+        views.auth_status,
+        name='auth_status'
+    ),
 ]

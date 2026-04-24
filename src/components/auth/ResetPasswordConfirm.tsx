@@ -1,5 +1,6 @@
 "use client";
 
+import { apiUrl } from "@/lib/api";
 import { useState } from "react";
 
 interface ResetPasswordConfirmProps {
@@ -14,15 +15,15 @@ interface ResetPasswordConfirmProps {
 interface ResetPasswordConfirmMessages {
   resetPasswordConfirm: {
     labelTitle: string;
-    titleSuccess: string;
-    textSuccess: string;
-    textResettingPasswordFor: string;
-    textMissingToken: string;
-    textRequiredFields: string;
-    textPasswordMismatch: string;
-    textResetPasswordFailed: string;
-    textErrorLoginFailed: string;
-    textNetworkError: string;
+    labelSuccess: string;
+    messageSuccess: string;
+    messageResettingPasswordFor: string;
+    messageMissingToken: string;
+    messageRequiredFields: string;
+    messagePasswordMismatch: string;
+    messageResetPasswordFailed: string;
+    messageErrorLoginFailed: string;
+    messageNetworkError: string;
     labelPassword: string;
     labelConfirmPassword: string;
     labelAutoLogin: string;
@@ -48,6 +49,14 @@ export default function ResetPasswordConfirm({
   const [resolvedUsername, setResolvedUsername] = useState<string | null>(null);
   const [autoLogin, setAutoLogin] = useState(true);
 
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
+  const passwordsMatch =
+    !!password && !!passwordConfirm && password === passwordConfirm;
+
+  const canSubmit = !loading && !!token && passwordsMatch;
+
   const renderError = () => {
     if (!error) return null;
 
@@ -70,31 +79,34 @@ export default function ResetPasswordConfirm({
     setLoading(true);
 
     if (!token) {
-      setError(messages.resetPasswordConfirm.textMissingToken);
+      setError(messages.resetPasswordConfirm.messageMissingToken);
       setLoading(false);
       return;
     }
 
     if (!password || !passwordConfirm) {
-      setError(messages.resetPasswordConfirm.textRequiredFields);
+      setError(messages.resetPasswordConfirm.messageRequiredFields);
       setLoading(false);
       return;
     }
 
     if (password !== passwordConfirm) {
-      setError(messages.resetPasswordConfirm.textPasswordMismatch);
+      setError(messages.resetPasswordConfirm.messagePasswordMismatch);
       setLoading(false);
       return;
     }
 
     try {
-      const csrfRes = await fetch("/api/auth/csrf/", {
+      const csrfRes = await fetch(apiUrl("auth/csrf/"), {
         credentials: "include",
+        headers: {
+          "Accept-Language": locale,
+        },
       });
       const csrfData = await csrfRes.json();
       const csrfToken = csrfData.csrfToken;
 
-      const response = await fetch("/api/auth/set_password/", {
+      const response = await fetch(apiUrl("auth/set_password/"), {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -120,7 +132,7 @@ export default function ResetPasswordConfirm({
 
       if (!response.ok) {
         setError(
-          data.error || messages.resetPasswordConfirm.textResetPasswordFailed
+          data.error || messages.resetPasswordConfirm.messageResetPasswordFailed
         );
         setLoading(false);
         return;
@@ -129,9 +141,8 @@ export default function ResetPasswordConfirm({
       setResolvedUsername(data.username || username || null);
       setStep("success");
       onSuccess?.(data);
-    } catch (err) {
-      console.error("Set/reset password submit failed:", err);
-      setError(messages.resetPasswordConfirm.textNetworkError + " " + String(err));
+    } catch {
+      setError(messages.resetPasswordConfirm.messageNetworkError);
     } finally {
       setLoading(false);
     }
@@ -144,13 +155,16 @@ export default function ResetPasswordConfirm({
     }
 
     try {
-      const csrfRes = await fetch("/api/auth/csrf/", {
+      const csrfRes = await fetch(apiUrl("auth/csrf/"), {
         credentials: "include",
+        headers: {
+          "Accept-Language": locale,
+        },
       });
       const csrfData = await csrfRes.json();
       const csrfToken = csrfData.csrfToken;
 
-      const response = await fetch("/api/auth/login/", {
+      const response = await fetch(apiUrl("auth/login/"), {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -164,24 +178,14 @@ export default function ResetPasswordConfirm({
         }),
       });
 
-      let data: any = null;
-      const contentType = response.headers.get("content-type") || "";
-
-      if (contentType.includes("application/json")) {
-        data = await response.json();
-      } else {
-        const text = await response.text();
-        throw new Error(text.slice(0, 200));
-      }
-
       if (!response.ok) {
-        setError(messages.resetPasswordConfirm.textErrorLoginFailed);
+        setError(messages.resetPasswordConfirm.messageErrorLoginFailed);
         return;
       }
 
       onClose?.();
     } catch {
-      setError(messages.resetPasswordConfirm.textNetworkError);
+      setError(messages.resetPasswordConfirm.messageNetworkError);
     }
   };
 
@@ -189,11 +193,11 @@ export default function ResetPasswordConfirm({
     return (
       <div className="space-y-4">
         <h2 className="text-xl font-semibold text-center">
-          {messages.resetPasswordConfirm.titleSuccess}
+          {messages.resetPasswordConfirm.labelSuccess}
         </h2>
 
         <p className="text-center text-gray-700">
-          {messages.resetPasswordConfirm.textSuccess}
+          {messages.resetPasswordConfirm.messageSuccess}
         </p>
 
         <label className="flex items-center gap-2 text-sm justify-center">
@@ -228,7 +232,7 @@ export default function ResetPasswordConfirm({
 
       {username && (
         <div className="text-sm text-gray-600 text-center">
-          {messages.resetPasswordConfirm.textResettingPasswordFor}{" "}
+          {messages.resetPasswordConfirm.messageResettingPasswordFor}{" "}
           <span className="font-semibold">{username}</span>
         </div>
       )}
@@ -237,35 +241,57 @@ export default function ResetPasswordConfirm({
         <label className="block mb-1">
           {messages.resetPasswordConfirm.labelPassword} *
         </label>
-        <input
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-          autoComplete="new-password"
-          className="w-full border px-3 py-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
+        <div className="relative">
+          <input
+            type={showPassword ? "text" : "password"}
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+            disabled={loading}
+            autoComplete="new-password"
+            className="w-full border px-3 py-2 pr-10 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
+          />
+          <button
+            type="button"
+            onClick={() => setShowPassword((prev) => !prev)}
+            disabled={loading}
+            className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 disabled:opacity-50"
+          >
+            {showPassword ? "🙈" : "👁"}
+          </button>
+        </div>
       </div>
 
       <div>
         <label className="block mb-1">
           {messages.resetPasswordConfirm.labelConfirmPassword} *
         </label>
-        <input
-          type="password"
-          value={passwordConfirm}
-          onChange={(e) => setPasswordConfirm(e.target.value)}
-          required
-          autoComplete="new-password"
-          className="w-full border px-3 py-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
+        <div className="relative">
+          <input
+            type={showConfirmPassword ? "text" : "password"}
+            value={passwordConfirm}
+            onChange={(e) => setPasswordConfirm(e.target.value)}
+            required
+            disabled={loading}
+            autoComplete="new-password"
+            className="w-full border px-3 py-2 pr-10 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
+          />
+          <button
+            type="button"
+            onClick={() => setShowConfirmPassword((prev) => !prev)}
+            disabled={loading}
+            className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 disabled:opacity-50"
+          >
+            {showConfirmPassword ? "🙈" : "👁"}
+          </button>
+        </div>
       </div>
 
       <button
         type="submit"
-        disabled={loading}
+        disabled={!canSubmit}
         className={`w-full py-2 rounded text-white ${
-          loading ? "bg-gray-400" : "bg-green-600 hover:bg-green-700"
+          canSubmit ? "bg-green-600 hover:bg-green-700" : "bg-gray-400"
         }`}
       >
         {loading

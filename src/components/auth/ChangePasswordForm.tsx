@@ -1,5 +1,6 @@
 "use client";
 
+import { apiUrl } from "@/lib/api";
 import { useState } from "react";
 
 interface ChangePasswordFormProps {
@@ -12,22 +13,20 @@ interface ChangePasswordFormProps {
 interface ChangePasswordMessages {
   changePassword: {
     labelTitle: string;
-    labelUsername: string;
     labelOldPassword: string;
     buttonForgottenPassword: string;
     labelNewPassword: string;
     labelConfirmNewPassword: string;
     buttonSubmit: string;
     buttonSubmitting: string;
-    textInvalidPasswordError: string;
-    textPasswordMismatch: string;
-    textSuccess: string;
+    messagePasswordMismatch: string;
+    messageSuccess: string;
     textChangeFailed: string;
-    textNetworkError: string;
-    textRequiredFields: string;
+    messageNetworkError: string;
+    messageRequiredFields: string;
     noteRequiredFields: string;
     textPasswordMatch: string;
-    textPasswordMismatchLive: string;
+    messagePasswordMismatchLive: string;
   };
 }
 
@@ -51,8 +50,15 @@ export default function ChangePasswordForm({
   const showPasswordMatchNote =
     newPassword.length > 0 && newPasswordConfirm.length > 0;
 
-    const passwordsMatch =
+  const passwordsMatch =
     showPasswordMatchNote && newPassword === newPasswordConfirm;
+
+  const canSubmit =
+    !loading &&
+    !!oldPassword &&
+    !!newPassword &&
+    !!newPasswordConfirm &&
+    passwordsMatch;
 
   const renderError = () => {
     if (!error) return null;
@@ -77,25 +83,28 @@ export default function ChangePasswordForm({
     setLoading(true);
 
     if (!oldPassword || !newPassword || !newPasswordConfirm) {
-      setError(messages.changePassword.textRequiredFields);
+      setError(messages.changePassword.messageRequiredFields);
       setLoading(false);
       return;
     }
 
     if (newPassword !== newPasswordConfirm) {
-      setError(messages.changePassword.textPasswordMismatch);
+      setError(messages.changePassword.messagePasswordMismatch);
       setLoading(false);
       return;
     }
 
     try {
-      const csrfRes = await fetch("/api/auth/csrf/", {
+      const csrfRes = await fetch(apiUrl("auth/csrf/"), {
         credentials: "include",
+        headers: {
+          "Accept-Language": locale,
+        },
       });
       const csrfData = await csrfRes.json();
       const csrfToken = csrfData.csrfToken;
 
-      const response = await fetch("/api/auth/change_password/", {
+      const response = await fetch(apiUrl("auth/change_password/"), {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -125,14 +134,14 @@ export default function ChangePasswordForm({
         return;
       }
 
-      setMessage(data.message || messages.changePassword.textSuccess);
+      setMessage(data.message || messages.changePassword.messageSuccess);
       setOldPassword("");
       setNewPassword("");
       setNewPasswordConfirm("");
 
       onSuccess?.();
-    } catch (err) {
-      setError(messages.changePassword.textNetworkError + String(err));
+    } catch {
+      setError(messages.changePassword.messageNetworkError);
     } finally {
       setLoading(false);
     }
@@ -157,27 +166,30 @@ export default function ChangePasswordForm({
             value={oldPassword}
             onChange={(e) => setOldPassword(e.target.value)}
             required
+            disabled={loading}
             autoComplete="current-password"
-            className="w-full border px-3 py-2 pr-10 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full border px-3 py-2 pr-10 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
           />
           <button
             type="button"
             onClick={() => setShowOldPassword((prev) => !prev)}
-            className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
+            disabled={loading}
+            className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 disabled:opacity-50"
           >
             {showOldPassword ? "🙈" : "👁"}
           </button>
         </div>
+
         <div className="text-right">
           <button
             type="button"
             onClick={onForgotPassword}
-            className="text-sm text-blue-600 hover:underline"
+            disabled={loading}
+            className="text-sm text-blue-600 hover:underline disabled:opacity-50"
           >
             {messages.changePassword.buttonForgottenPassword}
           </button>
         </div>
-
       </div>
 
       <div>
@@ -190,13 +202,15 @@ export default function ChangePasswordForm({
             value={newPassword}
             onChange={(e) => setNewPassword(e.target.value)}
             required
+            disabled={loading}
             autoComplete="new-password"
-            className="w-full border px-3 py-2 pr-10 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full border px-3 py-2 pr-10 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
           />
           <button
             type="button"
             onClick={() => setShowNewPassword((prev) => !prev)}
-            className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
+            disabled={loading}
+            className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 disabled:opacity-50"
           >
             {showNewPassword ? "🙈" : "👁"}
           </button>
@@ -213,13 +227,15 @@ export default function ChangePasswordForm({
             value={newPasswordConfirm}
             onChange={(e) => setNewPasswordConfirm(e.target.value)}
             required
+            disabled={loading}
             autoComplete="new-password"
-            className="w-full border px-3 py-2 pr-10 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full border px-3 py-2 pr-10 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
           />
           <button
             type="button"
             onClick={() => setShowConfirmPassword((prev) => !prev)}
-            className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
+            disabled={loading}
+            className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 disabled:opacity-50"
           >
             {showConfirmPassword ? "🙈" : "👁"}
           </button>
@@ -233,16 +249,16 @@ export default function ChangePasswordForm({
           }`}
         >
           {passwordsMatch
-            ? (messages.changePassword.textPasswordMatch ?? "Passwords match.")
-            : (messages.changePassword.textPasswordMismatchLive ?? "Passwords do not match.")}
+            ? messages.changePassword.textPasswordMatch
+            : messages.changePassword.messagePasswordMismatchLive}
         </p>
       )}
 
       <button
         type="submit"
-        disabled={loading}
+        disabled={!canSubmit}
         className={`w-full py-2 rounded text-white ${
-          loading ? "bg-gray-400" : "bg-green-600 hover:bg-green-700"
+          canSubmit ? "bg-green-600 hover:bg-green-700" : "bg-gray-400"
         }`}
       >
         {loading

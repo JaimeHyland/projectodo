@@ -1,5 +1,6 @@
 "use client";
 
+import { apiUrl } from "@/lib/api";
 import { useState } from "react";
 
 interface SetPasswordProps {
@@ -14,15 +15,15 @@ interface SetPasswordProps {
 interface SetPasswordMessages {
   setPassword: {
     labelTitle: string;
-    titleSuccess: string;
-    textSuccess: string;
-    textSettingPasswordFor: string;
-    textMissingToken: string;
-    textRequiredFields: string;
-    textPasswordMismatch: string;
-    textSetPasswordFailed: string;
-    textErrorLoginFailed: string;
-    textNetworkError: string;
+    labelSuccess: string;
+    messageSuccess: string;
+    messageSettingPasswordFor: string;
+    messageMissingToken: string;
+    messageRequiredFields: string;
+    messagePasswordMismatch: string;
+    messageSetPasswordFailed: string;
+    messageErrorLoginFailed: string;
+    messageNetworkError: string;
     labelPassword: string;
     labelConfirmPassword: string;
     labelAutoLogin: string;
@@ -48,6 +49,14 @@ export default function SetPassword({
   const [createdUsername, setCreatedUsername] = useState<string | null>(null);
   const [autoLogin, setAutoLogin] = useState(true);
 
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
+  const passwordsMatch =
+    !!password && !!passwordConfirm && password === passwordConfirm;
+
+  const canSubmit = !loading && !!token && passwordsMatch;
+
   const renderError = () => {
     if (!error) return null;
 
@@ -70,32 +79,34 @@ export default function SetPassword({
     setLoading(true);
 
     if (!token) {
-      setError(messages.setPassword.textMissingToken);
+      setError(messages.setPassword.messageMissingToken);
       setLoading(false);
       return;
     }
 
     if (!password || !passwordConfirm) {
-      setError(messages.setPassword.textRequiredFields);
+      setError(messages.setPassword.messageRequiredFields);
       setLoading(false);
       return;
     }
 
     if (password !== passwordConfirm) {
-      setError(messages.setPassword.textPasswordMismatch);
+      setError(messages.setPassword.messagePasswordMismatch);
       setLoading(false);
       return;
     }
 
     try {
-      const csrfRes = await fetch("/api/auth/csrf/", {
+      const csrfRes = await fetch(apiUrl("auth/csrf/"), {
         credentials: "include",
+        headers: {
+          "Accept-Language": locale,
+        },
       });
       const csrfData = await csrfRes.json();
       const csrfToken = csrfData.csrfToken;
 
-
-      const response = await fetch("/api/auth/set_password/", {
+      const response = await fetch(apiUrl("auth/set_password/"), {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -120,7 +131,7 @@ export default function SetPassword({
       }
 
       if (!response.ok) {
-        setError(data.error || messages.setPassword.textSetPasswordFailed);
+        setError(data.error || messages.setPassword.messageSetPasswordFailed);
         setLoading(false);
         return;
       }
@@ -128,27 +139,30 @@ export default function SetPassword({
       setCreatedUsername(data.username || username || null);
       setStep("success");
       onSuccess?.(data);
-    } catch (err) {
-      setError(messages.setPassword.textNetworkError);
+    } catch {
+      setError(messages.setPassword.messageNetworkError);
     } finally {
       setLoading(false);
     }
   };
 
-  const handleContinue  = async () => {
+  const handleContinue = async () => {
     if (!autoLogin || !createdUsername) {
       onClose?.();
       return;
     }
 
     try {
-      const csrfRes = await fetch("/api/auth/csrf/", {
+      const csrfRes = await fetch(apiUrl("auth/csrf/"), {
         credentials: "include",
+        headers: {
+          "Accept-Language": locale,
+        },
       });
       const csrfData = await csrfRes.json();
       const csrfToken = csrfData.csrfToken;
 
-      const response = await fetch("/api/auth/login/", {
+      const response = await fetch(apiUrl("auth/login/"), {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -162,36 +176,26 @@ export default function SetPassword({
         }),
       });
 
-      let data: any = null;
-      const contentType = response.headers.get("content-type") || "";
-
-      if (contentType.includes("application/json")) {
-        data = await response.json();
-      } else {
-        const text = await response.text();
-        throw new Error(text.slice(0, 200));
-      }
-
       if (!response.ok) {
-        setError(messages.setPassword.textErrorLoginFailed);
+        setError(messages.setPassword.messageErrorLoginFailed);
         return;
       }
 
       onClose?.();
-    } catch (err) {
-      setError(messages.setPassword.textNetworkError);
-    };
+    } catch {
+      setError(messages.setPassword.messageNetworkError);
+    }
   };
-  
+
   if (step === "success") {
-    return(
+    return (
       <div className="space-y-4">
         <h2 className="text-xl font-semibold text-center">
-          {messages.setPassword.titleSuccess}
+          {messages.setPassword.labelSuccess}
         </h2>
 
         <p className="text-center text-gray-700">
-          {messages.setPassword.textSuccess}
+          {messages.setPassword.messageSuccess}
         </p>
 
         <label className="flex items-center gap-2 text-sm justify-center">
@@ -226,7 +230,7 @@ export default function SetPassword({
 
       {username && (
         <div className="text-sm text-gray-600 text-center">
-          {messages.setPassword.textSettingPasswordFor}{" "}
+          {messages.setPassword.messageSettingPasswordFor}{" "}
           <span className="font-semibold">{username}</span>
         </div>
       )}
@@ -235,40 +239,62 @@ export default function SetPassword({
         <label className="block mb-1">
           {messages.setPassword.labelPassword} *
         </label>
-        <input
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-          autoComplete="new-password"
-          className="w-full border px-3 py-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
+        <div className="relative">
+          <input
+            type={showPassword ? "text" : "password"}
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+            disabled={loading}
+            autoComplete="new-password"
+            className="w-full border px-3 py-2 pr-10 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
+          />
+          <button
+            type="button"
+            onClick={() => setShowPassword((prev) => !prev)}
+            disabled={loading}
+            className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 disabled:opacity-50"
+          >
+            {showPassword ? "🙈" : "👁"}
+          </button>
+        </div>
       </div>
 
       <div>
         <label className="block mb-1">
           {messages.setPassword.labelConfirmPassword} *
         </label>
-        <input
-          type="password"
-          value={passwordConfirm}
-          onChange={(e) => setPasswordConfirm(e.target.value)}
-          required
-          autoComplete="new-password"
-          className="w-full border px-3 py-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
+        <div className="relative">
+          <input
+            type={showConfirmPassword ? "text" : "password"}
+            value={passwordConfirm}
+            onChange={(e) => setPasswordConfirm(e.target.value)}
+            required
+            disabled={loading}
+            autoComplete="new-password"
+            className="w-full border px-3 py-2 pr-10 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
+          />
+          <button
+            type="button"
+            onClick={() => setShowConfirmPassword((prev) => !prev)}
+            disabled={loading}
+            className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 disabled:opacity-50"
+          >
+            {showConfirmPassword ? "🙈" : "👁"}
+          </button>
+        </div>
       </div>
 
       <button
         type="submit"
-        disabled={loading}
+        disabled={!canSubmit}
         className={`w-full py-2 rounded text-white ${
-          loading ? "bg-gray-400" : "bg-green-600 hover:bg-green-700"
+          canSubmit ? "bg-green-600 hover:bg-green-700" : "bg-gray-400"
         }`}
       >
         {loading
-          ? (messages.setPassword.buttonSubmitting)
-          : (messages.setPassword.buttonSubmit)}
+          ? messages.setPassword.buttonSubmitting
+          : messages.setPassword.buttonSubmit}
       </button>
     </form>
   );
