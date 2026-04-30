@@ -1,0 +1,63 @@
+{
+  "titleLegalNotice": "Impressum",
+  "legalNotice": {
+    "sections": [
+      {
+        "heading": "Anbieterkennzeichnung",
+        "paragraphs": [
+          ["Fidel Conde", "Körnerstraße 26", "10785 Berlin"],
+          [
+            "Fon: 030 - 26 55 46 28",
+            "Fax: 030 - 26 55 46 28"
+          ]
+        ],
+        "links": [
+          {
+            "label": "Mail",
+            "text": "info@projectodo.de",
+            "href": "mailto:info@projectodo.de"
+          },
+          {
+            "label": "Internet",
+            "text": "www.projectodo.de",
+            "href": "https://www.projectodo.de/"
+          }
+        ]
+      },
+      {
+        "heading": "Verantwortlich im Sinne von § 10, Absatz 3 MDStV",
+        "paragraphs": [["Fidel Conde"]]
+      },
+      {
+        "heading": "Rechtlicher Hinweis",
+        "paragraphs": [
+          [
+            "Alle Rechte vorbehalten. Die dargestellten Informationen sind Eigentum von Fidel Conde. Sie stellen die zum Zeitpunkt der Publikation jeweils neuesten Informationen dar. Eine Haftung oder Garantie für die Aktualität, Richtigkeit und Vollständigkeit der zur Verfügung gestellten Informationen und Daten ist ausgeschlossen. Die Informationen auf den Webseiten stellen in keinem Fall rechtliche Zusicherungen dar. Fidel Conde behält sich das Recht vor, bei Bedarf Änderungen oder Ergänzungen der bereitgestellten Informationen oder Daten durchzuführen. Aus den hier beschriebenen Themenbereichen können keine Rechtsansprüche abgeleitet werden. Angebote sind in allen Teilen ausschließlich unverbindlich."
+          ],
+          [
+            "Fidel Conde haftet weder für direkte noch indirekte Schäden, die durch die Nutzung der Informationen oder Daten entstehen, die auf dieser Webseite zu finden sind. Rechte und Pflichten zwischen Fidel Conde und dem einzelnen Nutzer der Webseite oder Dritten bestehen nicht. Die Inhalte von www.projectodo.de sind urheberrechtlich geschützt. Die Inhalte dürfen weder ganz noch teilweise ohne vorherige schriftliche Genehmigung des Urhebers vervielfältigt und/oder veröffentlicht oder in einem Informationssystem gespeichert werden."
+          ]
+        ]
+      },
+      {
+        "heading": "Konzept & Design",
+        "paragraphs": [
+          ["Jaime Hyland &m-dash; language-landscapes.com"]
+        ],
+        "links": [
+          {
+            "label": "language-landscapes.com",
+            "text": "language-landscapes.com",
+            "href": "http://www.language-landscapes.com"
+        },
+        {
+            "label": "Jaime Hyland",
+            "text": "Jaime Hyland",
+            "href": "http://www.jaime-hyland.com"
+        }                 
+
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,63 @@
+{
+  "titleLegalNotice": "Aviso legal",
+  "legalNotice": {
+    "sections": [
+      {
+        "heading": "Detalles del proveedor de servicios",
+        "paragraphs": [
+          ["Fidel Conde", "Körnerstraße 26", "10785 Berlin"],
+          [
+            "Tel: 030 - 26 55 46 28",
+            "Fax: 030 - 26 55 46 28"
+          ]
+        ],
+        "links": [
+          {
+            "label": "Mail",
+            "text": "info@projectodo.de",
+            "href": "mailto:info@projectodo.de"
+          },
+          {
+            "label": "Internet",
+            "text": "www.projectodo.de",
+            "href": "https://www.projectodo.de/"
+          }
+        ]
+      },
+      {
+        "heading": "Responsable según § 10, párrafo 3 MDStV (ley alemana sobre medios)",
+        "paragraphs": [["Fidel Conde"]]
+      },
+      {
+        "heading": "Aviso legal",
+        "paragraphs": [
+          [
+            "Totos los derechos reservados. La información presentada es propiedad de Fidel Conde. Representa la información más reciente disponible en el momento de la publicación. Se excluye cualquier responsabilidad o garantía por la actualidad, exactitud y completitud de la información y datos proporcionados. La información en las páginas web no constituye en ningún caso una garantía legal. Fidel Conde se reserva el derecho a realizar cambios o actualizaciones de la información o datos proporcionados cuando sea necesario. No se pueden derivar derechos de los temas descritos aquí. Las ofertas son exclusivamente no vinculantes en todas sus partes."
+          ],
+          [
+            "Fidel Conde no acepta responsabilidad por los daños y perjuicios que puedan derivarse del uso de la información o datos disponibles en esta página web. Fidel Conde se reserva el derecho a realizar cambios o actualizaciones de la información o datos proporcionados cuando sea necesario. No se pueden derivar derechos de los temas descritos aquí. Las ofertas son exclusivamente no vinculantes en todas sus partes."
+          ]
+        ]
+      },
+      {
+        "heading": "Concepto y diseño",
+        "paragraphs": [
+          ["Jaime Hyland &m-dash; language-landscapes.com"]
+        ],
+        "links": [
+          {
+            "label": "language-landscapes.com",
+            "text": "language-landscapes.com",
+            "href": "http://www.language-landscapes.com"
+        },
+        {
+            "label": "Jaime Hyland",
+            "text": "Jaime Hyland",
+            "href": "http://www.jaime-hyland.com"
+        }                 
+
+        ]
+      }
+    ]
+  }
+}

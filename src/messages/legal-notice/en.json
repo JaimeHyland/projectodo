@@ -1,0 +1,63 @@
+{
+  "titleLegalNotice": "Impressum",
+  "legalNotice": {
+    "sections": [
+      {
+        "heading": "Details on service provider",
+        "paragraphs": [
+          ["Fidel Conde", "Körnerstraße 26", "10785 Berlin"],
+          [
+            "Fon: 030 - 26 55 46 28",
+            "Fax: 030 - 26 55 46 28"
+          ]
+        ],
+        "links": [
+          {
+            "label": "Mail",
+            "text": "info@projectodo.de",
+            "href": "mailto:info@projectodo.de"
+          },
+          {
+            "label": "Internet",
+            "text": "www.projectodo.de",
+            "href": "https://www.projectodo.de/"
+          }
+        ]
+      },
+      {
+        "heading": "Responsible within the meaning of § 10, paragraph 3 MDStV",
+        "paragraphs": [["Fidel Conde"]]
+      },
+      {
+        "heading": "Legal Notice",
+        "paragraphs": [
+          [
+            "All rights reserved. The displayed information is the property of Fidel Conde. It represents the most recent information available at the time of publication. No liability or warranty is given for the currency, accuracy and completeness of the information and data provided. The information on the websites does not constitute any legal guarantees. Fidel Conde reserves the right to make changes or updates to the provided information or data when necessary. No legal claims can be derived from the topics described here. Offers are exclusively non-binding in all their parts."
+          ],
+          [
+            "Fidel Conde shall not be held liable for direct or indirect damages that may arise from the use of the information or data available on this website. Rights and obligations between Fidel Conde and individual users of the website or third parties do not exist. The contents of www.projectodo.de are protected by copyright law. The contents may not be reproduced or published in whole or in part without prior written permission from the copyright holder."
+          ]
+        ]
+      },
+      {
+        "heading": "Konzept & Design",
+        "paragraphs": [
+          ["Jaime Hyland &m-dash; language-landscapes.com"]
+        ],
+        "links": [
+          {
+            "label": "language-landscapes.com",
+            "text": "language-landscapes.com",
+            "href": "http://www.language-landscapes.com"
+        },
+        {
+            "label": "Jaime Hyland",
+            "text": "Jaime Hyland",
+            "href": "http://www.jaime-hyland.com"
+        }                 
+
+        ]
+      }
+    ]
+  }
+}
