@@ -11,5 +11,10 @@
         "signup",
         "tailwindcss",
         "vercel"
-    ]
+    ],
+  "python.defaultInterpreterPath": "${workspaceFolder}\\backend\\venv\\Scripts\\python.exe",
+
+  "isort.interpreter": ["${workspaceFolder}\\backend\\venv\\Scripts\\python.exe"],
+  "isort.importStrategy": "fromEnvironment",
+  "isort.args": ["--profile", "black"]
 }
