@@ -18,5 +18,10 @@
     "menuLogout": "Log out",
     "menuChangePassword": "Change password",
     "menuResetPassword": "Reset password",
-    "alertSignupSuccess": "Signup successful! A verification email has been sent to the address you entered. Please check your inbox (including your spam mail folder if applicable) and click the link to activate your account. If you have any questions or need further assistance, please contact our support team."    
+    "alertSignupSuccess": "Signup successful! A verification email has been sent to the address you entered. Please check your inbox (including your spam mail folder if applicable) and click the link to activate your account. If you have any questions or need further assistance, please contact our support team." ,
+    "altBanner": "Projectodo banner",
+    "altLanguageSelector": "Language selector",
+    "ariaSelectLanguage": "Select language",
+    "ariaOpenMenu": "Open menu",
+    "ariaCloseMenu": "Close menu"   
 }

@@ -292,7 +292,15 @@ export function Header() {
               alt="Language selector"
               width={56}
               height={56}
-              className="object-contain transition-transform duration-200 ease-out hover:scale-110 active:scale-95"
+              className="
+                object-contain
+                transition-transform duration-200 ease-out
+                hover:scale-110 active:scale-95
+                w-9 h-9           /* ≤ 640px (~36px) */
+                sm:w-10 sm:h-10   /* ≤ 900px (~40px) */
+                md:w-12 md:h-12   /* ≤ 1280px (~48px) */
+                lg:w-14 lg:h-14   /* ≤ 1600px (~56px) */
+              "
             />
           </button>
 

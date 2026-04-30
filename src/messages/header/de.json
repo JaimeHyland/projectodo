@@ -18,5 +18,10 @@
     "menuLogout": "Abmelden",
     "menuChangePassword": "Passwort wechseln",
     "menuResetPassword": "Passwort zurücksetzen",
-    "alertSignupSuccess": "Ihre Anmeldung war erfolgreich! Sie haben eine Bestätigungs-E-Mail an die angegebene Adresse erhalten. Bitte prüfen Sie Ihren Posteingang (ggf. auch Ihren Spam-Ordner) und klicken Sie auf den Link, um Ihr Konto zu aktivieren. Bei Fragen oder falls Sie weitere Unterstützung benötigen, wenden Sie sich bitte an unser Support-Team."
+    "alertSignupSuccess": "Ihre Anmeldung war erfolgreich! Sie haben eine Bestätigungs-E-Mail an die angegebene Adresse erhalten. Bitte prüfen Sie Ihren Posteingang (ggf. auch Ihren Spam-Ordner) und klicken Sie auf den Link, um Ihr Konto zu aktivieren. Bei Fragen oder falls Sie weitere Unterstützung benötigen, wenden Sie sich bitte an unser Support-Team.",
+    "altBanner": "Projectodo Banner",
+    "altLanguageSelector": "Sprachselector",
+    "ariaSelectLanguage": "Sprache auswählen",
+    "ariaOpenMenu": "Menü öffnen",
+    "ariaCloseMenu": "Menü schließen"
 }
