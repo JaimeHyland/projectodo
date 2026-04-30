@@ -1,3 +1,13 @@
 {
-    "titleTechnical": "Technisch"
+  "titleTechnical": "Technik",
+  "technical": {
+    "image": {
+      "src": "/uploads/images/technik/technik.jpg",
+      "alt": "Ein Aufnahmegerät"
+    },
+    "paragraphs": [
+      "Projectodo bietet unseren Kunden ein passendes Recording-Equipment für viele individuelle Bedürfnisse.",
+      "Ob Werbespots, Sprach- oder Musikaufnahmen – wir stellen Ihnen neben der Technik auch unsere langjährige Erfahrung im Bereich von Audioproduktionen zur Verfügung."
+    ]
+  }
 }

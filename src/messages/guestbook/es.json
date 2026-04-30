@@ -1,3 +1,7 @@
 {
-    "titleGuestbook": "Libro de visitas"
+  "titleGuestbook": "Libro de visitas",
+  "guestbook": {
+    "intro": "Déjanos un mensaje o lee los registros de nuestros invitados.",
+    "emptyState": "Pronto aparecerán aquí los registros del libro de visitas."
+  }
 }

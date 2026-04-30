@@ -1,3 +1,13 @@
 {
-    "titleTechnical": "Técnico"
+  "titleTechnical": "Technik",
+  "technical": {
+    "image": {
+      "src": "/uploads/images/technik/technik.jpg",
+      "alt": "Un equipo de grabación"
+    },
+    "paragraphs": [
+      "Projectodo ofrece a nuestros clientes un equipo de grabación adecuado para muchas necesidades individuales.",
+      "Ya sean spots publicitarios, grabaciones de voz o música – además de la tecnología, también ofrecemos nuestra amplia experiencia en el área de producción audiovisual."
+    ]
+  }
 }

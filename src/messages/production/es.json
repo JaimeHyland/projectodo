@@ -1,3 +1,14 @@
 {
-    "titleProduction": "Producción"
+  "titleProduction": "Producción",
+  "production": {
+    "image": {
+      "src": "/produktion.jpg",
+      "alt": "Producción musical"
+    },
+    "paragraphs": [
+      "Aquí tienes una selección de nuestras producciones. Por favor, convéncete con estos ejemplos.",
+      "Los pedidos son posibles mediante consulta."
+    ],
+    "highlight": "Elige de el menú de la izquierda para obtener más información sobre nuestras producciones de CD."
+  }
 }

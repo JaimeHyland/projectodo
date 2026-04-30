@@ -1,3 +1,64 @@
 {
-    "titleLessons": "Clases"
+  "titleLessons": "Clases de Música",
+  "lessons": {
+    "headline": "L A  E S C U E L I T A",
+
+    "intro": [
+      "Para todos aquellos que quieran aprender a tocar la guitarra o ukulele, Projectodo ofrece clases de música en su escuela de música en Berlín para principiantes y estudiantes avanzados.",
+      "Las clases en pequeños grupos son tan posibles como las instrucciones privadas individuales, y también pueden organizarse en su domicilio a petición."
+    ],
+
+    "benefits": [
+      "Incluso en la infancia, la educación musical fomenta la concentración y el rendimiento cognitivo a través del juego – se fortalece la autoconfianza y se abre un nuevo mundo de creatividad.",
+      "Especialmente los niños hiperactivos se benefician, ya que aprenden a concentrarse y a reducir la agresividad mediante la música.",
+      "Los ancianos también obtienen grandes ventajas al aprender a tocar un instrumento, pues tocar música es como hacer ejercicio para el cerebro."
+    ],
+
+    "contact": {
+      "label": "Contacto:",
+      "locations": [
+        {
+          "title": "1. Lugar de la clase",
+          "lines": [
+            "Projectodo",
+            "Grundschule an dem Buchen",
+            "Wilhelm-Wolff-Straße 19",
+            "13156 Berlin - Pankow"
+          ]
+        },
+        {
+          "title": "2. Lugar de la clase",
+          "lines": [
+            "Grundschule im Hasengrund Berlin Pankow",
+            "Hermann-Hesse-Straße 48-52",
+            "13156 Berlin"
+          ]
+        },
+        {
+          "title": "3. Lugar de la clase",
+          "lines": [
+            "Mendel-Grundschule",
+            "Stiftsweg 3",
+            "13187 Berlin"
+          ]
+        },
+        {
+          "title": "4. Lugar de la clase y dirección postal",
+          "lines": [
+            "Fidel Conde",
+            "Körnerstraße 26",
+            "10785 Berlin - Mitte"
+          ]
+        }
+      ],
+
+      "details": {
+        "phone": "Teléfono: +49 030 - 26 55 46 28",
+        "mobile": "Móvil: +49 151 68 10 11 63",
+        "fax": "Fax: +49 030 - 26 93 13 40",
+        "email": "info@projectodo.de",
+        "website": "www.projectodo.de"
+      }
+    }
+  }
 }

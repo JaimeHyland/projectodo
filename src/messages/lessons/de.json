@@ -1,3 +1,64 @@
 {
-    "titleLessons": "Unterricht"
+  "titleLessons": "Unterricht",
+  "lessons": {
+    "headline": "L A  E S C U E L I T A",
+
+    "intro": [
+      "Für alle, die selbst zur Gitarre oder Ukulele greifen möchten, bietet Projectodo Unterricht in seiner Musikschule in Berlin für Anfänger und Fortgeschrittene.",
+      "Der Unterricht in kleinen Gruppen ist ebenso möglich wie der private Einzelunterricht, auf Wunsch auch bei Ihnen direkt zu Hause."
+    ],
+
+    "benefits": [
+      "Schon bei der musikalischen Früherziehung wird spielerisch die Konzentration und die Leistung des Gehirns gefördert – das Selbstbewusstsein wird gestärkt und eine neue Welt zur Kreativität eröffnet.",
+      "Davon profitieren besonders hyperaktive Kinder, die durch das Musizieren lernen, sich gezielt zu konzentrieren und Aggressionen abzubauen.",
+      "Auch Senioren ziehen großen Nutzen aus dem Erlernen eines Instruments, denn Musizieren ist wie Sport für das Gehirn."
+    ],
+
+    "contact": {
+      "label": "Kontakt:",
+      "locations": [
+        {
+          "title": "1. Unterrichtsort",
+          "lines": [
+            "Projectodo",
+            "Grundschule an dem Buchen",
+            "Wilhelm-Wolff-Straße 19",
+            "13156 Berlin - Pankow"
+          ]
+        },
+        {
+          "title": "2. Unterrichtsort",
+          "lines": [
+            "Grundschule im Hasengrund Berlin Pankow",
+            "Hermann-Hesse-Straße 48-52",
+            "13156 Berlin"
+          ]
+        },
+        {
+          "title": "3. Unterrichtsort",
+          "lines": [
+            "Mendel-Grundschule",
+            "Stiftsweg 3",
+            "13187 Berlin"
+          ]
+        },
+        {
+          "title": "4. Unterrichtsort und Postanschrift",
+          "lines": [
+            "Fidel Conde",
+            "Körnerstraße 26",
+            "10785 Berlin - Mitte"
+          ]
+        }
+      ],
+
+      "details": {
+        "phone": "Fon: +49 030 - 26 55 46 28",
+        "mobile": "Funk: +49 151 68 10 11 63",
+        "fax": "Fax: +49 030 - 26 93 13 40",
+        "email": "info@projectodo.de",
+        "website": "www.projectodo.de"
+      }
+    }
+  }
 }

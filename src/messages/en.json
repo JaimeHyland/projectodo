@@ -1,3 +1,33 @@
 {
-    "titleHome": "Home"
+  "titleHome": "Welcome to Projectodo",
+  "home": {
+    "intro": {
+      "imageAlt": "A guitarist performing",
+      "paragraphs": [
+        "Projectodo is your musicians manager, your sound equipment rental service and recording studio for your music productions.",
+        "Family celebrations, jubilees, inaugurations, weddings — we arrange your events with experienced musicians, whether as a duet, trio, quartet or quintet. We offer you the best service so that your party becomes a success."
+      ],
+      "claim": "...simply contact us, we'll take care of the rest!"
+    },
+    "sections": [
+      {
+        "title": "Bands",
+        "body": "We can provide you with experienced musicians for any type of occasion! From solo to sextet and also larger bands on request.",
+        "href": "/bands",
+        "linkLabel": "Read more..."
+      },
+      {
+        "title": "Production",
+        "body": "We offer clients high quality recording equipment that suits all needs of professional work.",
+        "href": "/production",
+        "linkLabel": "Read more..."
+      },
+      {
+        "title": "Technical",
+        "body": "No matter whether advertising, speech or music recording — besides our equipment, we provide you with our experience.",
+        "href": "/technical",
+        "linkLabel": "Read more..."
+      }
+    ]
+  }
 }

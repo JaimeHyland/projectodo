@@ -1,3 +1,33 @@
 {
-    "titleHome": "Inicio"
+  "titleHome": "¡Bienvenido a Projectodo!",
+  "home": {
+    "intro": {
+      "imageAlt": "Un guitarrista en acción",
+      "paragraphs": [
+        "Projectodo es tu gestor de músicos, tu servicio de alquiler de equipos de sonido y tu estudio de grabación para tus producciones musicales.",
+        "Celebraciones familiares, aniversarios, inauguraciones, bodas — organizamos tus eventos con músicos experimentados, ya sea como dúo, tríos, cuarteto o quíntet. Te ofrecemos el mejor servicio para que tu fiesta sea un éxito."
+      ],
+      "claim": "...simplemente contactarnos, ¡nos encargamos del resto!"
+    },
+    "sections": [
+      {
+        "title": "Grupos",
+        "body": "¡Podemos proporcionarte músicos experimentados para cualquier tipo de ocasión! Desde solistas hasta sextetos y también grupos más grandes bajo petición.",
+        "href": "/bands",
+        "linkLabel": "Leer más..."
+      },
+      {
+        "title": "Producción",
+        "body": "Ofrecemos a nuestros clientes equipos de grabación de alta calidad que se adapten a todas las necesidades del trabajo profesional.",
+        "href": "/production",
+        "linkLabel": "Leer más..."
+      },
+      {
+        "title": "Technical",
+        "body": "No importa si es publicidad, discurso o grabación de música — además de nuestro equipo, te ofrecemos nuestra experiencia.",
+        "href": "/technical",
+        "linkLabel": "Leer más..."
+      }
+    ]
+  }
 }

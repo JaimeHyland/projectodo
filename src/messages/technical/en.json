@@ -1,3 +1,13 @@
 {
-    "titleTechnical": "Technical"
+  "titleTechnical": "Technical services",
+  "technical": {
+    "image": {
+      "src": "/uploads/images/technik/technik.jpg",
+      "alt": "Recording equipment"
+    },
+    "paragraphs": [
+      "Projectodo offers our customers suitable recording equipment for many individual needs.",
+      "Whether advertising spots, voice or music recordings – we provide you with not only the technology but also our years of experience in the field of audio production."
+    ]
+  }
 }

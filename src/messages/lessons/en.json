@@ -1,3 +1,64 @@
 {
-    "titleLessons": "Lessons"
+  "titleLessons": "Music Lessons",
+  "lessons": {
+    "headline": "L A  E S C U E L I T A",
+
+    "intro": [
+      "For anyone who wants to pick up the guitar or ukulele, Projectodo offers music lessons in their music school in Berlin for beginners and advanced players.",
+      "Lessons in small groups are just as possible as private one-on-one instruction, and can also be arranged at your home upon request."
+    ],
+
+    "benefits": [
+      "Even in early childhood, musical education fosters concentration and cognitive performance through play – self-confidence is strengthened and a new world of creativity is opened.",
+      "Especially hyperactive children benefit, as they learn to concentrate and reduce aggression through music.",
+      "Senior citizens also gain significant benefits from learning to play an instrument, as playing music is like exercise for the brain."
+    ],
+
+    "contact": {
+      "label": "Contact:",
+      "locations": [
+        {
+          "title": "1. Lesson venue",
+          "lines": [
+            "Projectodo",
+            "Grundschule an dem Buchen",
+            "Wilhelm-Wolff-Straße 19",
+            "13156 Berlin - Pankow"
+          ]
+        },
+        {
+          "title": "2. Lesson venue",
+          "lines": [
+            "Grundschule im Hasengrund Berlin Pankow",
+            "Hermann-Hesse-Straße 48-52",
+            "13156 Berlin"
+          ]
+        },
+        {
+          "title": "3. Lesson venue",
+          "lines": [
+            "Mendel-Grundschule",
+            "Stiftsweg 3",
+            "13187 Berlin"
+          ]
+        },
+        {
+          "title": "4. Lesson venue and postal address",
+          "lines": [
+            "Fidel Conde",
+            "Körnerstraße 26",
+            "10785 Berlin - Mitte"
+          ]
+        }
+      ],
+
+      "details": {
+        "phone": "Phone: +49 030 - 26 55 46 28",
+        "mobile": "Mobile: +49 151 68 10 11 63",
+        "fax": "Fax: +49 030 - 26 93 13 40",
+        "email": "info@projectodo.de",
+        "website": "www.projectodo.de"
+      }
+    }
+  }
 }

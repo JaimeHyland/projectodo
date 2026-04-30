@@ -1,3 +1,23 @@
 {
-    "titleContact": "Kontakt"
+  "titleContact": "Kontakt",
+  "contact": {
+    "name": "Projectodo",
+    "person": "Fidel Conde",
+    "address": [
+      "Körnerstraße 26",
+      "10785 Berlin"
+    ],
+    "details": {
+      "phoneLabel": "Fon",
+      "phone": "+49 030 - 26 55 46 28",
+      "mobileLabel": "Funk",
+      "mobile": "+49 171 23 39 44 9",
+      "faxLabel": "Fax",
+      "fax": "+49 030 - 26 93 13 40",
+      "emailLabel": "Mail",
+      "email": "info@projectodo.de",
+      "websiteLabel": "Internet",
+      "website": "www.projectodo.de"
+    }
+  }
 }
