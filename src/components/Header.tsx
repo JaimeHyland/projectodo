@@ -274,19 +274,24 @@ export function Header() {
         </div>
 
         {/* Language selector */}
-        <div ref={localeMenuRef} className="absolute top-2 right-2 z-50">
+        <div ref={localeMenuRef} className="absolute right-6 top-[35%] -translate-y-1/2 z-50">
           <button
             type="button"
             onClick={() => setLocaleMenuOpen((prev) => !prev)}
-            className="rounded-full p-1 hover:bg-white/30 transition"
+            className="
+            rounded-full p-2
+            transition
+            ring-2 ring-white/40
+            hover:ring-4 hover:ring-white=70
+            hover:bf-white/20"
             aria-label="Select language"
             aria-expanded={localeMenuOpen}
           >
             <Image
-              src="/globe.svg"
+              src="/globe.png"
               alt="Language selector"
-              width={36}
-              height={36}
+              width={56}
+              height={56}
               className="object-contain transition-transform duration-200 ease-out hover:scale-110 active:scale-95"
             />
           </button>
