@@ -11,18 +11,28 @@
     },
     "sections": [
       {
+        "id": "lessons",
+        "title": "Lessons",
+        "body": "From small children to seniors, we offer music lessons for all levels and ages. Our teachers are professional musicians with long experience in teaching.",
+        "href": "/lessons",
+        "linkLabel": "Read more..."
+      },
+      {
+        "id": "bands",
         "title": "Bands",
-        "body": "We can provide you with experienced musicians for any type of occasion! From solo to sextet and also larger bands on request.",
+        "body": "We can provide you with talented and experienced musicians for any type of occasion! From solo to sextet and also larger bands on request.",
         "href": "/bands",
         "linkLabel": "Read more..."
       },
       {
+        "id": "production",
         "title": "Production",
         "body": "We offer clients high quality recording equipment that suits all needs of professional work.",
         "href": "/production",
         "linkLabel": "Read more..."
       },
       {
+        "id": "technical",
         "title": "Technical",
         "body": "No matter whether advertising, speech or music recording — besides our equipment, we provide you with our experience.",
         "href": "/technical",

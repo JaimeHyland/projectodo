@@ -11,18 +11,28 @@
     },
     "sections": [
       {
+        "id": "lessons",
+        "title": "Clases",
+        "body": "Desde pequeños niños hasta seniores, ofrecemos clases de música para todos los niveles y edades. Nuestros profesores son músicos profesionales con experiencia en la enseñanza.",
+        "href": "/lessons",
+        "linkLabel": "Leer más..."
+      },
+      {
+        "id": "bands",
         "title": "Grupos",
         "body": "¡Podemos proporcionarte músicos experimentados para cualquier tipo de ocasión! Desde solistas hasta sextetos y también grupos más grandes bajo petición.",
         "href": "/bands",
         "linkLabel": "Leer más..."
       },
       {
+        "id": "production",
         "title": "Producción",
         "body": "Ofrecemos a nuestros clientes equipos de grabación de alta calidad que se adapten a todas las necesidades del trabajo profesional.",
         "href": "/production",
         "linkLabel": "Leer más..."
       },
       {
+        "id": "technical",
         "title": "Technical",
         "body": "No importa si es publicidad, discurso o grabación de música — además de nuestro equipo, te ofrecemos nuestra experiencia.",
         "href": "/technical",

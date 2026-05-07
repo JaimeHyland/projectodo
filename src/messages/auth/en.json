@@ -32,6 +32,7 @@
     "buttonSubmit": "Log in",
     "buttonSubmitting": "Logging in...",
     "messageError": "Invalid user name or password",
+    "usernameRequirements": "To create your username, use only letters, numbers and @ . + - _ characters. Blank spaces are not allowed.",
     "noteRequiredFields": "* required fields",
     "messageMissingToken": "Missing token. Please click  the link in the email we sent you.",
     "messageSignupFailed": "The sign-up process failed. Please contact the webmaster!",

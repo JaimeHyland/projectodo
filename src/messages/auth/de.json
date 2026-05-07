@@ -32,6 +32,7 @@
     "buttonSubmitting": "Anmelde...",
     "noteRequiredFields": "* erforderliche Felder",
     "messageError": "Ungültiger Benutzername oder Passwort",
+    "usernameRequirements": "Um Ihren Benutzernamen zu erstellen, verwenden Sie nur Buchstaben, Zahlen und die Zeichen @ . + - _. Leerzeichen sind nicht erlaubt.",
     "messageMissingToken": "Fehlender Token. Bitte klicken Sie auf den Link in der von uns gesendeten E-Mail.",
     "messageSignupFailed": "Die Anmeldung hat leider nicht geklappt. Bitte wende dich an den Webmaster!",
     "messageSignupSuccess": "Fast geschafft! Wir haben eine Bestätigungs-E-Mail an die von dir angegebene Adresse geschickt. Schau in deinen Posteingang und klick auf den Link, um dein Konto zu aktivieren.",

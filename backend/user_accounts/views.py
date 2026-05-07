@@ -9,6 +9,7 @@ from django.contrib.auth import (
     update_session_auth_hash,
 )
 from django.conf import settings
+from django.contrib.auth.validators import UnicodeUsernameValidator
 from django.contrib.auth.password_validation import validate_password
 from django.core.mail import EmailMultiAlternatives, send_mail
 from django.core.exceptions import ValidationError
@@ -31,8 +32,23 @@ def auth_status(request):
     user = request.user
     return JsonResponse({
         "is_authenticated": user.is_authenticated,
-        "is_superuser": user.is_superuser if user.is_authenticated else False,
-        "username": user.username if user.is_authenticated else None,
+        "is_superuser": (
+            user.is_superuser
+            if user.is_authenticated
+            else False
+        ),
+        "username": (
+            user.username
+            if user.is_authenticated
+            else None
+        ),
+        "groups": (
+            list(
+                user.groups.values_list("name", flat=True)
+            )
+            if user.is_authenticated
+            else []
+        ),
     })
 
 
@@ -206,8 +222,8 @@ def verify_email_view(request):
 @require_POST
 def signup_request_view(request):
     data = json.loads(request.body.decode("utf-8"))
-    username = data.get("username")
-    email = data.get("email")
+    username = (data.get("username") or "").strip()
+    email = (data.get("email") or "").strip().lower()
     locale = request.headers.get("Accept-Language", "en").split(",")[0]
 
     translation.activate(locale)
@@ -215,6 +231,20 @@ def signup_request_view(request):
     if not username or not email:
         return JsonResponse(
             {"error": _("Username and email required")},
+            status=400,
+        )
+
+    username_validator = UnicodeUsernameValidator()
+
+    try:
+        username_validator(username)
+    except ValidationError:
+        return JsonResponse(
+            {
+                "error": _(
+                    "Username may contain only letters, numbers, and @/./+/-/_ characters."
+                )
+            },
             status=400,
         )
 

@@ -26,6 +26,7 @@ interface SignupMessages {
     messageRequiredFields: string;
     messageNetworkError: string;
     noteRequiredFields: string;
+    usernameRequirements: string;
   };
 }
 
@@ -144,16 +145,29 @@ export default function SignupForm({
       )}
 
       <div>
-        <label className="block mb-1">{messages.signup.labelUsername} *</label>
+        <label className="block mb-1">
+          {messages.signup.labelUsername} *
+        </label>
+
         <input
           type="text"
           value={username}
-          onChange={(e) => setUsername(e.target.value)}
+          onChange={(e) =>
+            setUsername(
+              e.target.value.replace(/\s+/g, "")
+            )
+          }
           required
           disabled={loading}
           autoComplete="username"
+          pattern="^[\w.@+-]+$"
+          title={messages.signup.usernameRequirements}
           className="w-full border px-3 py-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
         />
+
+        <p className="mt-1 text-sm text-gray-500">
+          {messages.signup.usernameRequirements}
+        </p>
       </div>
 
       <div>

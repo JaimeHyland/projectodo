@@ -28,6 +28,7 @@ export function Header() {
   type User = {
     username: string;
     isSuperuser: boolean;
+    groups: string[];
   };
 
   const [menuOpen, setMenuOpen] = useState(false);
@@ -39,7 +40,9 @@ export function Header() {
   const [localeMenuOpen, setLocaleMenuOpen] = useState(false);
   const [showChangePasswordModal, setShowChangePasswordModal] = useState(false);
   const [user, setUser] = useState<User | null>(null);
-
+  const isWebmaster = user?.isSuperuser || user?.groups.includes('webmaster');
+  const isPressorWebmaster = user?.isSuperuser || user?.groups.includes('press') || user?.groups.includes('webmaster');
+  const isLoggedIn = user !== null;
   const searchParams = useSearchParams();
   const pathname = usePathname() ?? '/';
   const router = useRouter();
@@ -66,12 +69,17 @@ export function Header() {
     { label: headerMessages.menuHome, href: '/' },
     { label: headerMessages.menuLessons, href: '/lessons' },
     { label: headerMessages.menuBands, href: '/bands' },
-    { label: headerMessages.menuTechnical, href: '/technical' },
-    { label: headerMessages.menuProduction, href: '/production' },
     { label: headerMessages.menuNews, href: '/news' },
-    { label: headerMessages.menuPress, href: '/press' },
-    { label: headerMessages.menuGuestbook, href: '/guestbook' },
+    ...(isPressorWebmaster
+      ? [{ label: headerMessages.menuPress, href: '/press' }]
+      : []),
+    ...(isLoggedIn
+      ? [{ label: headerMessages.menuGuestbook, href: '/guestbook' }]
+      : []),
     { label: headerMessages.menuContact, href: '/contact' },
+    ...(isWebmaster
+      ? [{ label: headerMessages.menuAdmin, href: '/admin-dashboard' }]
+      : []),
   ];
 
   const tabColors = [
@@ -80,10 +88,8 @@ export function Header() {
     '#7bae37',
     '#008bae',
     '#ca8f81',
-    '#fabe00',
     '#3a5c03',
     '#f2f3ae',
-    '#fabe00',
     '#008bae',
   ];
 
@@ -119,6 +125,7 @@ export function Header() {
           setUser({
             username: data.username,
             isSuperuser: data.is_superuser,
+            groups: data.groups ?? [],
           });
         } else {
           setUser(null);
@@ -279,11 +286,12 @@ export function Header() {
             type="button"
             onClick={() => setLocaleMenuOpen((prev) => !prev)}
             className="
-            rounded-full p-2
-            transition
-            ring-2 ring-white/40
-            hover:ring-4 hover:ring-white=70
-            hover:bf-white/20"
+                rounded-full p-2
+                transition
+                ring-2 ring-white/40
+                hover:ring-4 hover:ring-white/70
+                hover:bg-white/20
+            "
             aria-label="Select language"
             aria-expanded={localeMenuOpen}
           >
@@ -477,6 +485,7 @@ export function Header() {
                         setUser({
                           username: data.username,
                           isSuperuser: data.is_superuser,
+                          groups: data.groups ?? [],
                         });
                       } else {
                         setUser(null);

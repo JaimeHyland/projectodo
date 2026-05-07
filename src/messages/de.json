@@ -7,22 +7,33 @@
         "Projectodo ist Ihre Musiker-Verwaltung, der Verleih von Soundausstattung und das Aufnahmezimmer für Ihre Musikproduktionen.",
         "Familienfeiern, Jubiläen, Neueröffnungen, Hochzeiten — wir organisieren Ihre Veranstaltungen mit erfahrenen Musikern, egal ob als Duett, Trio, Quartett oder Quintett. Wir bieten Ihnen den besten Service, damit Ihre Party ein Erfolg wird."
       ],
-      "claim": "...simply contact us, we regulate the rest!"
+      "claim": "...einfach kontaktieren, wir kümmern uns um den Rest!"
     },
     "sections": [
       {
-        "title": "Bands",
+        "id": "lessons",
+        "title": "Unterricht",
         "body": "Wir können Ihnen erfahrene Musiker für jede Art von Anlass zur Verfügung stellen! Von Solo bis Sextett und auch größere Bands auf Anfrage.",
-        "href": "/bands",
+        "href": "/lessons",
         "linkLabel": "Lesen Sie mehr dazu..."
       },
       {
+        "id": "production",
         "title": "Produktion",
         "body": "Wir bieten Ihnen hochwertige Aufnahmeausrüstung an, die allen Anforderungen professioneller Arbeit entspricht.",
         "href": "/production",
         "linkLabel": "Lesen Sie mehr dazu..."
       },
       {
+        "id": "bands",
+        "title": "Bands",
+        "body": "Wir können Ihnen erfahrene Musiker für jede Art von Anlass zur Verfügung stellen! Von Solo bis Sextett und auch größere Bands auf Anfrage.",
+        "href": "/bands",
+        "linkLabel": "Lesen Sie mehr dazu..."
+      },
+      
+      {
+        "id": "technical",
         "title": "Technik",
         "body": "Egal ob Werbung, Rede oder Musikaufnahme — neben unserer Ausrüstung bieten wir Ihnen unsere Erfahrung an.",
         "href": "/technical",

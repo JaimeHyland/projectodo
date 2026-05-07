@@ -37,6 +37,8 @@
       "messageSignupSuccess": "¡Casi listo! Hemos enviado un correo de confirmación a la dirección que proporcionaste. Por favor, revisa tu bandeja de entrada y haz clic en el enlace para activar tu cuenta.",
       "messageEmailMismatch": "Las direcciones de correo electrónico no coinciden.",
       "messageInvalidEmail": "Por favor, introduce una dirección de correo electrónico válida.",
+      "messageUsernameInvalid": "El nombre de usuario no es válido.",
+      "usernameRequirements": "Para crear tu nombre de usuario, usa solo letras, números y los caracteres @ . + - _ . Los espacios en blanco no están permitidos.",
       "messageEmailValid": "Esta dirección de correo electrónico es válida.",
       "messageRequiredFields": "Por favor, completa todos los campos requeridos.",
       "messageNetworkError": "Ocurrió un error de red. Por favor, inténtalo de nuevo. ",

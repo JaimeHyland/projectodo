@@ -125,7 +125,12 @@ export default function LoginForm({
           type="text"
           id="login-username"
           value={username}
-          onChange={(e) => setUsername(e.target.value)}
+          onChange={(e) =>
+            setUsername(
+              e.target.value
+                .replace(/\s+/g, "")
+            )
+          }
           required
           disabled={loading}
           autoComplete="username"
