@@ -1,3 +1,8 @@
+import { redirect, notFound } from 'next/navigation';
+import { cookies } from "next/headers";
+import { getCurrentUser } from '@/lib/server-authorization';
+import { CollapsibleSection } from '@/components/CollapsibleSection';
+
 import en from "@/messages/admin-dashboard/en.json";
 import de from "@/messages/admin-dashboard/de.json";
 import es from "@/messages/admin-dashboard/es.json";
@@ -6,14 +11,196 @@ interface AdminDashboardPageProps {
   params: Promise<{ locale: string }>;
 }
 
+type UserGroupCounts = {
+  total: number;
+  ordinary: number;
+  superuser: number;
+  webmaster: number;
+  teacher: number;
+  student: number;
+  band_leader: number;
+  press: number;
+};
+
+type AdminUser = {
+  id: number;
+  username: string;
+  email: string;
+  is_superuser: boolean;
+  groups: string[];
+};
+
+type AdminUserListResponse = {
+  users: AdminUser[];
+};
+
+const API_BASE =
+  process.env.API_BASE_URL ??
+  process.env.NEXT_PUBLIC_API_BASE_URL ??
+  'http://localhost:8000';
+
+async function getUserGroupCounts(): Promise<UserGroupCounts | null> {
+  const cookieStore = await cookies();
+
+  const cookieHeader = cookieStore
+    .getAll()
+    .map((cookie) => `${cookie.name}=${cookie.value}`)
+    .join('; ');
+
+  const res = await fetch(`${API_BASE}/api/auth/user-group-counts/`, {
+    headers: {
+      Cookie: cookieHeader,
+    },
+    cache: 'no-store',
+  });
+
+  if (!res.ok) {
+    const errorText = await res.text();
+    console.error("user-group-counts failed", {
+      status: res.status,
+      statusText: res.statusText,
+      body: errorText,
+    });
+
+    return null;
+  }
+
+  return res.json();
+}
+
+async function getAdminUsers(): Promise<AdminUser[] | null> {
+  const cookieStore = await cookies();
+  const cookieHeader = cookieStore
+    .getAll()
+    .map((cookie) => `${cookie.name}=${cookie.value}`)
+    .join('; ');
+
+  const res = await fetch(`${API_BASE}/api/auth/users/`, {
+    headers: {
+      Cookie: cookieHeader,
+    },
+    cache: 'no-store',
+  });
+  if (!res.ok) {
+    const errorText = await res.text();
+    console.error("admin users failed", {
+      status: res.status,
+      statusText: res.statusText,
+      body: errorText,
+    });
+    return null;
+  }
+
+  const data: AdminUserListResponse = await res.json();
+  return data.users;
+}
+
 export default async function AdminDashboardPage({ params }: AdminDashboardPageProps) {
-  const { locale } =  await params;
+  const user = await getCurrentUser();
+  const { locale } = await params;
   const messages = locale === "de" ? de : locale === "es" ? es : en;
+
+  if (!user) {
+    redirect(`/${locale}?auth=login`);
+  }
+
+  const canViewAdminDashboard =
+    user.isSuperuser || user.groups.includes('webmaster');
+
+  if (!canViewAdminDashboard) {
+    notFound();
+  }
+
+  const counts = await getUserGroupCounts();
+  const adminUsers = await getAdminUsers();
 
   return (
     <main className="p-8 text-center">
       <h1 className="text-2xl font-bold">{messages.titleAdminDashboard}</h1>
-      <p className="text-lg">{messages.descriptionAdminDashboard}</p> 
+      <p className="mb-8 text-lg">{messages.descriptionAdminDashboard}</p>
+
+      <CollapsibleSection title="User stats" defaultOpen>
+        {counts ? (
+          <dl className="grid grid-cols-2 gap-3">
+            <dt className="font-medium">Total users</dt>
+            <dd>{counts.total}</dd>
+
+            <dt className="font-medium">Ordinary registered users</dt>
+            <dd>{counts.ordinary}</dd>
+
+            <dt className="font-medium">Superusers</dt>
+            <dd>{counts.superuser}</dd>
+
+            <dt className="font-medium">Webmasters</dt>
+            <dd>{counts.webmaster}</dd>
+
+            <dt className="font-medium">Teachers</dt>
+            <dd>{counts.teacher}</dd>
+
+            <dt className="font-medium">Students</dt>
+            <dd>{counts.student}</dd>
+
+            <dt className="font-medium">Band leaders</dt>
+            <dd>{counts.band_leader}</dd>
+
+            <dt className="font-medium">Press</dt>
+            <dd>{counts.press}</dd>
+          </dl>
+        ) : (
+          <p>Could not load user stats.</p>
+        )}
+      </CollapsibleSection>
+      <CollapsibleSection title="Users" defaultOpen={false}>
+        {adminUsers ? (
+          <div className="overflow-x-auto">
+            <table className="w-full border-collapse text-sm">
+              <thead>
+                <tr className="border-b bg-gray-100">
+                  <th className="p-2 text-left">Username</th>
+                  <th className="p-2 text-left">Email</th>
+                  <th className="p-2 text-left">Roles</th>
+                  <th className="p-2 text-left">Actions</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                {adminUsers.map((adminUser) => (
+                  <tr key={adminUser.id} className="border-b">
+                    <td className="p-2">{adminUser.username}</td>
+                    <td className="p-2">{adminUser.email || "—"}</td>
+                    <td className="p-2">
+                      {adminUser.is_superuser
+                        ? ["superuser", ...adminUser.groups].join(", ")
+                        : adminUser.groups.length > 0
+                          ? adminUser.groups.join(", ")
+                          : "ordinary"}
+                    </td>
+                    <td className="p-2">
+                      <div className="flex gap-2">
+                        <button
+                          type="button"
+                          className="rounded bg-gray-700 px-3 py-1 text-white"
+                        >
+                          Edit
+                        </button>
+
+                        <button
+                          type="button"
+                          className="rounded bg-red-700 px-3 py-1 text-white"
+                        >
+                          Delete
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        ) : (
+          <p>Could not load users.</p>
+        )}
+      </CollapsibleSection>
     </main>
   );
 }

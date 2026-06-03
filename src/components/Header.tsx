@@ -534,6 +534,21 @@ export function Header() {
                 onConfirm={() => {
                   setUser(null);
                   closeLogout();
+
+                  const protectedPaths = [
+                    '/press',
+                    '/admin-dashboard',
+                    '/guestbook',
+                  ];
+
+                  const isProtectedPath = protectedPaths.some((protectedPath) =>
+                    pathWithoutLocale === protectedPath ||
+                    pathWithoutLocale.startsWith(`${protectedPath}/`)
+                  );
+
+                  if (isProtectedPath) {
+                    router.replace(switchLocale('/', currentLocale));
+                  }
                 }}
                 onCancel={closeLogout}
               />

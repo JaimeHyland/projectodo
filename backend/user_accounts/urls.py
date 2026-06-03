@@ -6,7 +6,6 @@ urlpatterns = [
     path("signup/", views.signup_request_view),
     path("login/", views.login_view),
     path("logout/", views.logout_view),
-    path("me/", views.me_view),
     path("csrf/", views.csrf),
     path(
         "set_password/",
@@ -37,5 +36,15 @@ urlpatterns = [
         'status/',
         views.auth_status,
         name='auth_status'
+    ),
+    path(
+        "user-group-counts/",
+        views.admin_user_group_counts_view,
+        name="user_group_counts"
+    ),
+    path(
+        "users/",
+        views.admin_user_list_view,
+        name="user_list"
     ),
 ]

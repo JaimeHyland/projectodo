@@ -11,11 +11,13 @@ from django.contrib.auth import (
 from django.conf import settings
 from django.contrib.auth.validators import UnicodeUsernameValidator
 from django.contrib.auth.password_validation import validate_password
+from django.contrib.auth.models import User, Group
 from django.core.mail import EmailMultiAlternatives, send_mail
 from django.core.exceptions import ValidationError
-from django.views.decorators.http import require_POST, require_GET
+from django.views.decorators.http import require_POST, require_GET, require_http_methods
 from django.http import JsonResponse
 from django.views.decorators.csrf import ensure_csrf_cookie
+from django.views.decorators.http import require_http_methods
 from django.middleware.csrf import get_token
 from django.utils import translation
 from django.utils.translation import gettext as _
@@ -23,6 +25,9 @@ from django.utils import timezone
 from urllib.parse import urlencode
 from .models import AuthToken
 from .utilities import generate_secure_token
+from .permissions import is_press_or_webmaster, is_webmaster
+
+from user_accounts.permissions import is_webmaster
 
 
 User = get_user_model()
@@ -437,16 +442,229 @@ def reset_password_confirm_view(request):
     })
 
 
-@require_GET
-def me_view(request):
+#  Helper functions for user permissions
+
+@require_http_methods(["POST"])
+def promote_to_webmaster_view(request):
     if not request.user.is_authenticated:
         return JsonResponse(
-            {"authenticated": False},
+            {"error": _("Authentication required")},
             status=401,
         )
 
+    if not is_webmaster(request.user):
+        return JsonResponse(
+            {"error": _("Webmaster permissions required")},
+            status=403,
+        )
+
+    data = json.loads(request.body.decode("utf-8"))
+    username = data.get("username")
+
+    if not username:
+        return JsonResponse(
+            {"error": _("Username required")},
+            status=400,
+        )
+
+    try:
+        user_to_promote = User.objects.get(username=username)
+    except User.DoesNotExist:
+        return JsonResponse(
+            {"error": _("User not found")},
+            status=404,
+        )
+
+    webmaster_group, _ = Group.objects.get_or_create(name="webmaster")
+    user_to_promote.groups.add(webmaster_group)
+
     return JsonResponse({
-        "authenticated": True,
-        "username": request.user.username,
-        "email": request.user.email,
+        "success": True,
+        "message": _("%(username)s has been promoted to webmaster.") % {
+            "username": username
+        },
+    })
+
+@require_http_methods(["POST"])
+def demote_from_webmaster_view(request):
+
+    if not request.user.is_authenticated:
+        return JsonResponse(
+            {"error": _("Authentication required")},
+            status=401,
+        )
+
+    if not is_webmaster(request.user):
+        return JsonResponse(
+            {"error": _("Webmaster permissions required")},
+            status=403,
+        )
+
+    data = json.loads(request.body.decode("utf-8"))
+    username = data.get("username")
+
+    if not username:
+        return JsonResponse(
+            {"error": _("Username required")},
+            status=400,
+        )
+
+    try:
+        user_to_demote = User.objects.get(username=username)
+    except User.DoesNotExist:
+        return JsonResponse(
+            {"error": _("User not found")},
+            status=404,
+        )
+
+    webmaster_group = Group.objects.filter(name="webmaster").first()
+    if webmaster_group:
+        user_to_demote.groups.remove(webmaster_group)
+
+    return JsonResponse({
+        "success": True,
+        "message": _("%(username)s has been demoted from webmaster.") % {
+            "username": username
+        },
+    })
+
+@require_http_methods(["POST"])
+def promote_to_press_view(request):
+    if not request.user.is_authenticated:
+        return JsonResponse(
+            {"error": _("Authentication required")},
+            status=401,
+        )
+
+    if not is_webmaster(request.user):
+        return JsonResponse(
+            {"error": _("Webmaster permissions required")},
+            status=403,
+        )
+
+    data = json.loads(request.body.decode("utf-8"))
+    username = data.get("username")
+
+    if not username:
+        return JsonResponse(
+            {"error": _("Username required")},
+            status=400,
+        )
+
+    try:
+        user_to_promote = User.objects.get(username=username)
+    except User.DoesNotExist:
+        return JsonResponse(
+            {"error": _("User not found")},
+            status=404,
+        )
+
+    press_group, _ = Group.objects.get_or_create(name="press")
+    user_to_promote.groups.add(press_group)
+
+    return JsonResponse({
+        "success": True,
+        "message": _("%(username)s has been promoted to press.") % {
+            "username": username
+        },
+    }) 
+
+@require_http_methods(["POST"])
+def demote_from_press_view(request):
+    if not request.user.is_authenticated:
+        return JsonResponse(
+            {"error": _("Authentication required")},
+            status=401,
+        )
+
+    if not is_webmaster(request.user):
+        return JsonResponse(
+            {"error": _("Webmaster permissions required")},
+            status=403,
+        )
+
+    data = json.loads(request.body.decode("utf-8"))
+    username = data.get("username")
+
+    if not username:
+        return JsonResponse(
+            {"error": _("Username required")},
+            status=400,
+        )
+
+    try:
+        user_to_demote = User.objects.get(username=username)
+    except User.DoesNotExist:
+        return JsonResponse(
+            {"error": _("User not found")},
+            status=404,
+        )
+
+    press_group = Group.objects.filter(name="press").first()
+    if press_group:
+        user_to_demote.groups.remove(press_group)
+
+    return JsonResponse({
+        "success": True,
+        "message": _("%(username)s has been demoted from press.") % {
+            "username": username
+        },
+    })
+
+    
+
+@require_http_methods(["GET"])
+def admin_user_group_counts_view(request):
+    if not request.user.is_authenticated:
+        return JsonResponse(
+            {"error": _("Authentication required")},
+            status=401,
+        )
+
+    if not is_webmaster(request.user):
+        return JsonResponse(
+            {"error": _("Webmaster permissions required")},
+            status=403,
+        )
+
+    group_names = ["webmaster", "press", "teacher", "band_leader", "student"]
+
+    counts = {
+        group_name: User.objects.filter(groups__name=group_name).distinct().count()
+        for group_name in group_names
+    }
+
+    grouped_user_ids = User.objects.filter(
+        groups__isnull=False
+        ).values_list("id", flat=True).distinct()
+
+    counts["ordinary"] = User.objects.exclude(id__in=grouped_user_ids).count()
+    counts["total"] = User.objects.count()
+
+    counts["superuser"] = User.objects.filter(is_superuser=True).count()
+
+
+    return JsonResponse(counts)
+
+@require_http_methods(["GET"])
+def admin_user_list_view(request):
+    if not request.user.is_authenticated:
+        return JsonResponse({"error": _("Authentication required")}, status=401)
+
+    if not is_webmaster(request.user):
+        return JsonResponse({"error": _("Webmaster permissions required")}, status=403)
+
+    users = User.objects.all().prefetch_related("groups").order_by("username")
+
+    return JsonResponse({
+        "users": [
+            {
+                "id": user.id,
+                "username": user.username,
+                "email": user.email,
+                "is_superuser": user.is_superuser,
+                "groups": [group.name for group in user.groups.all()],
+            }
+            for user in users
+        ]
     })
