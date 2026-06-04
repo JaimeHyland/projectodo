@@ -3,6 +3,8 @@ import { cookies } from "next/headers";
 import { getCurrentUser } from '@/lib/server-authorization';
 import { CollapsibleSection } from '@/components/CollapsibleSection';
 
+import AdminUsersTable from "./AdminUsersTable";
+
 import en from "@/messages/admin-dashboard/en.json";
 import de from "@/messages/admin-dashboard/de.json";
 import es from "@/messages/admin-dashboard/es.json";
@@ -18,7 +20,7 @@ type UserGroupCounts = {
   webmaster: number;
   teacher: number;
   student: number;
-  band_leader: number;
+  bandLeader: number;
   press: number;
 };
 
@@ -27,6 +29,7 @@ type AdminUser = {
   username: string;
   email: string;
   is_superuser: boolean;
+  is_current_user: boolean;
   groups: string[];
 };
 
@@ -119,87 +122,46 @@ export default async function AdminDashboardPage({ params }: AdminDashboardPageP
       <h1 className="text-2xl font-bold">{messages.titleAdminDashboard}</h1>
       <p className="mb-8 text-lg">{messages.descriptionAdminDashboard}</p>
 
-      <CollapsibleSection title="User stats" defaultOpen>
+      <CollapsibleSection title={messages.sectionUserStats} defaultOpen>
         {counts ? (
           <dl className="grid grid-cols-2 gap-3">
-            <dt className="font-medium">Total users</dt>
+            <dt className="font-medium">{messages.totalUsers}</dt>
             <dd>{counts.total}</dd>
 
-            <dt className="font-medium">Ordinary registered users</dt>
+            <dt className="font-medium">{messages.ordinary}</dt>
             <dd>{counts.ordinary}</dd>
 
-            <dt className="font-medium">Superusers</dt>
+            <dt className="font-medium">{messages.superusers}</dt>
             <dd>{counts.superuser}</dd>
 
-            <dt className="font-medium">Webmasters</dt>
+            <dt className="font-medium">{messages.webmasters}</dt>
             <dd>{counts.webmaster}</dd>
 
-            <dt className="font-medium">Teachers</dt>
+            <dt className="font-medium">{messages.teachers}</dt>
             <dd>{counts.teacher}</dd>
 
-            <dt className="font-medium">Students</dt>
+            <dt className="font-medium">{messages.students}</dt>
             <dd>{counts.student}</dd>
 
-            <dt className="font-medium">Band leaders</dt>
-            <dd>{counts.band_leader}</dd>
+            <dt className="font-medium">{messages.bandLeaders}</dt>
+            <dd>{counts.bandLeader}</dd>
 
-            <dt className="font-medium">Press</dt>
+            <dt className="font-medium">{messages.press}</dt>
             <dd>{counts.press}</dd>
           </dl>
         ) : (
-          <p>Could not load user stats.</p>
+          <p>{messages.couldNotLoadUserStats}</p>
         )}
       </CollapsibleSection>
       <CollapsibleSection title="Users" defaultOpen={false}>
         {adminUsers ? (
-          <div className="overflow-x-auto">
-            <table className="w-full border-collapse text-sm">
-              <thead>
-                <tr className="border-b bg-gray-100">
-                  <th className="p-2 text-left">Username</th>
-                  <th className="p-2 text-left">Email</th>
-                  <th className="p-2 text-left">Roles</th>
-                  <th className="p-2 text-left">Actions</th>
-                </tr>
-              </thead>
-
-              <tbody>
-                {adminUsers.map((adminUser) => (
-                  <tr key={adminUser.id} className="border-b">
-                    <td className="p-2">{adminUser.username}</td>
-                    <td className="p-2">{adminUser.email || "—"}</td>
-                    <td className="p-2">
-                      {adminUser.is_superuser
-                        ? ["superuser", ...adminUser.groups].join(", ")
-                        : adminUser.groups.length > 0
-                          ? adminUser.groups.join(", ")
-                          : "ordinary"}
-                    </td>
-                    <td className="p-2">
-                      <div className="flex gap-2">
-                        <button
-                          type="button"
-                          className="rounded bg-gray-700 px-3 py-1 text-white"
-                        >
-                          Edit
-                        </button>
-
-                        <button
-                          type="button"
-                          className="rounded bg-red-700 px-3 py-1 text-white"
-                        >
-                          Delete
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+          <AdminUsersTable
+          users={adminUsers}
+          messages={messages}
+        />
         ) : (
-          <p>Could not load users.</p>
-        )}
+          <p>{messages.couldNotLoadUsers}</p>
+        )}+
       </CollapsibleSection>
     </main>
   );

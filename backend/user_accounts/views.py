@@ -627,7 +627,7 @@ def admin_user_group_counts_view(request):
             status=403,
         )
 
-    group_names = ["webmaster", "press", "teacher", "band_leader", "student"]
+    group_names = ["webmaster", "press", "teacher", "bandLeader", "student"]
 
     counts = {
         group_name: User.objects.filter(groups__name=group_name).distinct().count()
@@ -663,8 +663,65 @@ def admin_user_list_view(request):
                 "username": user.username,
                 "email": user.email,
                 "is_superuser": user.is_superuser,
+                "is_current_user": user.id == request.user.id,
                 "groups": [group.name for group in user.groups.all()],
             }
             for user in users
         ]
     })
+
+
+@require_http_methods(["POST"])
+def admin_update_user_groups_view(request, user_id):
+    if not request.user.is_authenticated:
+        return JsonResponse({"error": _("Authentication required")}, status=401)
+
+    if not is_webmaster(request.user):
+        return JsonResponse({"error": _("Webmaster permissions required")}, status=403)
+
+    try:
+        target_user = User.objects.get(id=user_id)
+    except User.DoesNotExist:
+        return JsonResponse({"error": _("User not found")}, status=404)
+
+    if target_user.is_superuser:
+        return JsonResponse({"error": _("Superusers cannot be modified here.")}, status=403)
+
+    if target_user.id == request.user.id:
+        return JsonResponse({"error": _("You cannot modify your own account here.")}, status=403)
+
+    data = json.loads(request.body.decode("utf-8"))
+    group_names = data.get("groups", [])
+
+    allowed_groups = {"webmaster", "press", "teacher", "student", "bandLeader"}
+
+    if not isinstance(group_names, list) or not set(group_names).issubset(allowed_groups):
+        return JsonResponse({"error": _("Invalid groups supplied.")}, status=400)
+
+    groups = Group.objects.filter(name__in=group_names)
+    target_user.groups.set(groups)
+
+    return JsonResponse({"success": True})
+
+@require_http_methods(["POST"])
+def admin_delete_user_view(request, user_id):
+    if not request.user.is_authenticated:
+        return JsonResponse({"error": _("Authentication required")}, status=401)
+
+    if not is_webmaster(request.user):
+        return JsonResponse({"error": _("Webmaster permissions required")}, status=403)
+
+    try:
+        target_user = User.objects.get(id=user_id)
+    except User.DoesNotExist:
+        return JsonResponse({"error": _("User not found")}, status=404)
+
+    if target_user.is_superuser:
+        return JsonResponse({"error": _("Superusers cannot be deleted here.")}, status=403)
+
+    if target_user.id == request.user.id:
+        return JsonResponse({"error": _("You cannot delete your own account here.")}, status=403)
+
+    target_user.delete()
+
+    return JsonResponse({"success": True})

@@ -47,4 +47,12 @@ urlpatterns = [
         views.admin_user_list_view,
         name="user_list"
     ),
+    path(
+        "users/<int:user_id>/groups/",
+        views.admin_update_user_groups_view,
+    ),
+    path(
+        "users/<int:user_id>/delete/",
+        views.admin_delete_user_view,
+    ),
 ]

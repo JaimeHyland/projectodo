@@ -41,7 +41,7 @@ def is_band_leader(user) -> bool:
         user.is_authenticated
         and (
             user.is_superuser
-            or is_in_group(user, "band_leader")
+            or is_in_group(user, "bandLeader")
         )
     )
 
