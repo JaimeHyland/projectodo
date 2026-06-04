@@ -70,6 +70,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'storages',
     'user_accounts',
+    'classes',
     'corsheaders',
     'certifi',
     'rest_framework',
