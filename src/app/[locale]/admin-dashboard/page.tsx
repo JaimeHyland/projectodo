@@ -169,7 +169,7 @@ export default async function AdminDashboardPage({ params }: AdminDashboardPageP
           <p>{messages.couldNotLoadUserStats}</p>
         )}
       </CollapsibleSection>
-      <CollapsibleSection title="Users" defaultOpen={false}>
+      <CollapsibleSection title={messages.sectionUsers} defaultOpen={false}>
         {adminUsers ? (
           <AdminUsersTable
           users={adminUsers}
