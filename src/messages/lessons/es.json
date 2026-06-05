@@ -14,43 +14,11 @@
       "Los ancianos también obtienen grandes ventajas al aprender a tocar un instrumento, pues tocar música es como hacer ejercicio para el cerebro."
     ],
 
+    "locationsTitle": "Lugares de enseñanza",
+    "couldNotLoadLocations": "No se pudieron cargar los lugares de enseñanza.",
+
     "contact": {
       "label": "Contacto:",
-      "locations": [
-        {
-          "title": "1. Lugar de la clase",
-          "lines": [
-            "Projectodo",
-            "Grundschule an dem Buchen",
-            "Wilhelm-Wolff-Straße 19",
-            "13156 Berlin - Pankow"
-          ]
-        },
-        {
-          "title": "2. Lugar de la clase",
-          "lines": [
-            "Grundschule im Hasengrund Berlin Pankow",
-            "Hermann-Hesse-Straße 48-52",
-            "13156 Berlin"
-          ]
-        },
-        {
-          "title": "3. Lugar de la clase",
-          "lines": [
-            "Mendel-Grundschule",
-            "Stiftsweg 3",
-            "13187 Berlin"
-          ]
-        },
-        {
-          "title": "4. Lugar de la clase y dirección postal",
-          "lines": [
-            "Fidel Conde",
-            "Körnerstraße 26",
-            "10785 Berlin - Mitte"
-          ]
-        }
-      ],
 
       "details": {
         "phone": "Teléfono: +49 030 - 26 55 46 28",

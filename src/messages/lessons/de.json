@@ -13,45 +13,10 @@
       "Davon profitieren besonders hyperaktive Kinder, die durch das Musizieren lernen, sich gezielt zu konzentrieren und Aggressionen abzubauen.",
       "Auch Senioren ziehen großen Nutzen aus dem Erlernen eines Instruments, denn Musizieren ist wie Sport für das Gehirn."
     ],
-
+    "locationsTitle": "Unterrichtsorte",
+    "couldNotLoadLocations": "Konnte Unterrichtsorte nicht laden.",
     "contact": {
       "label": "Kontakt:",
-      "locations": [
-        {
-          "title": "1. Unterrichtsort",
-          "lines": [
-            "Projectodo",
-            "Grundschule an dem Buchen",
-            "Wilhelm-Wolff-Straße 19",
-            "13156 Berlin - Pankow"
-          ]
-        },
-        {
-          "title": "2. Unterrichtsort",
-          "lines": [
-            "Grundschule im Hasengrund Berlin Pankow",
-            "Hermann-Hesse-Straße 48-52",
-            "13156 Berlin"
-          ]
-        },
-        {
-          "title": "3. Unterrichtsort",
-          "lines": [
-            "Mendel-Grundschule",
-            "Stiftsweg 3",
-            "13187 Berlin"
-          ]
-        },
-        {
-          "title": "4. Unterrichtsort und Postanschrift",
-          "lines": [
-            "Fidel Conde",
-            "Körnerstraße 26",
-            "10785 Berlin - Mitte"
-          ]
-        }
-      ],
-
       "details": {
         "phone": "Fon: +49 030 - 26 55 46 28",
         "mobile": "Funk: +49 151 68 10 11 63",

@@ -4,7 +4,7 @@ from django.db import models
 
 class Location(models.Model):
     name = models.CharField(max_length=255)
-    StreetAddress = models.CharField(max_length=255)
+    street_address = models.CharField(max_length=255)
     city = models.CharField(max_length=100)
     state = models.CharField(max_length=100)
     postcode = models.CharField(max_length=7)
@@ -36,6 +36,7 @@ class Course(models.Model):
         ("date_range", "Date range"),
     ]
 
+    name = models.CharField(max_length=200)
     course_type = models.CharField(max_length=20, choices=COURSE_TYPE_CHOICES)
     subject = models.CharField(max_length=20, choices=SUBJECT_CHOICES)
     term_type = models.CharField(max_length=20, choices=TERM_TYPE_CHOICES)

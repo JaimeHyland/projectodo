@@ -13,44 +13,10 @@
       "Especially hyperactive children benefit, as they learn to concentrate and reduce aggression through music.",
       "Senior citizens also gain significant benefits from learning to play an instrument, as playing music is like exercise for the brain."
     ],
-
+    "locationsTitle": "Lesson venues",
+    "couldNotLoadLocations": "Could not load lesson venues.",
     "contact": {
       "label": "Contact:",
-      "locations": [
-        {
-          "title": "1. Lesson venue",
-          "lines": [
-            "Projectodo",
-            "Grundschule an dem Buchen",
-            "Wilhelm-Wolff-Straße 19",
-            "13156 Berlin - Pankow"
-          ]
-        },
-        {
-          "title": "2. Lesson venue",
-          "lines": [
-            "Grundschule im Hasengrund Berlin Pankow",
-            "Hermann-Hesse-Straße 48-52",
-            "13156 Berlin"
-          ]
-        },
-        {
-          "title": "3. Lesson venue",
-          "lines": [
-            "Mendel-Grundschule",
-            "Stiftsweg 3",
-            "13187 Berlin"
-          ]
-        },
-        {
-          "title": "4. Lesson venue and postal address",
-          "lines": [
-            "Fidel Conde",
-            "Körnerstraße 26",
-            "10785 Berlin - Mitte"
-          ]
-        }
-      ],
 
       "details": {
         "phone": "Phone: +49 030 - 26 55 46 28",
