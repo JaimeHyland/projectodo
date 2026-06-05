@@ -4,6 +4,7 @@ import { getCurrentUser } from '@/lib/server-authorization';
 import { CollapsibleSection } from '@/components/CollapsibleSection';
 
 import AdminUsersTable from "./AdminUsersTable";
+import AdminLocationsTable from "./AdminLocationsTable";
 
 import en from "@/messages/admin-dashboard/en.json";
 import de from "@/messages/admin-dashboard/de.json";
@@ -35,6 +36,20 @@ type AdminUser = {
 
 type AdminUserListResponse = {
   users: AdminUser[];
+};
+
+type LessonLocation = {
+  id: number;
+  name: string;
+  street_address: string;
+  city: string;
+  state: string;
+  postcode: string;
+  country: string;
+};
+
+type LocationsResponse = {
+  locations: LessonLocation[];
 };
 
 const API_BASE =
@@ -100,6 +115,7 @@ async function getAdminUsers(): Promise<AdminUser[] | null> {
 
 export default async function AdminDashboardPage({ params }: AdminDashboardPageProps) {
   const user = await getCurrentUser();
+  const locations = await getLocations();
   const { locale } = await params;
   const messages = locale === "de" ? de : locale === "es" ? es : en;
 
@@ -161,8 +177,38 @@ export default async function AdminDashboardPage({ params }: AdminDashboardPageP
         />
         ) : (
           <p>{messages.couldNotLoadUsers}</p>
-        )}+
+        )}
+      </CollapsibleSection>
+      <CollapsibleSection title={messages.sectionLocations} defaultOpen={false}>
+        {locations ? (
+          <AdminLocationsTable locations={locations} messages={messages} />
+        ) : (
+          <p>{messages.couldNotLoadLocations}</p>
+        )}
       </CollapsibleSection>
     </main>
   );
+}
+
+async function getLocations(): Promise<LessonLocation[] | null> {
+  const cookieStore = await cookies();
+
+  const cookieHeader = cookieStore
+    .getAll()
+    .map((cookie) => `${cookie.name}=${cookie.value}`)
+    .join("; ");
+
+  const res = await fetch(`${API_BASE}/api/classes/locations/`, {
+    headers: {
+      Cookie: cookieHeader,
+    },
+    cache: "no-store",
+  });
+
+  if (!res.ok) {
+    return null;
+  }
+
+  const data: LocationsResponse = await res.json();
+  return data.locations;
 }
