@@ -1,7 +1,7 @@
 {
   "titleAdminDashboard": "Administrationsbereich",
   "descriptionAdminDashboard": "Benutzer und Website-Verwaltung verwalten.",
-  "sectionLocations": "Lesson venues",
+  "sectionLocations": "Unterrichtsorte",
   "couldNotLoadLocations": "Konnte Unterrichtsorte nicht laden.",
   "couldNotSaveLocation": "Konnte Unterrichtsort nicht speichern.",
   "deleteLocationQuestion": "Sind Sie sicher, dass Sie {name} löschen möchten?",
