@@ -51,7 +51,6 @@ const availableGroups = [
   "press",
   "teacher",
   "student",
-  "bandLeader",
 ];
 
 export default function AdminUsersTable({ users, messages }: Props) {
