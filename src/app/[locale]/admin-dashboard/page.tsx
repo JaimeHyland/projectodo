@@ -18,12 +18,12 @@ interface AdminDashboardPageProps {
 type UserGroupCounts = {
   total: number;
   ordinary: number;
-  superuser: number;
-  webmaster: number;
-  teacher: number;
-  student: number;
-  bandLeader: number;
-  press: number;
+  superuserRole: number;
+  webmasterRole: number;
+  teacherRole: number;
+  studentRole: number;
+  bandLeaderRole: number;
+  pressRole: number;
 };
 
 type AdminUser = {
@@ -172,22 +172,22 @@ export default async function AdminDashboardPage({ params }: AdminDashboardPageP
             <dd>{counts.ordinary}</dd>
 
             <dt className="font-medium">{messages.superusers}</dt>
-            <dd>{counts.superuser}</dd>
+            <dd>{counts.superuserRole}</dd>
 
             <dt className="font-medium">{messages.webmasters}</dt>
-            <dd>{counts.webmaster}</dd>
+            <dd>{counts.webmasterRole}</dd>
 
             <dt className="font-medium">{messages.teachers}</dt>
-            <dd>{counts.teacher}</dd>
+            <dd>{counts.teacherRole}</dd>
 
             <dt className="font-medium">{messages.students}</dt>
-            <dd>{counts.student}</dd>
+            <dd>{counts.studentRole}</dd>
 
             <dt className="font-medium">{messages.bandLeaders}</dt>
-            <dd>{counts.bandLeader}</dd>
+            <dd>{counts.bandLeaderRole}</dd>
 
             <dt className="font-medium">{messages.press}</dt>
-            <dd>{counts.press}</dd>
+            <dd>{counts.pressRole}</dd>
           </dl>
         ) : (
           <p>{messages.couldNotLoadUserStats}</p>
