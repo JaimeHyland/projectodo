@@ -5,6 +5,7 @@ import { CollapsibleSection } from '@/components/CollapsibleSection';
 
 import AdminUsersTable from "./AdminUsersTable";
 import AdminLocationsTable from "./AdminLocationsTable";
+import AdminBandsTable from "./AdminBandsTable";
 
 import en from "@/messages/admin-dashboard/en.json";
 import de from "@/messages/admin-dashboard/de.json";
@@ -50,6 +51,28 @@ type LessonLocation = {
 
 type LocationsResponse = {
   locations: LessonLocation[];
+};
+
+type AdminBand = {
+  id: number;
+  name: string;
+  can_manage: boolean;
+  description: string;
+  contact_email: string;
+  contact_tel: string;
+  website_url: string;
+  social_media_urls: { platform: string; url: string }[];
+  band_members: { name: string; instrument_or_role: string }[];
+  genres: string[];
+  band_leader: {
+    id: number;
+    username: string;
+    email: string;
+  };
+};
+
+type BandsResponse = {
+  bands: AdminBand[];
 };
 
 const API_BASE =
@@ -115,7 +138,6 @@ async function getAdminUsers(): Promise<AdminUser[] | null> {
 
 export default async function AdminDashboardPage({ params }: AdminDashboardPageProps) {
   const user = await getCurrentUser();
-  const locations = await getLocations();
   const { locale } = await params;
   const messages = locale === "de" ? de : locale === "es" ? es : en;
 
@@ -132,6 +154,8 @@ export default async function AdminDashboardPage({ params }: AdminDashboardPageP
 
   const counts = await getUserGroupCounts();
   const adminUsers = await getAdminUsers();
+  const locations = await getLocations();
+  const bands = await getAdminBands();
 
   return (
     <main className="p-8 text-center">
@@ -186,6 +210,13 @@ export default async function AdminDashboardPage({ params }: AdminDashboardPageP
           <p>{messages.couldNotLoadLocations}</p>
         )}
       </CollapsibleSection>
+      <CollapsibleSection title={messages.sectionBands} defaultOpen={false}>
+        {bands ? (
+          <AdminBandsTable bands={bands} messages={messages} />
+        ) : (
+          <p>{messages.couldNotLoadBands}</p>
+        )}
+      </CollapsibleSection>
     </main>
   );
 }
@@ -211,4 +242,34 @@ async function getLocations(): Promise<LessonLocation[] | null> {
 
   const data: LocationsResponse = await res.json();
   return data.locations;
+}
+
+async function getAdminBands(): Promise<AdminBand[] | null> {
+  const cookieStore = await cookies();
+
+  const cookieHeader = cookieStore
+    .getAll()
+    .map((cookie) => `${cookie.name}=${cookie.value}`)
+    .join("; ");
+
+  const res = await fetch(`${API_BASE}/api/bands/admin/bands/`, {
+    headers: {
+      Cookie: cookieHeader,
+    },
+    cache: "no-store",
+  });
+
+  if (!res.ok) {
+    const errorText = await res.text();
+    console.error("admin bands failed", {
+      status: res.status,
+      statusText: res.statusText,
+      body: errorText,
+    });
+
+    return null;
+  }
+
+  const data: BandsResponse = await res.json();
+  return data.bands;
 }

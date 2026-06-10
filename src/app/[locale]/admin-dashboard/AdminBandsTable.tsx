@@ -1,0 +1,458 @@
+"use client";
+
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { apiUrl } from "@/lib/api";
+
+function getCookie(name: string): string | undefined {
+  const value = `; ${document.cookie}`;
+  const parts = value.split(`; ${name}=`);
+  return parts.length === 2
+    ? parts.pop()?.split(";").shift()
+    : undefined;
+}
+
+type AdminBand = {
+  id: number;
+  name: string;
+  description: string;
+  can_manage: boolean;
+  contact_email: string;
+  contact_tel: string;
+  website_url: string;
+  genres: string[];
+  band_leader: {
+    id: number;
+    username: string;
+    email: string;
+  };
+};
+
+type Messages = {
+  name: string;
+  description: string;
+  bandLeaderLabel: string;
+  contactEmail: string;
+  contactTel: string;
+  websiteUrl: string;
+  genres: string;
+  createBand: string;
+  editBand: string;
+  confirm: string;
+  undoChanges: string;
+  dontDelete: string;
+  actions: string;
+  edit: string;
+  delete: string;
+  couldNotCreateBand: string;
+  couldNotUpdateBand: string;
+  couldNotDeleteBand: string;
+  confirmDeleteBand: string;
+  deleteWarning: string;
+};
+
+
+type Props = {
+  bands: AdminBand[];
+  messages: Messages;
+};
+
+export default function AdminBandsTable({ bands, messages }: Props) {
+  const router = useRouter();
+
+  const [isCreating, setIsCreating] = useState(false);
+  const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
+  const [contactEmail, setContactEmail] = useState("");
+  const [contactTel, setContactTel] = useState("");
+  const [websiteUrl, setWebsiteUrl] = useState("");
+  const [genres, setGenres] = useState("");
+  const [error, setError] = useState<string | null>(null);
+
+  
+  const [deletingBand, setDeletingBand] = useState<AdminBand | null>(null);
+  const [editingBand, setEditingBand] = useState<AdminBand | null>(null);
+
+
+  function openEdit(band: AdminBand) {
+    setEditingBand(band);
+    setName(band.name);
+    setDescription(band.description);
+    setContactEmail(band.contact_email);
+    setContactTel(band.contact_tel);
+    setWebsiteUrl(band.website_url);
+    setGenres(band.genres.join(", "));
+    setError(null);
+  }
+
+  async function confirmCreate() {
+    const csrfToken = getCookie("csrftoken");
+
+    const res = await fetch(apiUrl("bands/admin/bands/"), {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+        "X-CSRFToken": csrfToken ?? "",
+      },
+      body: JSON.stringify({
+        name,
+        description,
+        contact_email: contactEmail,
+        contact_tel: contactTel,
+        website_url: websiteUrl,
+        genres: genres
+          .split(",")
+          .map((genre) => genre.trim())
+          .filter(Boolean),
+      }),
+    });
+
+    if (!res.ok) {
+      const data = await res.json();
+      setError(data.error ?? messages.couldNotCreateBand);
+      return;
+    }
+
+    setIsCreating(false);
+    setName("");
+    setDescription("");
+    setContactEmail("");
+    setContactTel("");
+    setWebsiteUrl("");
+    setGenres("");
+    setError(null);
+
+    router.refresh();
+  }
+
+  async function confirmDelete() {
+  if (!deletingBand) return;
+
+  const csrfToken = getCookie("csrftoken");
+
+  const res = await fetch(apiUrl(`bands/admin/bands/${deletingBand.id}/`), {
+    method: "POST",
+    credentials: "include",
+    headers: {
+      "Content-Type": "application/json",
+      "X-CSRFToken": csrfToken ?? "",
+    },
+    body: JSON.stringify({ action: "delete" }),
+  });
+
+  if (!res.ok) {
+    const data = await res.json();
+    setError(data.error ?? messages.couldNotDeleteBand);
+    return;
+  }
+
+  setDeletingBand(null);
+  router.refresh();
+}
+
+async function confirmEdit() {
+  if (!editingBand) return;
+
+  const csrfToken = getCookie("csrftoken");
+
+  const res = await fetch(apiUrl(`bands/admin/bands/${editingBand.id}/`), {
+    method: "POST",
+    credentials: "include",
+    headers: {
+      "Content-Type": "application/json",
+      "X-CSRFToken": csrfToken ?? "",
+    },
+    body: JSON.stringify({
+      action: "edit",
+      name,
+      description,
+      contact_email: contactEmail,
+      contact_tel: contactTel,
+      website_url: websiteUrl,
+      genres: genres
+        .split(",")
+        .map((genre) => genre.trim())
+        .filter(Boolean),
+    }),
+  });
+
+  if (!res.ok) {
+    const data = await res.json();
+    setError(data.error ?? messages.couldNotUpdateBand);
+    return;
+  }
+
+  setEditingBand(null);
+  router.refresh();
+}
+
+  return (
+    <>
+      <div className="mb-4 flex justify-end">
+        <button
+          type="button"
+          onClick={() => setIsCreating(true)}
+          className="rounded bg-[#3a5c03] px-4 py-2 text-white"
+        >
+          {messages.createBand}
+        </button>
+      </div>
+
+      <div className="overflow-x-auto">
+        <table className="w-full border-collapse text-sm">
+          <thead>
+            <tr className="border-b bg-gray-100">
+              <th className="p-2 text-left">{messages.name}</th>
+              <th className="p-2 text-left">{messages.bandLeaderLabel}</th>
+              <th className="p-2 text-left">{messages.contactEmail}</th>
+              <th className="p-2 text-left">{messages.genres}</th>
+              <th className="p-2 text-left">{messages.actions}</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            {bands.map((band) => (
+              <tr key={band.id} className="border-b">
+                <td className="p-2">{band.name}</td>
+                <td className="p-2">{band.band_leader.username}</td>
+                <td className="p-2">{band.contact_email || "—"}</td>
+                <td className="p-2">{band.genres.join(", ") || "—"}</td>
+                <td className="p-2">
+                  <div className="flex gap-2">
+                    <button
+                      type="button"
+                      disabled={!band.can_manage}
+                      onClick={() => openEdit(band)}
+                      className="rounded bg-gray-700 px-3 py-1 text-white disabled:cursor-not-allowed disabled:bg-gray-300 disabled:text-gray-600"
+                    >
+                      {messages.edit}
+                    </button>
+
+                    <button
+                      type="button"
+                      disabled={!band.can_manage}
+                      onClick={() => setDeletingBand(band)}
+                      className="rounded bg-red-700 px-3 py-1 text-white disabled:cursor-not-allowed disabled:bg-gray-300 disabled:text-gray-600"
+                    >
+                      {messages.delete}
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      {isCreating && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+          <div className="w-full max-w-md rounded bg-white p-6 text-left shadow-lg">
+            <h3 className="mb-4 text-lg font-semibold">
+              {messages.createBand}
+            </h3>
+
+            <div className="space-y-3">
+              <label className="block">
+                <span className="font-medium">{messages.name}</span>
+                <input
+                  value={name}
+                  onChange={(event) => setName(event.target.value)}
+                  className="mt-1 w-full rounded border p-2"
+                />
+              </label>
+
+              <label className="block">
+                <span className="font-medium">{messages.description}</span>
+                <textarea
+                  value={description}
+                  onChange={(event) => setDescription(event.target.value)}
+                  className="mt-1 w-full rounded border p-2"
+                />
+              </label>
+
+              <label className="block">
+                <span className="font-medium">{messages.contactEmail}</span>
+                <input
+                  value={contactEmail}
+                  onChange={(event) => setContactEmail(event.target.value)}
+                  className="mt-1 w-full rounded border p-2"
+                />
+              </label>
+
+              <label className="block">
+                <span className="font-medium">{messages.contactTel}</span>
+                <input
+                  value={contactTel}
+                  onChange={(event) => setContactTel(event.target.value)}
+                  className="mt-1 w-full rounded border p-2"
+                />
+              </label>
+
+              <label className="block">
+                <span className="font-medium">{messages.websiteUrl}</span>
+                <input
+                  value={websiteUrl}
+                  onChange={(event) => setWebsiteUrl(event.target.value)}
+                  className="mt-1 w-full rounded border p-2"
+                />
+              </label>
+
+              <label className="block">
+                <span className="font-medium">{messages.genres}</span>
+                <input
+                  value={genres}
+                  onChange={(event) => setGenres(event.target.value)}
+                  placeholder="jazz, funk, soul"
+                  className="mt-1 w-full rounded border p-2"
+                />
+              </label>
+            </div>
+
+            {error && <p className="mt-4 text-red-700">{error}</p>}
+
+            <div className="mt-6 flex justify-end gap-3">
+              <button
+                type="button"
+                onClick={() => setIsCreating(false)}
+                className="rounded bg-gray-300 px-4 py-2"
+              >
+                {messages.undoChanges}
+              </button>
+
+              <button
+                type="button"
+                onClick={confirmCreate}
+                className="rounded bg-[#3a5c03] px-4 py-2 text-white"
+              >
+                {messages.confirm}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {editingBand && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+          <div className="w-full max-w-md rounded bg-white p-6 text-left shadow-lg">
+            <h3 className="mb-4 text-lg font-semibold">
+              {messages.editBand}: {editingBand.name}
+            </h3>
+
+            <div className="space-y-3">
+              <label className="block">
+                <span className="font-medium">{messages.name}</span>
+                <input
+                  value={name}
+                  onChange={(event) => setName(event.target.value)}
+                  className="mt-1 w-full rounded border p-2"
+                />
+              </label>
+
+              <label className="block">
+                <span className="font-medium">{messages.description}</span>
+                <textarea
+                  value={description}
+                  onChange={(event) => setDescription(event.target.value)}
+                  className="mt-1 w-full rounded border p-2"
+                />
+              </label>
+
+              <label className="block">
+                <span className="font-medium">{messages.contactEmail}</span>
+                <input
+                  value={contactEmail}
+                  onChange={(event) => setContactEmail(event.target.value)}
+                  className="mt-1 w-full rounded border p-2"
+                />
+              </label>
+
+              <label className="block">
+                <span className="font-medium">{messages.contactTel}</span>
+                <input
+                  value={contactTel}
+                  onChange={(event) => setContactTel(event.target.value)}
+                  className="mt-1 w-full rounded border p-2"
+                />
+              </label>
+
+              <label className="block">
+                <span className="font-medium">{messages.websiteUrl}</span>
+                <input
+                  value={websiteUrl}
+                  onChange={(event) => setWebsiteUrl(event.target.value)}
+                  className="mt-1 w-full rounded border p-2"
+                />
+              </label>
+
+              <label className="block">
+                <span className="font-medium">{messages.genres}</span>
+                <input
+                  value={genres}
+                  onChange={(event) => setGenres(event.target.value)}
+                  placeholder="jazz, funk, soul"
+                  className="mt-1 w-full rounded border p-2"
+                />
+              </label>
+            </div>
+
+            {error && <p className="mt-4 text-red-700">{error}</p>}
+
+            <div className="mt-6 flex justify-end gap-3">
+              <button
+                type="button"
+                onClick={() => {
+                  setEditingBand(null);
+                  setError(null);
+                }}
+                className="rounded bg-gray-300 px-4 py-2"
+              >
+                {messages.undoChanges}
+              </button>
+
+              <button
+                type="button"
+                onClick={confirmEdit}
+                className="rounded bg-[#3a5c03] px-4 py-2 text-white"
+              >
+                {messages.confirm}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {deletingBand && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+          <div className="w-full max-w-md rounded bg-white p-6 text-left shadow-lg">
+            <h3 className="mb-4 text-lg font-semibold">
+              {messages.delete}: {deletingBand.name}?
+            </h3>
+
+            <p>{messages.deleteWarning}</p>
+
+            {error && <p className="mt-4 text-red-700">{error}</p>}
+
+            <div className="mt-6 flex justify-end gap-3">
+              <button
+                type="button"
+                onClick={() => setDeletingBand(null)}
+                className="rounded bg-gray-300 px-4 py-2"
+              >
+                {messages.dontDelete}
+              </button>
+
+              <button
+                type="button"
+                onClick={confirmDelete}
+                className="rounded bg-red-700 px-4 py-2 text-white"
+              >
+                {messages.confirm}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </>
+  );
+}

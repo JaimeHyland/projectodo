@@ -1,5 +1,3 @@
-# bands/models.py
-
 from django.conf import settings
 from django.db import models
 
@@ -21,7 +19,7 @@ class Band(models.Model):
     social_media_urls = models.JSONField(default=list, blank=True)
     band_members = models.JSONField(default=list, blank=True)
     genres = models.JSONField(default=list, blank=True)
-    
+
     created_by = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.PROTECT,
@@ -36,5 +34,3 @@ class Band(models.Model):
 
     def __str__(self):
         return self.name
-
-# Create your models here.

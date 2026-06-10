@@ -30,6 +30,7 @@ type Messages = {
   delete: string;
   confirm: string;
   undoChanges: string;
+  dontDelete: string;
   name: string;
   streetAddress: string;
   city: string;
@@ -38,7 +39,7 @@ type Messages = {
   country: string;
   actions: string;
   editLocation: string;
-  deleteLocationQuestion: string;
+  ConfirmDeleteLocation: string;
   deleteWarning: string;
   couldNotSaveLocation: string;
   couldNotDeleteLocation: string;
@@ -264,7 +265,7 @@ function closeForm() {
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
           <div className="w-full max-w-md rounded bg-white p-6 shadow-lg">
             <h3 className="mb-4 text-lg font-semibold">
-              {messages.deleteLocationQuestion.replace("{name}", deletingLocation.name)}
+              {messages.ConfirmDeleteLocation.replace("{name}", deletingLocation.name)}
             </h3>
 
             <p>{messages.deleteWarning}</p>
@@ -277,7 +278,7 @@ function closeForm() {
                 onClick={() => setDeletingLocation(null)}
                 className="rounded bg-gray-300 px-4 py-2"
               >
-                {messages.undoChanges}
+                {messages.dontDelete}
               </button>
 
               <button
