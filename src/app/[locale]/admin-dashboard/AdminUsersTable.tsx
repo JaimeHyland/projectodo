@@ -29,13 +29,13 @@ type Messages = {
   roles: string;
   actions: string;
   ordinary: string;
-  superuser: string;
+  superuserRole: string;
   edit: string;
   delete: string;
   confirm: string;
   undoChanges: string;
   editRolesFor: string;
-  deleteUserQuestion: string;
+  confirmDeleteUser: string;
   deleteWarning: string;
   couldNotUpdateUser: string;
   couldNotDeleteUser: string;
