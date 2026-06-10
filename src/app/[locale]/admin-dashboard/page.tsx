@@ -162,7 +162,7 @@ export default async function AdminDashboardPage({ params }: AdminDashboardPageP
       <h1 className="text-2xl font-bold">{messages.titleAdminDashboard}</h1>
       <p className="mb-8 text-lg">{messages.descriptionAdminDashboard}</p>
 
-      <CollapsibleSection title={messages.sectionUserStats} defaultOpen>
+      <CollapsibleSection title={messages.sectionUserStats} defaultOpen={false}>
         {counts ? (
           <dl className="grid grid-cols-2 gap-3">
             <dt className="font-medium">{messages.totalUsers}</dt>
