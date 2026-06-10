@@ -49,7 +49,7 @@
   "undoChanges": "Änderungen rückgängig machen",
   "dontDelete": "Nicht löschen",
   "editRolesFor": "Rollen für {username} bearbeiten",
-  "ConfirmDeleteUser": "Sind Sie sicher, dass Sie {username} löschen möchten?",
+  "confirmDeleteUser": "Sind Sie sicher, dass Sie {username} löschen möchten?",
   "deleteWarning": "Diese Aktion kann nicht rückgängig gemacht werden.",
   "couldNotUpdateUser": "Benutzer konnte nicht aktualisiert werden.",
   "couldNotDeleteUser": "Benutzer konnte nicht gelöscht werden.",

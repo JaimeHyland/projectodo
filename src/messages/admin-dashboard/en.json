@@ -49,7 +49,7 @@
   "undoChanges": "Undo changes",
   "dontDelete": "Don't delete",
   "editRolesFor": "Edit roles for {username}",
-  "ConfirmDeleteUser": "Are you sure you want to delete {username}?",
+  "confirmDeleteUser": "Are you sure you want to delete {username}?",
   "deleteWarning": "This cannot be undone.",
   "couldNotUpdateUser": "Could not update user.",
   "couldNotDeleteUser": "Could not delete user.",

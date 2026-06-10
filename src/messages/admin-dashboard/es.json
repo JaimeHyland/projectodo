@@ -49,7 +49,7 @@
   "undoChanges": "Deshacer cambios",
   "dontDelete": "No eliminar",
   "editRolesFor": "Editar roles para {username}",
-  "ConfirmDeleteUser": "¿Está seguro de que desea eliminar {username}?",
+  "confirmDeleteUser": "¿Está seguro de que desea eliminar {username}?",
   "deleteWarning": "Esta acción no se puede deshacer.",
   "couldNotUpdateUser": "No se pudo actualizar el usuario.",
   "couldNotDeleteUser": "No se pudo eliminar el usuario.",
