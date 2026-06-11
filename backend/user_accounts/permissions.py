@@ -92,3 +92,14 @@ def can_assign_band_leader(user):
         )
     )
 
+def can_manage_band_page(user, band):
+    if not user or not user.is_authenticated:
+        return False
+
+    if user.is_superuser:
+        return True
+
+    if user.groups.filter(name="webmaster").exists():
+        return True
+
+    return band.band_leader_id == user.id

@@ -72,6 +72,7 @@ INSTALLED_APPS = [
     'user_accounts',
     'classes',
     'bands',
+    'core',
     'corsheaders',
     'certifi',
     'rest_framework',

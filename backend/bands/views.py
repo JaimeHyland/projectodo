@@ -1,7 +1,9 @@
 import json
 
 from django.http import JsonResponse
-from django.views.decorators.http import require_http_methods
+from django.shortcuts import get_object_or_404
+from django.utils.text import slugify
+from django.views.decorators.http import require_http_methods, require_GET, require_POST
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group
 from django.db import IntegrityError
@@ -11,7 +13,101 @@ from user_accounts.permissions import (
     can_manage_band,
     can_delete_band,
 )
-from .models import Band
+from .models import Band, BandPage
+from user_accounts.permissions import can_manage_band_page
+
+
+def make_unique_band_page_slug(band):
+    base_slug = slugify(band.name) or f"band-{band.id}"
+    slug = base_slug
+    counter = 2
+
+    while BandPage.objects.filter(slug=slug).exists():
+        slug = f"{base_slug}-{counter}"
+        counter +=1
+
+    return slug
+
+@require_POST
+def create_band_page(request, band_id):
+    band = get_object_or_404(Band, id=band_id)
+
+    if not can_manage_band_page(request.user, band):
+        return JsonResponse(
+            {"error": "You do not have permission to create this band page."},
+            status=403,
+        )
+    
+    if hasattr(band, "page"):
+        return JsonResponse(
+            {"error": "This band already has a public page."},
+            status=400,
+        )
+    
+    page = BandPage.objects.create(
+        band=band,
+        slug=make_unique_band_page_slug(band),
+        description_html=band.description or "",
+    )
+
+    return JsonResponse(
+         {
+            "id": page.id,
+            "slug": page.slug,
+            "band": {
+                "id": band.id,
+                "name": band.name,
+            },
+            "description_html": page.description_html,
+            "published": page.published,
+        },
+        status=201,
+    )
+
+
+@require_GET
+def public_band_page_detail(request, slug):
+    page = get_object_or_404(
+        BandPage.objects.select_related("band", "band__band_leader").prefetch_related("band__members"),
+        slug=slug,
+        published=True,
+    )
+
+    band = page.band
+
+    return JsonResponse({
+        "id": page.id,
+        "slug": page.slug,
+        "band": {
+            "id": band.id,
+            "name": band.name,
+            "description": band.description,
+            "contact_email": band.contact_email,
+            "contact_tel": band.contact_tel,
+            "website_url": band.website_url,
+            "social_media_urls": band.social_media_urls,
+            "genres": band.genres,
+            "band_leader": {
+                "id": band.band_leader.id,
+                "username": band.band_leader.username,
+                "email": band.band_leader.email,
+            },
+            "members": [
+                {
+                    "id": member.id,
+                    "name": member.name,
+                    "roles": member.roles,
+                    "sort_order": member.sort_order,
+                    "user_id": member.user_id,
+                }
+                for member in band.members.all()
+            ],
+        },
+        "description_html": page.description_html,
+        "foreground_colour": page.foreground_colour,
+        "background_colour": page.background_colour,
+        "published": page.published,
+    })
 
 
 @require_http_methods(["GET", "POST"])

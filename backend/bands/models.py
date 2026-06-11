@@ -1,8 +1,9 @@
 from django.conf import settings
 from django.db import models
+from core.models import TimeStampedModel
 
 
-class Band(models.Model):
+class Band(TimeStampedModel):
     name = models.CharField(max_length=200, unique=True)
     description = models.TextField(blank=True)
 
@@ -17,7 +18,6 @@ class Band(models.Model):
     website_url = models.URLField(blank=True)
 
     social_media_urls = models.JSONField(default=list, blank=True)
-    band_members = models.JSONField(default=list, blank=True)
     genres = models.JSONField(default=list, blank=True)
 
     created_by = models.ForeignKey(
@@ -26,8 +26,6 @@ class Band(models.Model):
         related_name="created_bands",
     )
 
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
         ordering = ["name"]
@@ -36,7 +34,7 @@ class Band(models.Model):
         return self.name
 
 
-class BandPage(models.Model):
+class BandPage(TimeStampedModel):
     band = models.OneToOneField(
         Band,
         on_delete=models.CASCADE,
@@ -63,10 +61,12 @@ class BandPage(models.Model):
 
     published = models.BooleanField(default=True)
 
-    updated_at = models.DateTimeField(auto_now=True)
+    slug = models.SlugField(
+        unique=True,
+        blank=True
+    )
 
-
-class BandGig(models.Model):
+class BandGig(TimeStampedModel):
     band = models.ForeignKey(
         Band,
         on_delete=models.CASCADE,
@@ -85,7 +85,7 @@ class BandGig(models.Model):
         ordering = ["-date"]
 
 
-class BandGalleryImage(models.Model):
+class BandGalleryImage(TimeStampedModel):
     band = models.ForeignKey(
         Band,
         on_delete=models.CASCADE,
@@ -105,4 +105,37 @@ class BandGalleryImage(models.Model):
 
     class Meta:
         ordering = ["sort_order"]
+
+
+class BandMember(TimeStampedModel):
+    band = models.ForeignKey(
+        Band,
+        on_delete=models.CASCADE,
+        related_name="members",
+    )
+
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="band_memberships",
+    )
+
+    name = models.CharField(max_length=255)
+
+    roles = models.JSONField(
+        default=list,
+        blank=True,
+    )
+
+    sort_order = models.PositiveIntegerField(
+        default=0,
+    )
+
+    class Meta:
+        ordering = ["sort_order", "id"]
+
+    def __str__(self):
+        return self.name
     
