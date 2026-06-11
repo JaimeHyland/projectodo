@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { apiUrl } from "@/lib/api";
+import type { AdminUser, AdminBand } from "@/types/admin";
 
 function getCookie(name: string): string | undefined {
   const value = `; ${document.cookie}`;
@@ -11,22 +12,6 @@ function getCookie(name: string): string | undefined {
     ? parts.pop()?.split(";").shift()
     : undefined;
 }
-
-type AdminBand = {
-  id: number;
-  name: string;
-  description: string;
-  can_manage: boolean;
-  contact_email: string;
-  contact_tel: string;
-  website_url: string;
-  genres: string[];
-  band_leader: {
-    id: number;
-    username: string;
-    email: string;
-  };
-};
 
 type Messages = {
   name: string;
@@ -54,12 +39,19 @@ type Messages = {
 
 type Props = {
   bands: AdminBand[];
+  users: AdminUser[];
   messages: Messages;
 };
 
-export default function AdminBandsTable({ bands, messages }: Props) {
+export default function AdminBandsTable({
+  bands,
+  users,
+  messages
+}: Props) {
   const router = useRouter();
-
+  const currentUser = users.find(
+    (user) => user.is_current_user
+  );
   const [isCreating, setIsCreating] = useState(false);
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
@@ -67,6 +59,9 @@ export default function AdminBandsTable({ bands, messages }: Props) {
   const [contactTel, setContactTel] = useState("");
   const [websiteUrl, setWebsiteUrl] = useState("");
   const [genres, setGenres] = useState("");
+  const [bandLeaderId, setBandLeaderId] = useState(
+    currentUser ? String(currentUser.id) : ""
+  );
   const [error, setError] = useState<string | null>(null);
 
   
@@ -82,6 +77,7 @@ export default function AdminBandsTable({ bands, messages }: Props) {
     setContactTel(band.contact_tel);
     setWebsiteUrl(band.website_url);
     setGenres(band.genres.join(", "));
+    setBandLeaderId(String(band.band_leader.id));
     setError(null);
   }
 
@@ -98,6 +94,7 @@ export default function AdminBandsTable({ bands, messages }: Props) {
       body: JSON.stringify({
         name,
         description,
+        band_leader_id: bandLeaderId ? Number(bandLeaderId) : null,
         contact_email: contactEmail,
         contact_tel: contactTel,
         website_url: websiteUrl,
@@ -121,6 +118,7 @@ export default function AdminBandsTable({ bands, messages }: Props) {
     setContactTel("");
     setWebsiteUrl("");
     setGenres("");
+    setBandLeaderId(currentUser ? String(currentUser.id) : "");
     setError(null);
 
     router.refresh();
@@ -166,6 +164,7 @@ async function confirmEdit() {
     body: JSON.stringify({
       action: "edit",
       name,
+      band_leader_id: bandLeaderId ? Number(bandLeaderId) : null,
       description,
       contact_email: contactEmail,
       contact_tel: contactTel,
@@ -231,7 +230,7 @@ async function confirmEdit() {
 
                     <button
                       type="button"
-                      disabled={!band.can_manage}
+                      disabled={!band.can_delete}
                       onClick={() => setDeletingBand(band)}
                       className="rounded bg-red-700 px-3 py-1 text-white disabled:cursor-not-allowed disabled:bg-gray-300 disabled:text-gray-600"
                     >
@@ -260,6 +259,22 @@ async function confirmEdit() {
                   onChange={(event) => setName(event.target.value)}
                   className="mt-1 w-full rounded border p-2"
                 />
+              </label>
+
+              <label className="block">
+                <span className="font-medium">{messages.bandLeaderLabel}</span>
+                <select
+                  value={bandLeaderId}
+                  onChange={(event) => setBandLeaderId(event.target.value)}
+                  className="mt-1 w-full rounded border p-2"
+                >
+                  {users.map((user) => (
+                    <option key={user.id} value={user.id}>
+                      {user.username}
+                      {user.email ? ` (${user.email})` : ""}
+                    </option>
+                  ))}
+                </select>
               </label>
 
               <label className="block">
@@ -347,6 +362,22 @@ async function confirmEdit() {
                   onChange={(event) => setName(event.target.value)}
                   className="mt-1 w-full rounded border p-2"
                 />
+              </label>
+
+              <label className="block">
+                <span className="font-medium">{messages.bandLeaderLabel}</span>
+                <select
+                  value={bandLeaderId}
+                  onChange={(event) => setBandLeaderId(event.target.value)}
+                  className="mt-1 w-full rounded border p-2"
+                >
+                  {users.map((user) => (
+                    <option key={user.id} value={user.id}>
+                      {user.username}
+                      {user.email ? ` (${user.email})` : ""}
+                    </option>
+                  ))}
+                </select>
               </label>
 
               <label className="block">

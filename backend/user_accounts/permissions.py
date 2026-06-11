@@ -41,7 +41,7 @@ def is_band_leader(user) -> bool:
         user.is_authenticated
         and (
             user.is_superuser
-            or is_in_group(user, "bandLeader")
+            or is_in_group(user, "band_leader")
         )
     )
 
@@ -54,3 +54,41 @@ def is_student(user) -> bool:
             or is_in_group(user, "student")
         )
     )
+
+def can_manage_band(user, band):
+    return (
+        user.is_authenticated
+        and
+            (is_webmaster(user)
+              or band.band_leader_id == user.id
+              or user.is_superuser
+            )
+    )
+
+def can_delete_band(user):
+    return (
+        user.is_authenticated
+        and (
+            user.is_superuser
+            or is_webmaster(user)
+        )
+    )
+
+def can_create_band(user):
+    return (
+        user.is_authenticated
+        and (
+            user.is_superuser
+            or is_webmaster(user)
+        )
+    )
+
+def can_assign_band_leader(user):
+    return (
+        user.is_authenticated
+        and (
+            user.is_superuser
+            or is_webmaster(user)
+        )
+    )
+

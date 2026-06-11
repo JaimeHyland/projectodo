@@ -4,6 +4,8 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { apiUrl } from "@/lib/api";
 
+import type { LessonLocation } from "@/types/admin";
+
 function getCookie(name: string): string | undefined {
   const value = `; ${document.cookie}`;
   const parts = value.split(`; ${name}=`);
@@ -12,15 +14,6 @@ function getCookie(name: string): string | undefined {
     : undefined;
 }
 
-type LessonLocation = {
-  id: number;
-  name: string;
-  street_address: string;
-  city: string;
-  state: string;
-  postcode: string;
-  country: string;
-};
 
 type LocationFormState = Omit<LessonLocation, "id">;
 

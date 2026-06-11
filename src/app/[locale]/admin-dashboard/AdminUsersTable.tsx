@@ -5,6 +5,8 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { apiUrl } from "@/lib/api";
 
+import type { AdminUser } from "@/types/admin";
+
 
 function getCookie(name: string): string | undefined {
   const value = `; ${document.cookie}`;
@@ -13,15 +15,6 @@ function getCookie(name: string): string | undefined {
     ? parts.pop()?.split(";").shift() 
     : undefined;
 }
-
-type AdminUser = {
-  id: number;
-  username: string;
-  email: string;
-  is_superuser: boolean;
-  is_current_user: boolean;
-  groups: string[];
-};
 
 type Messages = {
   username: string;

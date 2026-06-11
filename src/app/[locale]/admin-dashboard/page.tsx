@@ -3,6 +3,12 @@ import { cookies } from "next/headers";
 import { getCurrentUser } from '@/lib/server-authorization';
 import { CollapsibleSection } from '@/components/CollapsibleSection';
 
+import type {
+  AdminUser,
+  AdminBand,
+  LessonLocation,
+} from "@/types/admin";
+
 import AdminUsersTable from "./AdminUsersTable";
 import AdminLocationsTable from "./AdminLocationsTable";
 import AdminBandsTable from "./AdminBandsTable";
@@ -26,49 +32,12 @@ type UserGroupCounts = {
   pressRole: number;
 };
 
-type AdminUser = {
-  id: number;
-  username: string;
-  email: string;
-  is_superuser: boolean;
-  is_current_user: boolean;
-  groups: string[];
-};
-
 type AdminUserListResponse = {
   users: AdminUser[];
 };
 
-type LessonLocation = {
-  id: number;
-  name: string;
-  street_address: string;
-  city: string;
-  state: string;
-  postcode: string;
-  country: string;
-};
-
 type LocationsResponse = {
   locations: LessonLocation[];
-};
-
-type AdminBand = {
-  id: number;
-  name: string;
-  can_manage: boolean;
-  description: string;
-  contact_email: string;
-  contact_tel: string;
-  website_url: string;
-  social_media_urls: { platform: string; url: string }[];
-  band_members: { name: string; instrument_or_role: string }[];
-  genres: string[];
-  band_leader: {
-    id: number;
-    username: string;
-    email: string;
-  };
 };
 
 type BandsResponse = {
@@ -212,7 +181,11 @@ export default async function AdminDashboardPage({ params }: AdminDashboardPageP
       </CollapsibleSection>
       <CollapsibleSection title={messages.sectionBands} defaultOpen={false}>
         {bands ? (
-          <AdminBandsTable bands={bands} messages={messages} />
+          <AdminBandsTable
+          bands={bands}
+          users={adminUsers ?? []}
+          messages={messages}
+          />
         ) : (
           <p>{messages.couldNotLoadBands}</p>
         )}
