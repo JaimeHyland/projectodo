@@ -239,7 +239,7 @@ export default function AdminUsersTable({ users, messages }: Props) {
                 onClick={() => setDeletingUser(null)}
                 className="rounded bg-gray-300 px-4 py-2"
               >
-                Don't delete
+                Don&apos;t delete
               </button>
 
               <button
