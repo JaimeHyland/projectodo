@@ -68,41 +68,19 @@ def create_band_page(request, band_id):
 @require_GET
 def public_band_page_detail(request, slug):
     page = get_object_or_404(
-        BandPage.objects.select_related("band", "band__band_leader").prefetch_related("band__members"),
+        BandPage.objects
+        .select_related("band", "band__band_leader")
+        .prefetch_related("band__members"),
         slug=slug,
         published=True,
     )
 
-    band = page.band
+    band_data = serialize_band(page.band)
 
     return JsonResponse({
         "id": page.id,
         "slug": page.slug,
-        "band": {
-            "id": band.id,
-            "name": band.name,
-            "description": band.description,
-            "contact_email": band.contact_email,
-            "contact_tel": band.contact_tel,
-            "website_url": band.website_url,
-            "social_media_urls": band.social_media_urls,
-            "genres": band.genres,
-            "band_leader": {
-                "id": band.band_leader.id,
-                "username": band.band_leader.username,
-                "email": band.band_leader.email,
-            },
-            "members": [
-                {
-                    "id": member.id,
-                    "name": member.name,
-                    "roles": member.roles,
-                    "sort_order": member.sort_order,
-                    "user_id": member.user_id,
-                }
-                for member in band.members.all()
-            ],
-        },
+        "band": band_data,
         "description_html": page.description_html,
         "foreground_colour": page.foreground_colour,
         "background_colour": page.background_colour,
@@ -110,48 +88,36 @@ def public_band_page_detail(request, slug):
     })
 
 
-@require_http_methods(["GET", "POST"])
 def admin_bands(request):
     if not request.user.is_authenticated:
         return JsonResponse({"error": "Forbidden"}, status=403)
-
     if request.method == "GET":
-        bands = Band.objects.select_related("band_leader", "created_by").all()
+        bands = (
+            Band.objects
+            .select_related("band_leader", "created_by")
+            .prefetch_related("members")
+            .all()
+        )
 
         return JsonResponse({
             "bands": [
-                {
-                    "id": band.id,
-                    "name": band.name,
-                    "description": band.description,
-                    "contact_email": band.contact_email,
-                    "contact_tel": band.contact_tel,
-                    "website_url": band.website_url,
-                    "social_media_urls": band.social_media_urls,
-                    "band_members": band.band_members,
-                    "genres": band.genres,
-                    "can_manage": can_manage_band(request.user, band),
-                    "can_delete": can_delete_band(request.user),
-                    "band_leader": {
-                        "id": band.band_leader.id,
-                        "username": band.band_leader.username,
-                        "email": band.band_leader.email,
-                    },
-                }
+                serialize_band(band, request.user)
                 for band in bands
             ]
         })
+
+    if request.method != "POST":
+        return JsonResponse({"error": "Method not allowed"}, status=405)
 
     if not can_create_band(request.user):
         return JsonResponse({"error": "Forbidden"}, status=403)
 
     data = json.loads(request.body or "{}")
-    
+
     name = (data.get("name") or "").strip()
 
     if not name:
         return JsonResponse({"error": "Band name is required."}, status=400)
-
 
     User = get_user_model()
 
@@ -173,13 +139,12 @@ def admin_bands(request):
     band = Band.objects.create(
         name=name,
         description=(data.get("description") or "").strip(),
-        band_leader=request.user,
+        band_leader=band_leader,
         created_by=request.user,
         contact_email=(data.get("contact_email") or "").strip(),
         contact_tel=(data.get("contact_tel") or "").strip(),
         website_url=(data.get("website_url") or "").strip(),
         social_media_urls=data.get("social_media_urls") or [],
-        band_members=data.get("band_members") or [],
         genres=data.get("genres") or [],
     )
 
@@ -236,7 +201,6 @@ def admin_band_detail(request, band_id):
         band.contact_tel = (data.get("contact_tel") or "").strip()
         band.website_url = (data.get("website_url") or "").strip()
         band.social_media_urls = data.get("social_media_urls") or []
-        band.band_members = data.get("band_members") or []
         band.genres = data.get("genres") or []
 
         try:
@@ -250,3 +214,40 @@ def admin_band_detail(request, band_id):
         return JsonResponse({"ok": True})
 
     return JsonResponse({"error": "Unknown action."}, status=400)
+
+def serialize_band_member(member):
+    return {
+        "id": member.id,
+        "name": member.name,
+        "roles": member.roles,
+        "sort_order": member.sort_order,
+        "user_id": member.user_id,
+    }
+
+
+def serialize_band(band, user=None):
+    data = {
+        "id": band.id,
+        "name": band.name,
+        "description": band.description,
+        "contact_email": band.contact_email,
+        "contact_tel": band.contact_tel,
+        "website_url": band.website_url,
+        "social_media_urls": band.social_media_urls,
+        "genres": band.genres,
+        "band_leader": {
+            "id": band.band_leader.id,
+            "username": band.band_leader.username,
+            "email": band.band_leader.email,
+        },
+        "members": [
+            serialize_band_member(member)
+            for member in band.members.all()
+        ],
+    }
+
+    if user is not None:
+        data["can_manage"] = can_manage_band(user, band)
+        data["can_delete"] = can_delete_band(user)
+
+    return data

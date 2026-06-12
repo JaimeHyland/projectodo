@@ -61,7 +61,6 @@ def can_manage_band(user, band):
         and
             (is_webmaster(user)
               or band.band_leader_id == user.id
-              or user.is_superuser
             )
     )
 

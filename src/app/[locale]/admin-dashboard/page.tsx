@@ -1,6 +1,6 @@
 import { redirect, notFound } from 'next/navigation';
-import { cookies } from "next/headers";
 import { getCurrentUser } from '@/lib/server-authorization';
+import { serverApiFetch } from '@/lib/server-api';
 import { CollapsibleSection } from '@/components/CollapsibleSection';
 
 import type {
@@ -24,12 +24,12 @@ interface AdminDashboardPageProps {
 type UserGroupCounts = {
   total: number;
   ordinary: number;
-  superuserRole: number;
-  webmasterRole: number;
-  teacherRole: number;
-  studentRole: number;
-  bandLeaderRole: number;
-  pressRole: number;
+  superusers: number;
+  webmasters: number;
+  teachers: number;
+  students: number;
+  band_leaders: number;
+  press: number;
 };
 
 type AdminUserListResponse = {
@@ -44,64 +44,38 @@ type BandsResponse = {
   bands: AdminBand[];
 };
 
-const API_BASE =
-  process.env.API_BASE_URL ??
-  process.env.NEXT_PUBLIC_API_BASE_URL ??
-  'http://localhost:8000';
 
 async function getUserGroupCounts(): Promise<UserGroupCounts | null> {
-  const cookieStore = await cookies();
+  const response = await serverApiFetch("/api/auth/user-group-counts/");
 
-  const cookieHeader = cookieStore
-    .getAll()
-    .map((cookie) => `${cookie.name}=${cookie.value}`)
-    .join('; ');
-
-  const res = await fetch(`${API_BASE}/api/auth/user-group-counts/`, {
-    headers: {
-      Cookie: cookieHeader,
-    },
-    cache: 'no-store',
-  });
-
-  if (!res.ok) {
-    const errorText = await res.text();
+  if (!response.ok) {
+    const errorText = await response.text();
     console.error("user-group-counts failed", {
-      status: res.status,
-      statusText: res.statusText,
+      status: response.status,
+      statusText: response.statusText,
       body: errorText,
     });
 
     return null;
   }
 
-  return res.json();
+  return response.json();
 }
 
 async function getAdminUsers(): Promise<AdminUser[] | null> {
-  const cookieStore = await cookies();
-  const cookieHeader = cookieStore
-    .getAll()
-    .map((cookie) => `${cookie.name}=${cookie.value}`)
-    .join('; ');
+  const response = await serverApiFetch("/api/auth/users/");
 
-  const res = await fetch(`${API_BASE}/api/auth/users/`, {
-    headers: {
-      Cookie: cookieHeader,
-    },
-    cache: 'no-store',
-  });
-  if (!res.ok) {
-    const errorText = await res.text();
+  if (!response.ok) {
+    const errorText = await response.text();
     console.error("admin users failed", {
-      status: res.status,
-      statusText: res.statusText,
+      status: response.status,
+      statusText: response.statusText,
       body: errorText,
     });
     return null;
   }
 
-  const data: AdminUserListResponse = await res.json();
+  const data: AdminUserListResponse = await response.json();
   return data.users;
 }
 
@@ -141,22 +115,22 @@ export default async function AdminDashboardPage({ params }: AdminDashboardPageP
             <dd>{counts.ordinary}</dd>
 
             <dt className="font-medium">{messages.superusers}</dt>
-            <dd>{counts.superuserRole}</dd>
+            <dd>{counts.superusers}</dd>
 
             <dt className="font-medium">{messages.webmasters}</dt>
-            <dd>{counts.webmasterRole}</dd>
+            <dd>{counts.webmasters}</dd>
 
             <dt className="font-medium">{messages.teachers}</dt>
-            <dd>{counts.teacherRole}</dd>
+            <dd>{counts.teachers}</dd>
 
             <dt className="font-medium">{messages.students}</dt>
-            <dd>{counts.studentRole}</dd>
+            <dd>{counts.students}</dd>
 
             <dt className="font-medium">{messages.bandLeaders}</dt>
-            <dd>{counts.bandLeaderRole}</dd>
+            <dd>{counts.band_leaders}</dd>
 
             <dt className="font-medium">{messages.press}</dt>
-            <dd>{counts.pressRole}</dd>
+            <dd>{counts.press}</dd>
           </dl>
         ) : (
           <p>{messages.couldNotLoadUserStats}</p>
@@ -195,54 +169,30 @@ export default async function AdminDashboardPage({ params }: AdminDashboardPageP
 }
 
 async function getLocations(): Promise<LessonLocation[] | null> {
-  const cookieStore = await cookies();
+  const response = await serverApiFetch("/api/classes/locations/");
 
-  const cookieHeader = cookieStore
-    .getAll()
-    .map((cookie) => `${cookie.name}=${cookie.value}`)
-    .join("; ");
-
-  const res = await fetch(`${API_BASE}/api/classes/locations/`, {
-    headers: {
-      Cookie: cookieHeader,
-    },
-    cache: "no-store",
-  });
-
-  if (!res.ok) {
+  if (!response.ok) {
     return null;
   }
 
-  const data: LocationsResponse = await res.json();
+  const data: LocationsResponse = await response.json();
   return data.locations;
 }
 
 async function getAdminBands(): Promise<AdminBand[] | null> {
-  const cookieStore = await cookies();
+  const response = await serverApiFetch("/api/bands/admin/bands/");
 
-  const cookieHeader = cookieStore
-    .getAll()
-    .map((cookie) => `${cookie.name}=${cookie.value}`)
-    .join("; ");
-
-  const res = await fetch(`${API_BASE}/api/bands/admin/bands/`, {
-    headers: {
-      Cookie: cookieHeader,
-    },
-    cache: "no-store",
-  });
-
-  if (!res.ok) {
-    const errorText = await res.text();
+  if (!response.ok) {
+    const errorText = await response.text();
     console.error("admin bands failed", {
-      status: res.status,
-      statusText: res.statusText,
+      status: response.status,
+      statusText: response.statusText,
       body: errorText,
     });
 
     return null;
   }
 
-  const data: BandsResponse = await res.json();
+  const data: BandsResponse = await response.json();
   return data.bands;
 }

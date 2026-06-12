@@ -612,39 +612,37 @@ def demote_from_press_view(request):
     })
 
     
-
-@require_http_methods(["GET"])
+@require_GET
 def admin_user_group_counts_view(request):
-    if not request.user.is_authenticated:
-        return JsonResponse(
-            {"error": _("Authentication required")},
-            status=401,
-        )
+    if not request.user.is_authenticated or not is_webmaster(request.user):
+        return JsonResponse({"error": "Forbidden"}, status=403)
 
-    if not is_webmaster(request.user):
-        return JsonResponse(
-            {"error": _("Webmaster permissions required")},
-            status=403,
-        )
+    return JsonResponse({
+        "total": User.objects.count(),
+        "ordinary": User.objects.filter(
+            is_superuser=False,
+            groups__isnull=True,
+        ).count(),
+        "superusers": User.objects.filter(
+            is_superuser=True,
+        ).count(),
+        "webmasters": User.objects.filter(
+            groups__name="webmaster",
+        ).distinct().count(),
+        "press": User.objects.filter(
+            groups__name="press",
+        ).distinct().count(),
+        "teachers": User.objects.filter(
+            groups__name="teacher",
+        ).distinct().count(),
+        "students": User.objects.filter(
+            groups__name="student",
+        ).distinct().count(),
+        "band_leaders": User.objects.filter(
+            groups__name="band_leader",
+        ).distinct().count(),
+    })
 
-    group_names = ["webmaster", "press", "teacher", "bandLeader", "student"]
-
-    counts = {
-        group_name: User.objects.filter(groups__name=group_name).distinct().count()
-        for group_name in group_names
-    }
-
-    grouped_user_ids = User.objects.filter(
-        groups__isnull=False
-        ).values_list("id", flat=True).distinct()
-
-    counts["ordinary"] = User.objects.exclude(id__in=grouped_user_ids).count()
-    counts["total"] = User.objects.count()
-
-    counts["superuser"] = User.objects.filter(is_superuser=True).count()
-
-
-    return JsonResponse(counts)
 
 @require_http_methods(["GET"])
 def admin_user_list_view(request):
@@ -693,7 +691,7 @@ def admin_update_user_groups_view(request, user_id):
     data = json.loads(request.body.decode("utf-8"))
     group_names = data.get("groups", [])
 
-    allowed_groups = {"webmaster", "press", "teacher", "student", "bandLeader"}
+    allowed_groups = {"webmaster", "press", "teacher", "student", "band_leader"}
 
     if not isinstance(group_names, list) or not set(group_names).issubset(allowed_groups):
         return JsonResponse({"error": _("Invalid groups supplied.")}, status=400)

@@ -7,6 +7,14 @@ export type AdminUser = {
   groups: string[];
 };
 
+export type AdminBandMember = {
+  id: number;
+  name: string;
+  roles: string[];
+  sort_order: number;
+  user_id: number | null;
+};
+
 export type AdminBand = {
   id: number;
   name: string;
@@ -17,7 +25,7 @@ export type AdminBand = {
   contact_tel: string;
   website_url: string;
   social_media_urls: { platform: string; url: string }[];
-  band_members: { name: string; instrument_or_role: string }[];
+  members: AdminBandMember[];
   genres: string[];
   band_leader: {
     id: number;

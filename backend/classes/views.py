@@ -2,30 +2,12 @@ import json
 
 from django.http import JsonResponse
 from django.views.decorators.http import require_GET, require_http_methods
+from django.utils.translation import gettext as _
 
 from user_accounts.permissions import is_webmaster
 
 from .models import Location
 
-
-@require_GET
-def public_locations_view():
-    locations = Location.objects.all().order_by("name")
-
-    return JsonResponse({
-        "locations": [
-            {
-                "id": location.id,
-                "name": location.name,
-                "street_address": location.street_address,
-                "city": location.city,
-                "state": location.state,
-                "postcode": location.postcode,
-                "country": location.country,
-            }
-            for location in locations
-        ]
-    })
 
 def serialize_location(location):
     return {

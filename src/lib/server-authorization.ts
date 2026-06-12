@@ -1,29 +1,12 @@
-// src/lib/server-authorization.ts
-import { cookies } from 'next/headers';
+import { serverApiFetch } from './server-api';
 
-const API_BASE =
-  process.env.API_BASE_URL ??
-  process.env.NEXT_PUBLIC_API_BASE_URL ??
-  'http://localhost:8000';
 
 export async function getCurrentUser() {
-  const cookieStore = await cookies();
+  const response = await serverApiFetch("/api/auth/status/");
 
-  const cookieHeader = cookieStore
-    .getAll()
-    .map((cookie) => `${cookie.name}=${cookie.value}`)
-    .join('; ');
+  if (!response.ok) return null;
 
-  const res = await fetch(`${API_BASE}/api/auth/status/`, {
-    headers: {
-      Cookie: cookieHeader,
-    },
-    cache: 'no-store',
-  });
-
-  if (!res.ok) return null;
-
-  const data = await res.json();
+  const data = await response.json();
 
   if (!data?.is_authenticated) return null;
 

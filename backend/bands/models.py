@@ -66,6 +66,10 @@ class BandPage(TimeStampedModel):
         blank=True
     )
 
+    def __str__(self):
+        return f"Page for {self.band.name}"
+    
+
 class BandGig(TimeStampedModel):
     band = models.ForeignKey(
         Band,
@@ -83,6 +87,9 @@ class BandGig(TimeStampedModel):
 
     class Meta:
         ordering = ["-date"]
+
+    def __str__(self):
+        return f"{self.band.name} — {self.venue} ({self.date})"
 
 
 class BandGalleryImage(TimeStampedModel):
@@ -105,6 +112,12 @@ class BandGalleryImage(TimeStampedModel):
 
     class Meta:
         ordering = ["sort_order"]
+
+    def __str__(self):
+        if self.caption:
+            return f"{self.band.name} — {self.caption}"
+        
+        return f"Gallery image for {self.band.name}"
 
 
 class BandMember(TimeStampedModel):
