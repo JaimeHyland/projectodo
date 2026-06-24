@@ -15,6 +15,12 @@ export type AdminBandMember = {
   user_id: number | null;
 };
 
+export type AdminBandPageSummary = {
+  id: number;
+  slug: string;
+  published: boolean;
+};
+
 export type AdminBand = {
   id: number;
   name: string;
@@ -27,6 +33,7 @@ export type AdminBand = {
   social_media_urls: { platform: string; url: string }[];
   members: AdminBandMember[];
   genres: string[];
+  page: AdminBandPageSummary | null;
   band_leader: {
     id: number;
     username: string;

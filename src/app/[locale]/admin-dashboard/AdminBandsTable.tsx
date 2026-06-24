@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link"
 import { apiUrl } from "@/lib/api";
 import type { AdminUser, AdminBand } from "@/types/admin";
 
@@ -37,17 +38,20 @@ type Messages = {
 };
 
 
-type Props = {
+type AdminBandTableProps = {
   bands: AdminBand[];
   users: AdminUser[];
   messages: Messages;
+  locale: string;
 };
 
 export default function AdminBandsTable({
   bands,
   users,
-  messages
-}: Props) {
+  messages,
+  locale,
+}: AdminBandTableProps) {
+  console.log("AdminBandsTable bands:", bands);
   const router = useRouter();
   const currentUser = users.find(
     (user) => user.is_current_user
@@ -68,6 +72,9 @@ export default function AdminBandsTable({
   const [deletingBand, setDeletingBand] = useState<AdminBand | null>(null);
   const [editingBand, setEditingBand] = useState<AdminBand | null>(null);
 
+  const visibleBands = bands.filter(
+  (band): band is AdminBand => band !== null && band !== undefined,
+);
 
   function openEdit(band: AdminBand) {
     setEditingBand(band);
@@ -77,7 +84,7 @@ export default function AdminBandsTable({
     setContactTel(band.contact_tel);
     setWebsiteUrl(band.website_url);
     setGenres(band.genres.join(", "));
-    setBandLeaderId(String(band.band_leader.id));
+    setBandLeaderId(band.band_leader ? String(band.band_leader.id) : "");
     setError(null);
   }
 
@@ -154,7 +161,7 @@ async function confirmEdit() {
 
   const csrfToken = getCookie("csrftoken");
 
-  const res = await fetch(apiUrl(`bands/admin/bands/${editingBand.id}/`), {
+  const resources = await fetch(apiUrl(`bands/admin/bands/${editingBand.id}/`), {
     method: "POST",
     credentials: "include",
     headers: {
@@ -176,8 +183,8 @@ async function confirmEdit() {
     }),
   });
 
-  if (!res.ok) {
-    const data = await res.json();
+  if (!resources.ok) {
+    const data = await resources.json();
     setError(data.error ?? messages.couldNotUpdateBand);
     return;
   }
@@ -211,10 +218,10 @@ async function confirmEdit() {
           </thead>
 
           <tbody>
-            {bands.map((band) => (
+            {visibleBands.map((band) => (
               <tr key={band.id} className="border-b">
                 <td className="p-2">{band.name}</td>
-                <td className="p-2">{band.band_leader.username}</td>
+                <td className="p-2">{band.band_leader?.username ?? "—"}</td>
                 <td className="p-2">{band.contact_email || "—"}</td>
                 <td className="p-2">{band.genres.join(", ") || "—"}</td>
                 <td className="p-2">
@@ -227,7 +234,14 @@ async function confirmEdit() {
                     >
                       {messages.edit}
                     </button>
-
+                    {band.can_manage && (
+                      <Link
+                        href={`/${locale}/admin-dashboard/bands/${band.id}/webpage`}
+                        className="rounded-md border px-3 py-1 text-sm hover:bg-gray-100"
+                      >
+                        {band.page ? "Edit webpage" : "Create webpage"}
+                      </Link>
+                    )}
                     <button
                       type="button"
                       disabled={!band.can_delete}
@@ -236,7 +250,7 @@ async function confirmEdit() {
                     >
                       {messages.delete}
                     </button>
-                  </div>
+                    </div>
                 </td>
               </tr>
             ))}

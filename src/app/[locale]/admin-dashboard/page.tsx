@@ -159,6 +159,7 @@ export default async function AdminDashboardPage({ params }: AdminDashboardPageP
           bands={bands}
           users={adminUsers ?? []}
           messages={messages}
+          locale={locale}
           />
         ) : (
           <p>{messages.couldNotLoadBands}</p>

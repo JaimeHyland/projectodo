@@ -12,9 +12,9 @@ from user_accounts.permissions import (
     can_create_band,
     can_manage_band,
     can_delete_band,
+    can_manage_band_page,
 )
 from .models import Band, BandPage
-from user_accounts.permissions import can_manage_band_page
 
 
 def make_unique_band_page_slug(band):
@@ -28,6 +28,7 @@ def make_unique_band_page_slug(band):
 
     return slug
 
+
 @require_POST
 def create_band_page(request, band_id):
     band = get_object_or_404(Band, id=band_id)
@@ -37,21 +38,29 @@ def create_band_page(request, band_id):
             {"error": "You do not have permission to create this band page."},
             status=403,
         )
-    
-    if hasattr(band, "page"):
+
+    try:
+        existing_page = band.page
+    except BandPage.DoesNotExist:
+        existing_page = None
+
+    if existing_page:
         return JsonResponse(
             {"error": "This band already has a public page."},
             status=400,
         )
-    
+
+    data = json.loads(request.body or "{}")
+
     page = BandPage.objects.create(
         band=band,
         slug=make_unique_band_page_slug(band),
-        description_html=band.description or "",
+        description_html=data.get("description_html", ""),
+        published=data.get("published", True),
     )
 
     return JsonResponse(
-         {
+        {
             "id": page.id,
             "slug": page.slug,
             "band": {
@@ -59,10 +68,60 @@ def create_band_page(request, band_id):
                 "name": band.name,
             },
             "description_html": page.description_html,
+            "foreground_colour": page.foreground_colour,
+            "background_colour": page.background_colour,
+            
             "published": page.published,
         },
         status=201,
     )
+
+
+def serialize_band(band, user=None):
+    
+    try:
+        page = band.page
+    except BandPage.DoesNotExist:
+        page = None
+
+    data = {
+        "id": band.id,
+        "name": band.name,
+        "description": band.description,
+        "contact_email": band.contact_email,
+        "contact_tel": band.contact_tel,
+        "website_url": band.website_url,
+        "social_media_urls": band.social_media_urls,
+        "genres": band.genres,
+        "members": [
+            serialize_band_member(member)
+            for member in band.members.all()
+        ],
+        "band_leader": (
+            {
+                "id": band.band_leader.id,
+                "username": band.band_leader.username,
+                "email": band.band_leader.email,
+            }
+            if band.band_leader
+            else None
+        ),
+        "page": (
+            {
+                "id": page.id,
+                "slug": page.slug,
+                "published": page.published,
+            }
+            if page
+            else None
+        ),
+    }
+
+    if user is not None:
+        data["can_manage"] = can_manage_band(user, band)
+        data["can_delete"] = can_delete_band(user)
+
+    return data
 
 
 @require_GET
@@ -94,7 +153,7 @@ def admin_bands(request):
     if request.method == "GET":
         bands = (
             Band.objects
-            .select_related("band_leader", "created_by")
+            .select_related("band_leader", "created_by", "page")
             .prefetch_related("members")
             .all()
         )
@@ -225,29 +284,74 @@ def serialize_band_member(member):
     }
 
 
-def serialize_band(band, user=None):
-    data = {
-        "id": band.id,
-        "name": band.name,
-        "description": band.description,
-        "contact_email": band.contact_email,
-        "contact_tel": band.contact_tel,
-        "website_url": band.website_url,
-        "social_media_urls": band.social_media_urls,
-        "genres": band.genres,
-        "band_leader": {
-            "id": band.band_leader.id,
-            "username": band.band_leader.username,
-            "email": band.band_leader.email,
-        },
-        "members": [
-            serialize_band_member(member)
-            for member in band.members.all()
-        ],
-    }
 
-    if user is not None:
-        data["can_manage"] = can_manage_band(user, band)
-        data["can_delete"] = can_delete_band(user)
+@require_http_methods(["GET", "PATCH"])
+def admin_band_page_detail(request, band_id):
+    band = get_object_or_404(
+        Band.objects.select_related("band_leader").prefetch_related("members"),
+        id=band_id,
+    )
 
-    return data
+    if not can_manage_band_page(request.user, band):
+        return JsonResponse({"error": "Forbidden"}, status=403)
+
+    try:
+        page = band.page
+    except BandPage.DoesNotExist:
+        return JsonResponse({"error": "This band does not have a webpage yet."}, status=404)
+
+    if request.method == "GET":
+        return JsonResponse({
+            "id": page.id,
+            "slug": page.slug,
+            "description_html": page.description_html,
+            "foreground_colour": page.foreground_colour,
+            "background_colour": page.background_colour,
+            "published": page.published,
+            "band": serialize_band(band, request.user),
+        })
+
+    data = json.loads(request.body or "{}")
+
+    page.description_html = data.get("description_html", page.description_html)
+    page.foreground_colour = data.get("foreground_colour", page.foreground_colour)
+    page.background_colour = data.get("background_colour", page.background_colour)
+    page.published = data.get("published", page.published)
+
+    page.save()
+
+    return JsonResponse({
+        "id": page.id,
+        "slug": page.slug,
+        "description_html": page.description_html,
+        "foreground_colour": page.foreground_colour,
+        "background_colour": page.background_colour,
+        "published": page.published,
+        "band": serialize_band(band, request.user),
+    })
+
+
+@require_GET
+def public_band_pages(request):
+    pages = (
+        BandPage.objects
+        .filter(published=True)
+        .select_related("band")
+        .order_by("band__name")
+    )
+
+    return JsonResponse({
+        "pages": [
+            {
+                "id": page.id,
+                "slug": page.slug,
+                "band": {
+                    "id": page.band.id,
+                    "name": page.band.name,
+                    "description": page.band.description,
+                    "genres": page.band.genres,
+                },
+            }
+            for page in pages
+        ]
+    })
