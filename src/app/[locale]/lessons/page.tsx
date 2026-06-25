@@ -28,7 +28,7 @@ const API_BASE =
   "http://localhost:8000";
 
 async function getLocations(): Promise<Location[] | null> {
-  const res = await fetch(`${API_BASE}/api/classes/locations/`, {
+  const res = await fetch(`${API_BASE}/api/courses/locations/`, {
     cache: "no-store",
   });
 

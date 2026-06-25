@@ -1,0 +1,201 @@
+﻿[
+{
+  "model": "auth.user",
+  "pk": 5,
+  "fields": {
+    "password": "pbkdf2_sha256$1200000$mw2xaJq9O6xbO8hwb4PvkE$X50Ay8f2ZeVOzGCMiONvM4oN0b3LMYqh+ImTzMXYmVQ=",
+    "last_login": "2026-06-25T07:47:56.796Z",
+    "is_superuser": true,
+    "username": "JaimeHyland",
+    "first_name": "Jaime",
+    "last_name": "Hyland",
+    "email": "hylandjaime@gmail.com",
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2026-02-13T07:22:57Z",
+    "groups": [
+      1,
+      2
+    ],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 21,
+  "fields": {
+    "password": "pbkdf2_sha256$1200000$fwslD9q9JZcImUffwRkL3T$clGYBDnPYykGcU/RoTIFlArog3hITB507bZht1RqJJ8=",
+    "last_login": "2026-06-12T09:13:34.920Z",
+    "is_superuser": false,
+    "username": "BillyToJack",
+    "first_name": "",
+    "last_name": "",
+    "email": "jaime.hyland@outlook.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-05-07T15:58:50.583Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 22,
+  "fields": {
+    "password": "pbkdf2_sha256$1200000$AEtRvWhBV3NLwsUX6eqnI2$aN1HJBCBBNWi19B/PHbMf4Mv1BPfegSvDd/R9pz5ziM=",
+    "last_login": "2026-06-12T08:36:44.725Z",
+    "is_superuser": false,
+    "username": "projectodo.de",
+    "first_name": "Fidel",
+    "last_name": "Conde",
+    "email": "info@projectodo.de",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-05-08T06:38:15Z",
+    "groups": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 23,
+  "fields": {
+    "password": "pbkdf2_sha256$1200000$ZS8dU1OxOK6e4jxOjUkRXA$+AlGPcV++4NoIhCW0z9hg9cbrCTSbHK3eMY2lM1pGNk=",
+    "last_login": "2026-05-08T06:44:30.763Z",
+    "is_superuser": false,
+    "username": "fidelconde.music",
+    "first_name": "",
+    "last_name": "",
+    "email": "info@fidelconde.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-05-08T06:43:33.975Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 24,
+  "fields": {
+    "password": "pbkdf2_sha256$1200000$zocYWMDyQb9a2CKVl5IYIc$5VJlR6GhafQQW6yrHKBxFAwq//knNp1CgLPgCt7vMMU=",
+    "last_login": "2026-05-08T06:51:30Z",
+    "is_superuser": false,
+    "username": "projectodo.presse",
+    "first_name": "Fidel",
+    "last_name": "Conde",
+    "email": "presse@projectodo.de",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-05-08T06:50:50Z",
+    "groups": [
+      1
+    ],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 26,
+  "fields": {
+    "password": "pbkdf2_sha256$1200000$MIBJdyhm4A87A2rv8Wip8R$zvRijSIJnW7Vt4kVu/aRAlfJ1a7QRL6lhd/4QDUOicg=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "BandLeader",
+    "first_name": "Band",
+    "last_name": "Leader",
+    "email": "hylandjaime@gmail.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-06-11T08:29:30Z",
+    "groups": [
+      4
+    ],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 27,
+  "fields": {
+    "password": "pbkdf2_sha256$1200000$1oyvTTu1ladghK89rizAfH$ie1T/Da2yT8sAir9nVfS9nP/gbwM+DWyZeUNBe489eA=",
+    "last_login": "2026-06-12T09:12:49.836Z",
+    "is_superuser": false,
+    "username": "Webmaster",
+    "first_name": "Webbie",
+    "last_name": "Masterson",
+    "email": "info@language-landscapes.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-06-11T08:31:50Z",
+    "groups": [
+      2
+    ],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 28,
+  "fields": {
+    "password": "pbkdf2_sha256$1200000$eto4GMBDytBnPzuKihhIPX$w2hgMNSA98rQcTOeOTswB4tRfiKWa+AREg7x5UxcM6g=",
+    "last_login": "2026-06-19T05:32:37.773Z",
+    "is_superuser": true,
+    "username": "JaimeHyl",
+    "first_name": "",
+    "last_name": "",
+    "email": "jaime.hyland@language-landscapes.com",
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2026-06-19T05:30:43.549Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.group",
+  "pk": 1,
+  "fields": {
+    "name": "press",
+    "permissions": []
+  }
+},
+{
+  "model": "auth.group",
+  "pk": 2,
+  "fields": {
+    "name": "webmaster",
+    "permissions": []
+  }
+},
+{
+  "model": "auth.group",
+  "pk": 3,
+  "fields": {
+    "name": "teacher",
+    "permissions": []
+  }
+},
+{
+  "model": "auth.group",
+  "pk": 4,
+  "fields": {
+    "name": "band_leader",
+    "permissions": []
+  }
+},
+{
+  "model": "auth.group",
+  "pk": 5,
+  "fields": {
+    "name": "student",
+    "permissions": []
+  }
+}
+]
+

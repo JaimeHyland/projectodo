@@ -79,8 +79,8 @@ export default function AdminLocationsTable({ locations, messages }: Props) {
     const csrfToken = getCookie("csrftoken");
 
     const endpoint = editingLocation
-      ? `classes/locations/${editingLocation.id}/update/`
-      : "classes/locations/create/";
+      ? `courses/locations/${editingLocation.id}/update/`
+      : "courses/locations/create/";
 
     const res = await fetch(apiUrl(endpoint), {
       method: "POST",
@@ -108,7 +108,7 @@ export default function AdminLocationsTable({ locations, messages }: Props) {
 
     const csrfToken = getCookie("csrftoken");
 
-    const res = await fetch(apiUrl(`classes/locations/${deletingLocation.id}/delete/`), {
+    const res = await fetch(apiUrl(`courses/locations/${deletingLocation.id}/delete/`), {
       method: "POST",
       credentials: "include",
       headers: {

@@ -170,7 +170,7 @@ export default async function AdminDashboardPage({ params }: AdminDashboardPageP
 }
 
 async function getLocations(): Promise<LessonLocation[] | null> {
-  const response = await serverApiFetch("/api/classes/locations/");
+  const response = await serverApiFetch("/api/courses/locations/");
 
   if (!response.ok) {
     return null;

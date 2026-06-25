@@ -3,7 +3,7 @@ from django.contrib import admin
 from .models import (
     Location,
     Course,
-    ClassMeeting,
+    CourseMeeting,
 )
 
 
@@ -41,11 +41,12 @@ class CourseAdmin(admin.ModelAdmin):
     )
 
 
-@admin.register(ClassMeeting)
-class ClassMeetingAdmin(admin.ModelAdmin):
+@admin.register(CourseMeeting)
+class CourseMeetingAdmin(admin.ModelAdmin):
     list_display = (
         "course",
-        "start_datetime",
+        "date",
+        "start_time",
         "location",
         "instructor",
         "cancelled",
