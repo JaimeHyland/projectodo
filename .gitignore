@@ -21,6 +21,9 @@ test_*.py
 # production
 /build
 
+# data backup
+*backup*.json
+
 # misc
 .DS_Store
 *.pem
