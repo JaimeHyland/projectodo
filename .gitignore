@@ -21,8 +21,11 @@ test_*.py
 # production
 /build
 
-# data backup
+# Local backup files
 *backup*.json
+*backup*.sql
+**/*backup*.json
+**/*backup*.sql
 
 # misc
 .DS_Store
