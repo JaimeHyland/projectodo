@@ -40,7 +40,7 @@ class Course(models.Model):
     ]
 
     COURSE_TYPE_CHOICES = [
-        ("one-to-one", "One-to-one"),
+        ("one_to_one", "One-to-one"),
         ("group", "Group"),
     ]
 

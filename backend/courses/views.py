@@ -3,10 +3,11 @@ import json
 from django.http import JsonResponse
 from django.views.decorators.http import require_GET, require_http_methods
 from django.utils.translation import gettext as _
+from django.core.exceptions import ValidationError
 
 from user_accounts.permissions import is_webmaster
 
-from .models import Location
+from .models import Course, Location
 
 
 def serialize_location(location):
@@ -94,3 +95,64 @@ def admin_delete_location_view(request, location_id):
     location.delete()
 
     return JsonResponse({"success": True})
+
+
+@require_http_methods(["POST"])
+def admin_create_course_view(request):
+    if not request.user.is_authenticated:
+        return JsonResponse({"error": _("Authentication required")}, status=401)
+
+    try:
+        data = json.loads(request.body)
+    except json.JSONDecodeError:
+        return JsonResponse({"error": _("Invalid JSON")}, status=400)
+
+    try:
+        location = Location.objects.get(id=data["location"])
+    except (KeyError, Location.DoesNotExist):
+        return JsonResponse({"error": _("Invalid location")}, status=400)
+
+    course = Course(
+        name=data.get("name", ""),
+        course_type=data.get("course_type", "one_to_one"),
+        subject=data.get("subject", "guitar"),
+        term_type=data.get("term_type", "school_term"),
+        duration_type=data.get("duration_type", "date_range"),
+        instructor=request.user,
+        max_participants=data.get("max_participants", 1),
+        location=location,
+        place=None,
+        start_date=data.get("start_date"),
+        end_date=data.get("end_date") or None,
+        start_time=data.get("start_time"),
+        duration_minutes=data.get("duration_minutes", 60),
+        days_of_week=data.get("days_of_week", ""),
+    )
+
+    try:
+        course.full_clean()
+    except ValidationError as error:
+        return JsonResponse({"error": error.message_dict}, status=400)
+
+    course.save()
+
+    return JsonResponse(
+        {
+            "id": course.id,
+            "name": course.name,
+            "course_type": course.course_type,
+            "subject": course.subject,
+            "term_type": course.term_type,
+            "duration_type": course.duration_type,
+            "instructor": course.instructor_id,
+            "max_participants": course.max_participants,
+            "location": course.location_id,
+            "place": course.place_id,
+            "start_date": course.start_date.isoformat(),
+            "end_date": course.end_date.isoformat() if course.end_date else None,
+            "start_time": course.start_time.isoformat(),
+            "duration_minutes": course.duration_minutes,
+            "days_of_week": course.days_of_week,
+        },
+        status=201,
+    )
