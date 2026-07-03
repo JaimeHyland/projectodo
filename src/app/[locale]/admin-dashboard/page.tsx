@@ -10,7 +10,7 @@ import type {
 } from "@/types/admin";
 
 import AdminUsersTable from "./AdminUsersTable";
-import AdminLocationsTable from "./AdminLocationsTable";
+import AdminLocationsTable, { type AppLocale } from "./AdminLocationsTable";
 import AdminBandsTable from "./AdminBandsTable";
 
 import en from "@/messages/admin-dashboard/en.json";
@@ -100,6 +100,9 @@ export default async function AdminDashboardPage({ params }: AdminDashboardPageP
   const locations = await getLocations();
   const bands = await getAdminBands();
 
+  const appLocale: AppLocale =
+  locale === "de" || locale === "es" || locale === "en" ? locale : "en";
+
   return (
     <main className="p-8 text-center">
       <h1 className="text-2xl font-bold">{messages.titleAdminDashboard}</h1>
@@ -151,7 +154,7 @@ export default async function AdminDashboardPage({ params }: AdminDashboardPageP
           <AdminLocationsTable
             locations={locations}
             messages={messages}
-            locale={locale as "en" | "de" | "es"}
+            locale={appLocale}
           />
         ) : (
           <p>{messages.couldNotLoadLocations}</p>
