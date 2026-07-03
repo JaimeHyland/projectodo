@@ -6,6 +6,8 @@ import { apiUrl } from "@/lib/api";
 
 import type { LessonLocation } from "@/types/admin";
 
+export type AppLocale = "en" | "de" | "es";
+
 function getCookie(name: string): string | undefined {
   const value = `; ${document.cookie}`;
   const parts = value.split(`; ${name}=`);
@@ -66,8 +68,6 @@ type Messages = {
   daySundayShort: string;
   daysOfWeek: string;
 };
-
-type AppLocale = "en" | "de" | "es";
 
 type Props = {
   locations: LessonLocation[];
@@ -147,6 +147,9 @@ export default function AdminLocationsTable({ locations, messages, locale }: Pro
     { code: "SA", label: messages.daySaturdayShort },
     { code: "SU", label: messages.daySundayShort },
   ];
+
+  const appLocale: AppLocale = 
+  locale === "de" ? "de" : locale === "es" ? "es" : "en";
 
   function toggleCourseDay(dayCode: string) {
     setCourseForm((current) => {
