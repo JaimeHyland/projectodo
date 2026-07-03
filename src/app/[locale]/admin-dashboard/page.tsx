@@ -148,11 +148,16 @@ export default async function AdminDashboardPage({ params }: AdminDashboardPageP
       </CollapsibleSection>
       <CollapsibleSection title={messages.sectionLocations} defaultOpen={false}>
         {locations ? (
-          <AdminLocationsTable locations={locations} messages={messages} />
+          <AdminLocationsTable
+            locations={locations}
+            messages={messages}
+            locale={locale}
+          />
         ) : (
           <p>{messages.couldNotLoadLocations}</p>
         )}
       </CollapsibleSection>
+      
       <CollapsibleSection title={messages.sectionBands} defaultOpen={false}>
         {bands ? (
           <AdminBandsTable

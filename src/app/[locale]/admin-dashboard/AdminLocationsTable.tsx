@@ -37,11 +37,42 @@ type Messages = {
   deleteWarning: string;
   couldNotSaveLocation: string;
   couldNotDeleteLocation: string;
+  courseName: string;
+  courseSubject: string;
+  guitar: string;
+  ukulele: string;
+  courseType: string;
+  oneToOne: string;
+  group: string;
+  courseStartDate: string;
+  courseEndDate: string;
+  courseTermType: string;
+  optionSchoolTerm: string;
+  optionAllYear: string;
+  courseDurationType: string;
+  optionDateRange: string;
+  optionOneOff: string;
+  courseStartTime: string;
+  courseDuration: string;
+  courseDays: string;
+  createCourseFor: string;
+  couldNotCreateCourse: string;
+  dayMondayShort: string;
+  dayTuesdayShort: string;
+  dayWednesdayShort: string;
+  dayThursdayShort: string;
+  dayFridayShort: string;
+  daySaturdayShort: string;
+  daySundayShort: string;
+  daysOfWeek: string;
 };
+
+type AppLocale = "en" | "de" | "es";
 
 type Props = {
   locations: LessonLocation[];
   messages: Messages;
+  locale: AppLocale;
 };
 
 
@@ -85,7 +116,14 @@ const emptyCourseForm: CourseFormState = {
 };
 
 
-export default function AdminLocationsTable({ locations, messages }: Props) {
+function htmlInputLocale(locale: AppLocale) {
+  if (locale === "de") return "de-DE";
+  if (locale === "es") return "es-ES";
+  return "en-GB";
+}
+
+
+export default function AdminLocationsTable({ locations, messages, locale }: Props) {
   const router = useRouter();
 
   const [editingLocation, setEditingLocation] = useState<LessonLocation | null>(null);
@@ -96,7 +134,37 @@ export default function AdminLocationsTable({ locations, messages }: Props) {
   const [error, setError] = useState<string | null>(null);
   const [isCreating, setIsCreating] = useState(false);
 
+  const inputLocale = htmlInputLocale(locale);
+
   const isOneOffCourse = courseForm.duration_type === "one_off";
+
+  const dayOptions = [
+    { code: "MO", label: messages.dayMondayShort },
+    { code: "TU", label: messages.dayTuesdayShort },
+    { code: "WE", label: messages.dayWednesdayShort },
+    { code: "TH", label: messages.dayThursdayShort },
+    { code: "FR", label: messages.dayFridayShort },
+    { code: "SA", label: messages.daySaturdayShort },
+    { code: "SU", label: messages.daySundayShort },
+  ];
+
+  function toggleCourseDay(dayCode: string) {
+    setCourseForm((current) => {
+      const selectedDays = current.days_of_week
+        .split(",")
+        .map((day) => day.trim())
+        .filter(Boolean);
+
+      const nextDays = selectedDays.includes(dayCode)
+        ? selectedDays.filter((day) => day !== dayCode)
+        : [...selectedDays, dayCode];
+
+      return {
+        ...current,
+        days_of_week: nextDays.join(","),
+      };
+    });
+  }
 
 
   function openCreateCourse(location: LessonLocation) {
@@ -196,15 +264,50 @@ function closeForm() {
 
   const formOpen = isCreating || editingLocation !== null;
 
+  function validateCourseForm(): string | null {
+    if (!courseForm.name.trim()) {
+      return "Course name is required.";
+    }
+
+    if (!courseForm.start_date) {
+      return "Start date is required.";
+    }
+
+    if (!courseForm.start_time) {
+      return "Start time is required.";
+    }
+
+    if (courseForm.duration_type === "date_range") {
+      if (!courseForm.end_date) {
+        return "End date is required for date range courses.";
+      }
+
+      if (!courseForm.days_of_week.trim()) {
+        return "At least one day of the week is required for date range courses.";
+      }
+    }
+
+    return null;
+  }
+
 
 async function confirmCreateCourse() {
   if (!courseLocation) return;
+
+    const validationError = validateCourseForm();
+
+  if (validationError) {
+    setError(validationError);
+    return;
+  }
 
   const csrfToken = getCookie("csrftoken");
 
   const payload = {
     ...courseForm,
     location: courseLocation.id,
+    end_date: courseForm.duration_type === "one_off" ? null : courseForm.end_date,
+    days_of_week: courseForm.duration_type === "one_off" ? "" : courseForm.days_of_week
   };
 
   const res = await fetch(apiUrl("courses/create/"), {
@@ -220,7 +323,7 @@ async function confirmCreateCourse() {
   if (!res.ok) {
     const errorText = await res.text();
     console.error("Create course failed", errorText);
-    setError("Could not create course.");
+    setError(messages.couldNotCreateCourse);
     return;
   }
 
@@ -275,7 +378,7 @@ async function confirmCreateCourse() {
                       className="rounded bg-gray-700 px-3 py-1 text-white"
                     >
                       {messages.edit}
-                    </button>d
+                    </button>
 
                     <button
                       type="button"
@@ -355,13 +458,12 @@ async function confirmCreateCourse() {
             </h3>
 
             <p className="mb-4">
-              Create course for{" "}
-              <span className="font-semibold">{courseLocation.name}</span>
+              {messages.createCourseFor.replace("{name}", courseLocation.name)}
             </p>
 
             <div className="space-y-3">
               <label className="block">
-                <span className="mb-1 block font-medium">Course name</span>
+                <span className="mb-1 block font-medium">{messages.courseName}</span>
                 <input
                   value={courseForm.name}
                   onChange={(event) =>
@@ -375,7 +477,7 @@ async function confirmCreateCourse() {
               </label>
 
               <label className="block">
-                <span className="mb-1 block font-medium">Subject</span>
+                <span className="mb-1 block font-medium">{messages.courseSubject}</span>
                 <select
                   value={courseForm.subject}
                   onChange={(event) =>
@@ -386,13 +488,13 @@ async function confirmCreateCourse() {
                   }
                   className="w-full rounded border px-3 py-2"
                 >
-                  <option value="guitar">Guitar</option>
-                  <option value="ukulele">Ukulele</option>
+                  <option value="guitar">{messages.guitar}</option>
+                  <option value="ukulele">{messages.ukulele}</option>
                 </select>
               </label>
 
               <label className="block">
-                <span className="mb-1 block font-medium">Course type</span>
+                <span className="mb-1 block font-medium">{messages.courseType}</span>
                 <select
                   value={courseForm.course_type}
                   onChange={(event) =>
@@ -403,16 +505,17 @@ async function confirmCreateCourse() {
                   }
                   className="w-full rounded border px-3 py-2"
                 >
-                  <option value="one_to_one">One-to-one</option>
-                  <option value="group">Group</option>
+                  <option value="one_to_one">{messages.oneToOne}</option>
+                  <option value="group">{messages.group}</option>
                 </select>
               </label>
 
               <div className="grid grid-cols-2 gap-3">
                 <label className="block">
-                  <span className="mb-1 block font-medium">Start date</span>
+                  <span className="mb-1 block font-medium">{messages.courseStartDate}</span>
                   <input
                     type="date"
+                    lang={inputLocale}
                     value={courseForm.start_date}
                     onChange={(event) =>
                       setCourseForm((current) => ({
@@ -424,7 +527,7 @@ async function confirmCreateCourse() {
                   />
                 </label>
                 <label className="block">
-                  <span className="mb-1 block font-medium">Term type</span>
+                  <span className="mb-1 block font-medium">{messages.courseTermType}</span>
                   <select
                     value={courseForm.term_type}
                     onChange={(event) =>
@@ -435,13 +538,13 @@ async function confirmCreateCourse() {
                     }
                     className="w-full rounded border px-3 py-2"
                   >
-                    <option value="school_term">School term</option>
-                    <option value="all_year">All year</option>
+                    <option value="school_term">{messages.optionSchoolTerm}</option>
+                    <option value="all_year">{messages.optionAllYear}</option>
                   </select>
                 </label>
 
                 <label className="block">
-                  <span className="mb-1 block font-medium">Duration type</span>
+                  <span className="mb-1 block font-medium">{messages.courseDurationType}</span>
                   <select
                     value={courseForm.duration_type}
                     onChange={(event) => {
@@ -456,32 +559,39 @@ async function confirmCreateCourse() {
                     }}
                     className="w-full rounded border px-3 py-2"
                   >
-                    <option value="date_range">Date range</option>
-                    <option value="one_off">One-off</option>
+                    <option value="date_range">{messages.optionDateRange}</option>
+                    <option value="one_off">{messages.optionOneOff}</option>
                   </select>
                 </label>
 
                 <label className="block">
-                  <span className="mb-1 block font-medium">End date</span>
+                  <span className="mb-1 block font-medium">{messages.courseEndDate}</span>
                   <input
                     type="date"
+                    lang={inputLocale}
                     value={courseForm.end_date}
+                    disabled={isOneOffCourse}
                     onChange={(event) =>
                       setCourseForm((current) => ({
                         ...current,
                         end_date: event.target.value,
                       }))
                     }
-                    className="w-full rounded border px-3 py-2"
+                    className={
+                      isOneOffCourse
+                        ? "w-full rounded border bg-gray-100 px-3 py-2 text-gray-500"
+                        : "w-full rounded border px-3 py-2"
+                    }
                   />
                 </label>
               </div>
 
               <div className="grid grid-cols-2 gap-3">
                 <label className="block">
-                  <span className="mb-1 block font-medium">Start time</span>
+                  <span className="mb-1 block font-medium">{messages.courseStartTime}</span>
                   <input
                     type="time"
+                    lang={inputLocale}
                     value={courseForm.start_time}
                     onChange={(event) =>
                       setCourseForm((current) => ({
@@ -494,7 +604,7 @@ async function confirmCreateCourse() {
                 </label>
 
                 <label className="block">
-                  <span className="mb-1 block font-medium">Duration</span>
+                  <span className="mb-1 block font-medium">{messages.courseDuration}</span>
                   <input
                     type="number"
                     value={courseForm.duration_minutes}
@@ -509,20 +619,38 @@ async function confirmCreateCourse() {
                 </label>
               </div>
 
-              <label className="block">
-                <span className="mb-1 block font-medium">Days of week</span>
-                <input
-                  value={courseForm.days_of_week}
-                  onChange={(event) =>
-                    setCourseForm((current) => ({
-                      ...current,
-                      days_of_week: event.target.value,
-                    }))
-                  }
-                  placeholder="MO,TU,WE,TH,FR"
-                  className="w-full rounded border px-3 py-2"
-                />
-              </label>
+              {!isOneOffCourse && (
+                <div className="block">
+                  <span className="mb-1 block font-medium">{messages.daysOfWeek}</span>
+
+                  <div className="flex flex-wrap gap-2">
+                    {dayOptions.map((day) => {
+                      const selectedDays = courseForm.days_of_week
+                        .split(",")
+                        .map((selectedDay) => selectedDay.trim())
+                        .filter(Boolean);
+
+                      const isSelected = selectedDays.includes(day.code);
+
+                      return (
+                        <button
+                          key={day.code}
+                          type="button"
+                          onClick={() => toggleCourseDay(day.code)}
+                          className={
+                            isSelected
+                              ? "rounded bg-[#3a5c03] px-3 py-1 text-white"
+                              : "rounded bg-gray-200 px-3 py-1 text-gray-900"
+                          }
+                        >
+                          {day.label}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+
             </div>
 
             {error && <p className="mt-4 text-red-700">{error}</p>}
