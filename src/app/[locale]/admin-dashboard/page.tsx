@@ -151,7 +151,7 @@ export default async function AdminDashboardPage({ params }: AdminDashboardPageP
           <AdminLocationsTable
             locations={locations}
             messages={messages}
-            locale={locale}
+            locale={locale as "en" | "de" | "es"}
           />
         ) : (
           <p>{messages.couldNotLoadLocations}</p>
