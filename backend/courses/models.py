@@ -25,6 +25,7 @@ class Place(models.Model):
         related_name="places",
     )
     name = models.CharField(max_length=255)
+    capacity = models.PositiveIntegerField(null=True, blank=True)
     notes = models.TextField(blank=True)
 
     def __str__(self):

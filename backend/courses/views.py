@@ -7,7 +7,7 @@ from django.core.exceptions import ValidationError
 
 from user_accounts.permissions import is_webmaster
 
-from .models import Course, Location
+from .models import Course, Location, Place
 
 
 def serialize_location(location):
@@ -153,6 +153,49 @@ def admin_create_course_view(request):
             "start_time": course.start_time.isoformat(),
             "duration_minutes": course.duration_minutes,
             "days_of_week": course.days_of_week,
+        },
+        status=201,
+    )
+
+@require_http_methods(["POST"])
+def admin_create_place_view(request, location_id):
+    if not request.user.is_authenticated:
+        return JsonResponse({"error": _("Authentication required")}, status=401)
+
+    try:
+        data = json.loads(request.body)
+    except json.JSONDecodeError:
+        return JsonResponse({"error": _("Invalid JSON")}, status=400)
+
+    try:
+        location = Location.objects.get(id=location_id)
+    except Location.DoesNotExist:
+        return JsonResponse({"error": _("Invalid location")}, status=400)
+
+    name = data.get("name", "").strip()
+    notes = data.get("notes", "").strip()
+    capacity = data.get("capacity")
+
+    if not name:
+        return JsonResponse({"error": _("Place name is required")}, status=400)
+
+    if capacity in ("", None):
+        capacity = None
+
+    place = Place.objects.create(
+        location=location,
+        name=name,
+        capacity=capacity,
+        notes=notes,
+    )
+
+    return JsonResponse(
+        {
+            "id": place.id,
+            "location": place.location_id,
+            "name": place.name,
+            "capacity": place.capacity,
+            "notes": place.notes,
         },
         status=201,
     )
