@@ -32,7 +32,8 @@ export function Footer({ locale }: FooterProps) {
             href="https://www.facebook.com/Projectodo/"
             target="_blank"
             rel="noopener noreferrer"
-            aria-label="Facebook"
+            aria-label={messages.linkFacebook}
+            title={messages.linkFacebook}
           >
             <FaFacebook className="h-6 w-6 hover:text-blue-500 transition-colors" />
           </a>
@@ -41,7 +42,8 @@ export function Footer({ locale }: FooterProps) {
             href="https://www.instagram.com/projectodo.de/"
             target="_blank"
             rel="noopener noreferrer"
-            aria-label="Instagram"
+            aria-label={messages.linkInstagram}
+            title={messages.linkInstagram}
           >
             <FaInstagram className="h-6 w-6 hover:text-pink-500 transition-colors" />
           </a>
@@ -50,7 +52,8 @@ export function Footer({ locale }: FooterProps) {
             href="https://www.youtube.com/@PROJECTODO"
             target="_blank"
             rel="noopener noreferrer"
-            aria-label="YouTube"
+            aria-label={messages.linkYoutube}
+            title={messages.linkYoutube}
           >
             <FaYoutube className="h-6 w-6 hover:text-red-500 transition-colors" />
           </a>
