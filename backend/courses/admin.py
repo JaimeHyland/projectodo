@@ -3,6 +3,7 @@ from django.contrib import admin
 from .models import (
     Location,
     Course,
+    Place,
     CourseMeeting,
 )
 
@@ -39,6 +40,13 @@ class CourseAdmin(admin.ModelAdmin):
     filter_horizontal = (
         "participants",
     )
+
+
+@admin.register(Place)
+class PlaceAdmin(admin.ModelAdmin):
+    list_display = ("name", "location", "capacity")
+    list_filter = ("location",)
+    search_fields = ("name", "location__name")
 
 
 @admin.register(CourseMeeting)

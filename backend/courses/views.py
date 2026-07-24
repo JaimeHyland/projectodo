@@ -10,8 +10,8 @@ from user_accounts.permissions import is_webmaster
 from .models import Course, Location, Place
 
 
-def serialize_location(location):
-    return {
+def serialize_location(location, include_places=False):
+    data = {
         "id": location.id,
         "name": location.name,
         "street_address": location.street_address,
@@ -21,13 +21,34 @@ def serialize_location(location):
         "country": location.country,
     }
 
+    if include_places:
+        data["places"] = [
+            serialize_place(place)
+            for place in location.places.all().order_by("name")
+        ]
+
+    return data
+
+
+def serialize_place(place):
+    return {
+        "id": place.id,
+        "location": place.location_id,
+        "name": place.name,
+        "capacity": place.capacity,
+        "notes": place.notes,
+    }
+
 
 @require_GET
 def public_locations_view(request):
-    locations = Location.objects.all().order_by("name")
+    locations = Location.objects.prefetch_related("places").all().order_by("name")
 
     return JsonResponse({
-        "locations": [serialize_location(location) for location in locations]
+        "locations": [
+            serialize_location(location, include_places=True)
+            for location in locations
+        ]
     })
 
 

@@ -11,6 +11,5 @@ urlpatterns = [
         "locations/<int:location_id>/places/create/",
         views.admin_create_place_view,
     ),
-
     path("create/", views.admin_create_course_view),
 ]
