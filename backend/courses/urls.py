@@ -11,5 +11,9 @@ urlpatterns = [
         "locations/<int:location_id>/places/create/",
         views.admin_create_place_view,
     ),
+    path(
+        "places/<int:place_id>/delete/",
+        views.admin_delete_place_view,
+    ),
     path("create/", views.admin_create_course_view),
 ]

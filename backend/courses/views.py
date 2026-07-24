@@ -220,3 +220,17 @@ def admin_create_place_view(request, location_id):
         },
         status=201,
     )
+
+@require_http_methods(["POST"])
+def admin_delete_place_view(request, place_id):
+    if not request.user.is_authenticated:
+        return JsonResponse({"error": _("Authentication required")}, status=401)
+
+    try:
+        place = Place.objects.get(id=place_id)
+    except Place.DoesNotExist:
+        return JsonResponse({"error": _("Invalid place")}, status=400)
+
+    place.delete()
+
+    return JsonResponse({"success": True})
