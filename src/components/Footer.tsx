@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { FaFacebook, FaInstagram, FaYoutube } from "react-icons/fa";
+import { FaFacebook, FaInstagram, FaYoutube, FaTiktok } from "react-icons/fa";
 
 import en from "@/messages/footer/en.json";
 import de from "@/messages/footer/de.json";
@@ -56,6 +56,16 @@ export function Footer({ locale }: FooterProps) {
             title={messages.linkYoutube}
           >
             <FaYoutube className="h-6 w-6 hover:text-red-500 transition-colors" />
+          </a>
+
+                    <a
+            href="https://www.tiktok.com/@projectodo5"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label={messages.linkTiktok}
+            title={messages.linkTiktok}
+          >
+            <FaTiktok className="h-6 w-6 hover:text-red-500 transition-colors" />
           </a>
         </div>
 

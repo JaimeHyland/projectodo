@@ -109,5 +109,8 @@
     "locationLabel": "Standort",
     "placeNameRequired": "Der Raumname ist erforderlich.",
     "couldNotCreatePlace": "Der Raum konnte nicht erstellt werden.",
-    "capacity": "Kapazität"
+    "capacity": "Kapazität",
+    "deletePlace": "Raum löschen",
+    "confirmDeletePlace": "Sind Sie sicher, dass Sie diesen Raum löschen möchten?",
+    "couldNotDeletePlace": "Der Raum konnte nicht gelöscht werden."
 }

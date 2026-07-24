@@ -109,5 +109,8 @@
   "locationLabel": "Location",
   "placeNameRequired": "Place name is required.",
   "couldNotCreatePlace": "Could not create place.",
-  "capacity": "Capacity"
+  "capacity": "Capacity",
+  "deletePlace": "Delete place",
+  "confirmDeletePlace": "Are you sure you want to delete this place?",
+  "couldNotDeletePlace": "Could not delete place."
 }

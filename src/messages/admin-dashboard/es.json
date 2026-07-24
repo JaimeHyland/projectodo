@@ -109,5 +109,8 @@
   "locationLabel": "Ubicación",
   "placeNameRequired": "El nombre del espacio es obligatorio.",
   "couldNotCreatePlace": "No se pudo crear el espacio.",
-  "capacity": "Capacidad"
+  "capacity": "Capacidad",
+  "deletePlace": "Eliminar espacio",
+  "confirmDeletePlace": "¿Está seguro de que desea eliminar este espacio?",
+  "couldNotDeletePlace": "No se pudo eliminar el espacio."
 }

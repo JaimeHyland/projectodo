@@ -79,6 +79,9 @@ type Messages = {
   placeNameRequired: string;
   couldNotCreatePlace: string;
   capacity: string;
+  deletePlace: string;
+  confirmDeletePlace: string;
+  couldNotDeletePlace: string;
 };
 
 type DashboardPlace = {
@@ -165,6 +168,8 @@ export default function AdminLocationsTable({ locations, messages, locale }: Pro
   const [deletingLocation, setDeletingLocation] = useState<DashboardLocation | null>(null);
   const [courseLocation, setCourseLocation] = useState<DashboardLocation | null>(null);
   const [courseForm, setCourseForm] = useState<CourseFormState>(emptyCourseForm);
+  const [deletingPlace, setDeletingPlace] = useState<DashboardPlace | null>(null);
+
   const [form, setForm] = useState<LocationFormState>(emptyForm);
   const [error, setError] = useState<string | null>(null);
   const [isCreating, setIsCreating] = useState(false);
@@ -350,6 +355,44 @@ export default function AdminLocationsTable({ locations, messages, locale }: Pro
     closePlaceForm();
     router.refresh();
   }
+
+
+  async function confirmDeletePlace() {
+  if (!deletingPlace) return;
+
+  const csrfToken = getCookie("csrftoken");
+
+  const res = await fetch(apiUrl(`courses/places/${deletingPlace.id}/delete/`), {
+    method: "POST",
+    credentials: "include",
+    headers: {
+      "X-CSRFToken": csrfToken ?? "",
+    },
+  });
+
+  if (!res.ok) {
+    const errorText = await res.text();
+    console.error("Delete place failed", errorText);
+    setError("Could not delete place.");
+    return;
+  }
+
+  const deletedPlaceId = deletingPlace.id;
+
+  setEditingLocation((current) => {
+    if (!current) return current;
+
+    return {
+      ...current,
+      places: (current.places ?? []).filter(
+        (place) => place.id !== deletedPlaceId,
+      ),
+    };
+  });
+
+  setDeletingPlace(null);
+  router.refresh();
+}
 
 
   function openCreate() {
@@ -564,19 +607,31 @@ async function confirmCreateCourse() {
                   <ul className="space-y-2 text-sm">
                     {editingLocation.places.map((place) => (
                       <li key={place.id} className="rounded border bg-white p-2">
-                        <div className="font-medium">{place.name}</div>
+                        <div className="flex items-start justify-between gap-3">
+                          <div>
+                            <div className="font-medium">{place.name}</div>
 
-                        {place.capacity !== null && (
-                          <div className="text-gray-700">
-                            {messages.capacity}: {place.capacity}
-                          </div>
-                        )}
+                            {place.capacity !== null && (
+                              <div className="text-gray-700">
+                                {messages.capacity}: {place.capacity}
+                              </div>
+                            )}
 
-                        {place.notes && (
-                          <div className="text-gray-700">
-                            {messages.notes}: {place.notes}
+                            {place.notes && (
+                              <div className="text-gray-700">
+                                {place.notes}
+                              </div>
+                            )}
                           </div>
-                        )}
+
+                          <button
+                            type="button"
+                            onClick={() => setDeletingPlace(place)}
+                            className="rounded bg-red-700 px-2 py-1 text-white"
+                          >
+                            {messages.delete}
+                          </button>
+                        </div>
                       </li>
                     ))}
                   </ul>
@@ -941,6 +996,40 @@ async function confirmCreateCourse() {
                 type="button"
                 onClick={confirmCreatePlace}
                 className="rounded bg-[#3a5c03] px-4 py-2 text-white"
+              >
+                {messages.confirm}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+      {deletingPlace && (
+        <div className="fixed inset-0 z-50 flex items-start justify-center bg-black/40 p-4 sm:items-center">
+          <div className="max-h-[calc(100vh-2rem)] w-full max-w-md overflow-y-auto rounded bg-white p-4 shadow-lg sm:p-6">
+            <h3 className="mb-4 text-lg font-semibold">
+              Delete place?
+            </h3>
+
+            <p>
+              Are you sure you want to delete{" "}
+              <span className="font-semibold">{deletingPlace.name}</span>?
+            </p>
+
+            {error && <p className="mt-4 text-red-700">{error}</p>}
+
+            <div className="mt-6 flex justify-end gap-3">
+              <button
+                type="button"
+                onClick={() => setDeletingPlace(null)}
+                className="rounded bg-gray-300 px-4 py-2"
+              >
+                {messages.dontDelete}
+              </button>
+
+              <button
+                type="button"
+                onClick={confirmDeletePlace}
+                className="rounded bg-red-700 px-4 py-2 text-white"
               >
                 {messages.confirm}
               </button>
