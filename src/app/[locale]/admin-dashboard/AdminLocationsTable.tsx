@@ -67,10 +67,34 @@ type Messages = {
   daySaturdayShort: string;
   daySundayShort: string;
   daysOfWeek: string;
+  places: string;
+  saveLocationBeforeCreatingPlaces: string;
+  createPlaceForThisLocation: string;
+  createAtLeastOnePlaceBeforeScheduling: string;
+  noPlacesCreatedForLocation: string;
+  placeName: string;
+  participantCapacity: string;
+  notes: string;
+  locationLabel: string;
+  placeNameRequired: string;
+  couldNotCreatePlace: string;
+  capacity: string;
+};
+
+type DashboardPlace = {
+  id: number;
+  name: string;
+  capacity: number | null;
+  notes: string;
+  location: number;
+};
+
+type DashboardLocation = LessonLocation & {
+  places?: DashboardPlace[];
 };
 
 type Props = {
-  locations: LessonLocation[];
+  locations: DashboardLocation[];
   messages: Messages;
   locale: AppLocale;
 };
@@ -90,6 +114,11 @@ type CourseFormState = {
   max_participants: number;
 };
 
+type PlaceFormState = {
+  name: string;
+  capacity: string;
+  notes: string;
+};
 
 const emptyForm: LocationFormState = {
   name: "",
@@ -115,6 +144,12 @@ const emptyCourseForm: CourseFormState = {
   max_participants: 1,
 };
 
+const emptyPlaceForm: PlaceFormState = {
+  name: "",
+  capacity: "",
+  notes: "",
+};
+
 
 function htmlInputLocale(locale: AppLocale) {
   if (locale === "de") return "de-DE";
@@ -126,9 +161,9 @@ function htmlInputLocale(locale: AppLocale) {
 export default function AdminLocationsTable({ locations, messages, locale }: Props) {
   const router = useRouter();
 
-  const [editingLocation, setEditingLocation] = useState<LessonLocation | null>(null);
-  const [deletingLocation, setDeletingLocation] = useState<LessonLocation | null>(null);
-  const [courseLocation, setCourseLocation] = useState<LessonLocation | null>(null);
+  const [editingLocation, setEditingLocation] = useState<DashboardLocation | null>(null);
+  const [deletingLocation, setDeletingLocation] = useState<DashboardLocation | null>(null);
+  const [courseLocation, setCourseLocation] = useState<DashboardLocation | null>(null);
   const [courseForm, setCourseForm] = useState<CourseFormState>(emptyCourseForm);
   const [form, setForm] = useState<LocationFormState>(emptyForm);
   const [error, setError] = useState<string | null>(null);
@@ -148,8 +183,9 @@ export default function AdminLocationsTable({ locations, messages, locale }: Pro
     { code: "SU", label: messages.daySundayShort },
   ];
 
-  const appLocale: AppLocale = 
-  locale === "de" ? "de" : locale === "es" ? "es" : "en";
+
+  const [placeLocation, setPlaceLocation] = useState<DashboardLocation | null>(null);
+  const [placeForm, setPlaceForm] = useState<PlaceFormState>(emptyPlaceForm);
 
   function toggleCourseDay(dayCode: string) {
     setCourseForm((current) => {
@@ -170,7 +206,7 @@ export default function AdminLocationsTable({ locations, messages, locale }: Pro
   }
 
 
-  function openCreateCourse(location: LessonLocation) {
+  function openCreateCourse(location: DashboardLocation) {
     setCourseLocation(location);
     setCourseForm(emptyCourseForm);
     setError(null);
@@ -183,8 +219,19 @@ export default function AdminLocationsTable({ locations, messages, locale }: Pro
     setError(null);
   }
 
+    function openCreatePlace(location: DashboardLocation) {
+    setPlaceLocation(location);
+    setPlaceForm(emptyPlaceForm);
+    setError(null);
+  }
 
-  function openEdit(location: LessonLocation) {
+  function closePlaceForm() {
+    setPlaceLocation(null);
+    setPlaceForm(emptyPlaceForm);
+    setError(null);
+  }
+
+  function openEdit(location: DashboardLocation) {
     setEditingLocation(location);
     setForm({
       name: location.name,
@@ -250,6 +297,61 @@ export default function AdminLocationsTable({ locations, messages, locale }: Pro
     router.refresh();
   }
 
+
+  async function confirmCreatePlace() {
+    if (!placeLocation) return;
+
+    if (!placeForm.name.trim()) {
+      setError(messages.placeNameRequired);
+      return;
+    }
+
+    const csrfToken = getCookie("csrftoken");
+
+    const payload = {
+      name: placeForm.name.trim(),
+      capacity: placeForm.capacity ? Number(placeForm.capacity) : null,
+      notes: placeForm.notes.trim(),
+    };
+
+    const res = await fetch(
+      apiUrl(`courses/locations/${placeLocation.id}/places/create/`),
+      {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRFToken": csrfToken ?? "",
+        },
+        body: JSON.stringify(payload),
+      },
+    );
+
+    if (!res.ok) {
+      const errorText = await res.text();
+      console.error("Create place failed", errorText);
+      setError(messages.couldNotCreatePlace);
+      return;
+    }
+
+    const createdPlace = await res.json();
+
+    setEditingLocation((current) => {
+      if (!current || current.id !== placeLocation.id) {
+        return current;
+      }
+
+      return {
+        ...current,
+        places: [...(current.places ?? []), createdPlace],
+      };
+    });
+
+    closePlaceForm();
+    router.refresh();
+  }
+
+
   function openCreate() {
   setIsCreating(true);
   setEditingLocation(null);
@@ -265,33 +367,33 @@ function closeForm() {
 }
 
 
-  const formOpen = isCreating || editingLocation !== null;
+const formOpen = isCreating || editingLocation !== null;
 
-  function validateCourseForm(): string | null {
-    if (!courseForm.name.trim()) {
-      return "Course name is required.";
-    }
-
-    if (!courseForm.start_date) {
-      return "Start date is required.";
-    }
-
-    if (!courseForm.start_time) {
-      return "Start time is required.";
-    }
-
-    if (courseForm.duration_type === "date_range") {
-      if (!courseForm.end_date) {
-        return "End date is required for date range courses.";
-      }
-
-      if (!courseForm.days_of_week.trim()) {
-        return "At least one day of the week is required for date range courses.";
-      }
-    }
-
-    return null;
+function validateCourseForm(): string | null {
+  if (!courseForm.name.trim()) {
+    return "Course name is required.";
   }
+
+  if (!courseForm.start_date) {
+    return "Start date is required.";
+  }
+
+  if (!courseForm.start_time) {
+    return "Start time is required.";
+  }
+
+  if (courseForm.duration_type === "date_range") {
+    if (!courseForm.end_date) {
+      return "End date is required for date range courses.";
+    }
+
+    if (!courseForm.days_of_week.trim()) {
+      return "At least one day of the week is required for date range courses.";
+    }
+  }
+
+  return null;
+}
 
 
 async function confirmCreateCourse() {
@@ -370,7 +472,12 @@ async function confirmCreateCourse() {
                     <button
                       type="button"
                       onClick={() => openCreateCourse(location)}
-                      className="rounded bg-[#3a5c03] px-3 py-1 text-white"
+                      disabled={!location.places?.length}
+                      className={
+                        location.places?.length
+                          ? "rounded bg-[#3a5c03] px-3 py-1 text-white"
+                          : "rounded bg-gray-300 px-3 py-1 text-gray-500"
+                      }
                     >
                       {messages.createCourse}
                     </button>
@@ -399,8 +506,8 @@ async function confirmCreateCourse() {
       </div>
 
       {formOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
-          <div className="w-full max-w-md rounded bg-white p-6 shadow-lg">
+        <div className="fixed inset-0 z-50 flex items-start justify-center bg-black/40 p-4 sm:items-center">
+          <div className="max-h-[calc(100vh-2rem)] w-full max-w-md overflow-y-auto rounded bg-white p-4 shadow-lg sm:p-6">
             <h3 className="mb-4 text-lg font-semibold">
               {editingLocation ? messages.editLocation : messages.addLocation}
             </h3>
@@ -430,6 +537,57 @@ async function confirmCreateCourse() {
               ))}
             </div>
 
+            {isCreating && (
+              <div className="mt-6 rounded border bg-gray-50 p-4">
+                <h4 className="mb-2 font-semibold">Places</h4>
+                <p className="text-sm text-gray-700">
+                  {messages.saveLocationBeforeCreatingPlaces}
+                </p>
+              </div>
+            )}
+
+            {editingLocation && (
+              <div className="mt-6 rounded border bg-gray-50 p-4">
+                <div className="mb-3 flex items-center justify-between gap-3">
+                  <h4 className="font-semibold">{messages.places}</h4>
+
+                  <button
+                    type="button"
+                    onClick={() => openCreatePlace(editingLocation)}
+                    className="rounded bg-[#3a5c03] px-3 py-1 text-white"
+                  >
+                    {messages.createPlaceForThisLocation}
+                  </button>
+                </div>
+
+                {editingLocation.places?.length ? (
+                  <ul className="space-y-2 text-sm">
+                    {editingLocation.places.map((place) => (
+                      <li key={place.id} className="rounded border bg-white p-2">
+                        <div className="font-medium">{place.name}</div>
+
+                        {place.capacity !== null && (
+                          <div className="text-gray-700">
+                            {messages.capacity}: {place.capacity}
+                          </div>
+                        )}
+
+                        {place.notes && (
+                          <div className="text-gray-700">
+                            {messages.notes}: {place.notes}
+                          </div>
+                        )}
+                      </li>
+                    ))}
+                  </ul>
+                ) : (
+                  <p className="text-sm text-gray-700">
+                    {messages.noPlacesCreatedForLocation}
+                  </p>
+                )}
+              </div>
+            )}
+
             {error && <p className="mt-4 text-red-700">{error}</p>}
 
             <div className="mt-6 flex justify-end gap-3">
@@ -454,8 +612,8 @@ async function confirmCreateCourse() {
       )}
 
       {courseLocation && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
-          <div className="w-full max-w-md rounded bg-white p-6 shadow-lg">
+        <div className="fixed inset-0 z-50 flex items-start justify-center bg-black/40 p-4 sm:items-center">
+          <div className="max-h-[calc(100vh-2rem)] w-full max-w-2xl overflow-y-auto rounded bg-white p-4 shadow-lg sm:p-6">
             <h3 className="mb-4 text-lg font-semibold">
               {messages.createCourse}
             </h3>
@@ -680,8 +838,8 @@ async function confirmCreateCourse() {
       )}
 
       {deletingLocation && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
-          <div className="w-full max-w-md rounded bg-white p-6 shadow-lg">
+        <div className="fixed inset-0 z-50 flex items-start justify-center bg-black/40 p-4 sm:items-center">
+          <div className="max-h-[calc(100vh-2rem)] w-full max-w-md overflow-y-auto rounded bg-white p-4 shadow-lg sm:p-6">
             <h3 className="mb-4 text-lg font-semibold">
               {messages.ConfirmDeleteLocation.replace("{name}", deletingLocation.name)}
             </h3>
@@ -703,6 +861,86 @@ async function confirmCreateCourse() {
                 type="button"
                 onClick={confirmDelete}
                 className="rounded bg-red-700 px-4 py-2 text-white"
+              >
+                {messages.confirm}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+      {placeLocation && (
+        <div className="fixed inset-0 z-50 flex items-start justify-center bg-black/40 p-4 sm:items-center">
+          <div className="max-h-[calc(100vh-2rem)] w-full max-w-md overflow-y-auto rounded bg-white p-4 shadow-lg sm:p-6">
+            <h3 className="mb-4 text-lg font-semibold">
+              {messages.createPlaceForThisLocation}
+            </h3>
+
+            <p className="mb-4">
+              {messages.locationLabel}: <span className="font-semibold">{placeLocation.name}</span>
+            </p>
+
+            <div className="space-y-3">
+              <label className="block">
+                <span className="mb-1 block font-medium">{messages.placeName}</span>
+                <input
+                  value={placeForm.name}
+                  onChange={(event) =>
+                    setPlaceForm((current) => ({
+                      ...current,
+                      name: event.target.value,
+                    }))
+                  }
+                  className="w-full rounded border px-3 py-2"
+                />
+              </label>
+
+              <label className="block">
+                <span className="mb-1 block font-medium">{messages.participantCapacity}</span>
+                <input
+                  type="number"
+                  min="1"
+                  value={placeForm.capacity}
+                  onChange={(event) =>
+                    setPlaceForm((current) => ({
+                      ...current,
+                      capacity: event.target.value,
+                    }))
+                  }
+                  className="w-full rounded border px-3 py-2"
+                />
+              </label>
+
+              <label className="block">
+                <span className="mb-1 block font-medium">{messages.notes}</span>
+                <textarea
+                  value={placeForm.notes}
+                  onChange={(event) =>
+                    setPlaceForm((current) => ({
+                      ...current,
+                      notes: event.target.value,
+                    }))
+                  }
+                  rows={3}
+                  className="w-full rounded border px-3 py-2"
+                />
+              </label>
+            </div>
+
+            {error && <p className="mt-4 text-red-700">{error}</p>}
+
+            <div className="mt-6 flex justify-end gap-3">
+              <button
+                type="button"
+                onClick={closePlaceForm}
+                className="rounded bg-gray-300 px-4 py-2"
+              >
+                {messages.undoChanges}
+              </button>
+
+              <button
+                type="button"
+                onClick={confirmCreatePlace}
+                className="rounded bg-[#3a5c03] px-4 py-2 text-white"
               >
                 {messages.confirm}
               </button>
