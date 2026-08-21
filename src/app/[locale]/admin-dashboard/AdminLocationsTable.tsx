@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { apiUrl } from "@/lib/api";
 
-import type { LessonLocation } from "@/types/admin";
+import type { AdminCourse, LessonLocation } from "@/types/admin";
 
 export type AppLocale = "en" | "de" | "es";
 
@@ -17,13 +17,22 @@ function getCookie(name: string): string | undefined {
 }
 
 
-type LocationFormState = Omit<LessonLocation, "id">;
+type LocationFormState = Omit<LessonLocation, "id" | "location_type">;
 
 type Messages = {
   addLocation: string;
   createCourse: string;
+  manageCourses: string;
+  coursesFor: string;
+  createNewCourse: string;
+  noCoursesForLocation: string;
+  loadingCourses: string;
+  couldNotLoadCourses: string;
+  editCourse: string;
+  couldNotUpdateCourse: string;
   edit: string;
   delete: string;
+  close: string;
   confirm: string;
   undoChanges: string;
   dontDelete: string;
@@ -57,6 +66,8 @@ type Messages = {
   courseStartTime: string;
   courseDuration: string;
   courseDays: string;
+  defaultPlace: string;
+  noDefaultPlace: string;
   createCourseFor: string;
   couldNotCreateCourse: string;
   dayMondayShort: string;
@@ -115,6 +126,11 @@ type CourseFormState = {
   duration_minutes: number;
   days_of_week: string;
   max_participants: number;
+  default_place: number | null;
+};
+
+type CoursesResponse = {
+  courses: AdminCourse[];
 };
 
 type PlaceFormState = {
@@ -145,6 +161,7 @@ const emptyCourseForm: CourseFormState = {
   duration_minutes: 60,
   days_of_week: "MO",
   max_participants: 1,
+  default_place: null,
 };
 
 const emptyPlaceForm: PlaceFormState = {
@@ -166,7 +183,11 @@ export default function AdminLocationsTable({ locations, messages, locale }: Pro
 
   const [editingLocation, setEditingLocation] = useState<DashboardLocation | null>(null);
   const [deletingLocation, setDeletingLocation] = useState<DashboardLocation | null>(null);
+  const [courseManagerLocation, setCourseManagerLocation] = useState<DashboardLocation | null>(null);
+  const [managedCourses, setManagedCourses] = useState<AdminCourse[]>([]);
+  const [isLoadingCourses, setIsLoadingCourses] = useState(false);
   const [courseLocation, setCourseLocation] = useState<DashboardLocation | null>(null);
+  const [editingCourse, setEditingCourse] = useState<AdminCourse | null>(null);
   const [courseForm, setCourseForm] = useState<CourseFormState>(emptyCourseForm);
   const [deletingPlace, setDeletingPlace] = useState<DashboardPlace | null>(null);
 
@@ -177,6 +198,9 @@ export default function AdminLocationsTable({ locations, messages, locale }: Pro
   const inputLocale = htmlInputLocale(locale);
 
   const isOneOffCourse = courseForm.duration_type === "one_off";
+  const availableCoursePlaces = (courseLocation?.places ?? []).filter(
+    (place) => place.location === courseLocation?.id,
+  );
 
   const dayOptions = [
     { code: "MO", label: messages.dayMondayShort },
@@ -211,15 +235,74 @@ export default function AdminLocationsTable({ locations, messages, locale }: Pro
   }
 
 
+  async function openManageCourses(location: DashboardLocation) {
+    setCourseManagerLocation(location);
+    setManagedCourses([]);
+    setIsLoadingCourses(true);
+    setError(null);
+
+    const response = await fetch(
+      apiUrl(`courses/locations/${location.id}/courses/`),
+      { credentials: "include" },
+    );
+
+    if (!response.ok) {
+      console.error("Load courses failed", await response.text());
+      setError(messages.couldNotLoadCourses);
+      setIsLoadingCourses(false);
+      return;
+    }
+
+    const data: CoursesResponse = await response.json();
+    setManagedCourses(data.courses);
+    setIsLoadingCourses(false);
+  }
+
+  function closeCourseManager() {
+    setCourseManagerLocation(null);
+    setManagedCourses([]);
+    setIsLoadingCourses(false);
+    setError(null);
+  }
+
   function openCreateCourse(location: DashboardLocation) {
+    setCourseManagerLocation(null);
     setCourseLocation(location);
-    setCourseForm(emptyCourseForm);
+    setEditingCourse(null);
+    setCourseForm({
+      ...emptyCourseForm,
+      default_place: null,
+    });
+    setError(null);
+  }
+
+  function openEditCourse(course: AdminCourse) {
+    if (!courseManagerLocation) return;
+
+    setCourseLocation(courseManagerLocation);
+    setCourseManagerLocation(null);
+    setEditingCourse(course);
+    setCourseForm({
+      name: course.name,
+      course_type: course.course_type,
+      subject: course.subject,
+      term_type: course.term_type,
+      duration_type: course.duration_type,
+      start_date: course.start_date,
+      end_date: course.end_date ?? "",
+      start_time: course.start_time.slice(0, 5),
+      duration_minutes: course.duration_minutes,
+      days_of_week: course.days_of_week,
+      max_participants: course.max_participants,
+      default_place: course.default_place,
+    });
     setError(null);
   }
 
 
   function closeCourseForm() {
     setCourseLocation(null);
+    setEditingCourse(null);
     setCourseForm(emptyCourseForm);
     setError(null);
   }
@@ -439,7 +522,7 @@ function validateCourseForm(): string | null {
 }
 
 
-async function confirmCreateCourse() {
+async function confirmSaveCourse() {
   if (!courseLocation) return;
 
     const validationError = validateCourseForm();
@@ -454,11 +537,19 @@ async function confirmCreateCourse() {
   const payload = {
     ...courseForm,
     location: courseLocation.id,
+    default_place:
+      courseLocation.location_type === "physical"
+        ? courseForm.default_place
+        : null,
     end_date: courseForm.duration_type === "one_off" ? null : courseForm.end_date,
     days_of_week: courseForm.duration_type === "one_off" ? "" : courseForm.days_of_week
   };
 
-  const res = await fetch(apiUrl("courses/create/"), {
+  const endpoint = editingCourse
+    ? `courses/${editingCourse.id}/update/`
+    : "courses/create/";
+
+  const res = await fetch(apiUrl(endpoint), {
     method: "POST",
     credentials: "include",
     headers: {
@@ -470,8 +561,12 @@ async function confirmCreateCourse() {
 
   if (!res.ok) {
     const errorText = await res.text();
-    console.error("Create course failed", errorText);
-    setError(messages.couldNotCreateCourse);
+    console.error("Save course failed", errorText);
+    setError(
+      editingCourse
+        ? messages.couldNotUpdateCourse
+        : messages.couldNotCreateCourse,
+    );
     return;
   }
 
@@ -514,15 +609,10 @@ async function confirmCreateCourse() {
                   <div className="flex gap-2">
                     <button
                       type="button"
-                      onClick={() => openCreateCourse(location)}
-                      disabled={!location.places?.length}
-                      className={
-                        location.places?.length
-                          ? "rounded bg-[#3a5c03] px-3 py-1 text-white"
-                          : "rounded bg-gray-300 px-3 py-1 text-gray-500"
-                      }
+                      onClick={() => openManageCourses(location)}
+                      className="rounded bg-[#3a5c03] px-3 py-1 text-white"
                     >
-                      {messages.createCourse}
+                      {messages.manageCourses}
                     </button>
 
                     <button
@@ -666,15 +756,74 @@ async function confirmCreateCourse() {
         </div>
       )}
 
+      {courseManagerLocation && (
+        <div className="fixed inset-0 z-50 flex items-start justify-center bg-black/40 p-4 sm:items-center">
+          <div className="max-h-[calc(100vh-2rem)] w-full max-w-2xl overflow-y-auto rounded bg-white p-4 shadow-lg sm:p-6">
+            <h3 className="text-lg font-semibold">{messages.manageCourses}</h3>
+            <p className="mb-4 text-gray-700">
+              {messages.coursesFor.replace("{name}", courseManagerLocation.name)}
+            </p>
+
+            {isLoadingCourses ? (
+              <p className="rounded border bg-gray-50 p-4 text-gray-700">
+                {messages.loadingCourses}
+              </p>
+            ) : managedCourses.length ? (
+              <ul className="space-y-2">
+                {managedCourses.map((course) => (
+                  <li key={course.id}>
+                    <button
+                      type="button"
+                      onClick={() => openEditCourse(course)}
+                      className="w-full rounded border bg-white p-3 text-left hover:bg-gray-50"
+                    >
+                      <span className="block font-medium">{course.name}</span>
+                      <span className="block text-sm text-gray-700">
+                        {course.subject === "guitar" ? messages.guitar : messages.ukulele}
+                        {" · "}
+                        {course.course_type === "one_to_one" ? messages.oneToOne : messages.group}
+                      </span>
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            ) : !error ? (
+              <p className="rounded border bg-gray-50 p-4 text-gray-700">
+                {messages.noCoursesForLocation}
+              </p>
+            ) : null}
+
+            {error && <p className="mt-4 text-red-700">{error}</p>}
+
+            <div className="mt-6 flex flex-wrap justify-end gap-3">
+              <button
+                type="button"
+                onClick={closeCourseManager}
+                className="rounded bg-gray-300 px-4 py-2"
+              >
+                {messages.close}
+              </button>
+              <button
+                type="button"
+                onClick={() => openCreateCourse(courseManagerLocation)}
+                className="rounded bg-[#3a5c03] px-4 py-2 text-white"
+              >
+                {messages.createNewCourse}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {courseLocation && (
         <div className="fixed inset-0 z-50 flex items-start justify-center bg-black/40 p-4 sm:items-center">
           <div className="max-h-[calc(100vh-2rem)] w-full max-w-2xl overflow-y-auto rounded bg-white p-4 shadow-lg sm:p-6">
             <h3 className="mb-4 text-lg font-semibold">
-              {messages.createCourse}
+              {editingCourse ? messages.editCourse : messages.createCourse}
             </h3>
 
             <p className="mb-4">
-              {messages.createCourseFor.replace("{name}", courseLocation.name)}
+              {messages.coursesFor.replace("{name}", courseLocation.name)}
             </p>
 
             <div className="space-y-3">
@@ -725,6 +874,33 @@ async function confirmCreateCourse() {
                   <option value="group">{messages.group}</option>
                 </select>
               </label>
+
+              {courseLocation.location_type === "physical" && (
+                <label className="block">
+                  <span className="mb-1 block font-medium">
+                    {messages.defaultPlace}
+                  </span>
+                  <select
+                    value={courseForm.default_place ?? ""}
+                    onChange={(event) =>
+                      setCourseForm((current) => ({
+                        ...current,
+                        default_place: event.target.value
+                          ? Number(event.target.value)
+                          : null,
+                      }))
+                    }
+                    className="w-full rounded border px-3 py-2"
+                  >
+                    <option value="">{messages.noDefaultPlace}</option>
+                    {availableCoursePlaces.map((place) => (
+                      <option key={place.id} value={place.id}>
+                        {place.name}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+              )}
 
               <div className="grid grid-cols-2 gap-3">
                 <label className="block">
@@ -882,7 +1058,7 @@ async function confirmCreateCourse() {
 
               <button
                 type="button"
-                onClick={confirmCreateCourse}
+                onClick={confirmSaveCourse}
                 className="rounded bg-[#3a5c03] px-4 py-2 text-white"
               >
                 {messages.confirm}

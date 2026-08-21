@@ -7,12 +7,23 @@ VALID_DAYS = {"MO", "TU", "WE", "TH", "FR", "SA", "SU"}
 
 
 class Location(models.Model):
-    name = models.CharField(max_length=255)
-    street_address = models.CharField(max_length=255)
-    city = models.CharField(max_length=100)
-    state = models.CharField(max_length=100)
-    postcode = models.CharField(max_length=7)
-    country = models.CharField(max_length=100)
+    LOCATION_TYPE_CHOICES = [
+        ("physical", "Physical"),
+        ("online", "Online"),
+    ]
+
+    location_type = models.CharField(
+        max_length=20,
+        choices=LOCATION_TYPE_CHOICES,
+        default="physical",
+    )
+
+    name = models.CharField(max_length=255, blank=True)
+    street_address = models.CharField(max_length=255, blank=True)
+    city = models.CharField(max_length=100, blank=True)
+    state = models.CharField(max_length=100, blank=True)
+    postcode = models.CharField(max_length=7, blank=True)
+    country = models.CharField(max_length=100, blank=True)
 
     def __str__(self):
         return self.name
@@ -78,7 +89,7 @@ class Course(models.Model):
         on_delete=models.PROTECT,
     )
 
-    place = models.ForeignKey(
+    default_place = models.ForeignKey(
         Place,
         on_delete=models.PROTECT,
         related_name="courses",
@@ -104,7 +115,22 @@ class Course(models.Model):
     def clean(self):
         super().clean()
 
-        VALID_DAYS = {"MO", "TU", "WE", "TH", "FR", "SA", "SU"}
+        if self.default_place_id and self.location_id:
+            place_location_id = (
+                Place.objects
+                .filter(pk=self.default_place_id)
+                .values_list("location_id", flat=True)
+                .first()
+            )
+            if (
+                place_location_id is not None
+                and place_location_id != self.location_id
+            ):
+                raise ValidationError({
+                    "default_place": (
+                        "Default place must belong to the course location."
+                    )
+                })
 
         if self.duration_type == "date_range" and not self.end_date:
             raise ValidationError({"end_date": "End date is required for date range courses."})
@@ -146,6 +172,14 @@ class CourseMeeting(models.Model):
     )
 
 
+    default_place = models.ForeignKey(
+        Place,
+        on_delete=models.PROTECT,
+        related_name="default_for_course_meetings",
+        null=True,
+        blank=True,
+    )
+
     place = models.ForeignKey(
         Place,
         on_delete=models.PROTECT,
@@ -164,6 +198,45 @@ class CourseMeeting(models.Model):
 
     def __str__(self):
         return f"{self.course.subject} on {self.date} at {self.start_time}"
+
+    @property
+    def effective_place(self):
+        return self.place if self.place_id is not None else self.default_place
+
+    def clean(self):
+        super().clean()
+
+        errors = {}
+
+        if self.default_place_id and self.location_id:
+            default_place_location_id = (
+                Place.objects
+                .filter(pk=self.default_place_id)
+                .values_list("location_id", flat=True)
+                .first()
+            )
+            if (
+                default_place_location_id is not None
+                and default_place_location_id != self.location_id
+            ):
+                errors["default_place"] = (
+                    "Default place must belong to the meeting location."
+                )
+
+        if self.place_id and self.location_id:
+            place_location_id = (
+                Place.objects
+                .filter(pk=self.place_id)
+                .values_list("location_id", flat=True)
+                .first()
+            )
+            if place_location_id is not None and place_location_id != self.location_id:
+                errors["place"] = (
+                    "Override place must belong to the meeting location."
+                )
+
+        if errors:
+            raise ValidationError(errors)
     
     class Meta:
         constraints = [
@@ -172,4 +245,3 @@ class CourseMeeting(models.Model):
                 name="unique_course_meeting_per_course_datetime",
             )
         ]
-    

@@ -21,6 +21,7 @@ class CourseAdmin(admin.ModelAdmin):
         "subject",
         "instructor",
         "location",
+        "default_place",
         "start_date",
         "end_date",
     )
@@ -56,6 +57,9 @@ class CourseMeetingAdmin(admin.ModelAdmin):
         "date",
         "start_time",
         "location",
+        "default_place",
+        "place",
+        "effective_place",
         "instructor",
         "cancelled",
     )

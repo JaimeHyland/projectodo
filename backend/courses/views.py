@@ -13,6 +13,7 @@ from .models import Course, Location, Place
 def serialize_location(location, include_places=False):
     data = {
         "id": location.id,
+        "location_type": location.location_type,
         "name": location.name,
         "street_address": location.street_address,
         "city": location.city,
@@ -40,6 +41,26 @@ def serialize_place(place):
     }
 
 
+def serialize_course(course):
+    return {
+        "id": course.id,
+        "name": course.name,
+        "course_type": course.course_type,
+        "subject": course.subject,
+        "term_type": course.term_type,
+        "duration_type": course.duration_type,
+        "instructor": course.instructor_id,
+        "max_participants": course.max_participants,
+        "location": course.location_id,
+        "default_place": course.default_place_id,
+        "start_date": course.start_date.isoformat(),
+        "end_date": course.end_date.isoformat() if course.end_date else None,
+        "start_time": course.start_time.isoformat(),
+        "duration_minutes": course.duration_minutes,
+        "days_of_week": course.days_of_week,
+    }
+
+
 @require_GET
 def public_locations_view(request):
     locations = Location.objects.prefetch_related("places").all().order_by("name")
@@ -62,14 +83,23 @@ def admin_create_location_view(request):
 
     data = json.loads(request.body.decode("utf-8"))
 
-    location = Location.objects.create(
-        name=data.get("name", "").strip(),
-        street_address=data.get("street_address", "").strip(),
-        city=data.get("city", "").strip(),
-        state=data.get("state", "").strip(),
-        postcode=data.get("postcode", "").strip(),
-        country=data.get("country", "").strip(),
-    )
+    location_values = {
+        "name": data.get("name", "").strip(),
+        "street_address": data.get("street_address", "").strip(),
+        "city": data.get("city", "").strip(),
+        "state": data.get("state", "").strip(),
+        "postcode": data.get("postcode", "").strip(),
+        "country": data.get("country", "").strip(),
+    }
+
+    if "location_type" in data:
+        location_type = data["location_type"]
+        valid_location_types = dict(Location.LOCATION_TYPE_CHOICES)
+        if location_type not in valid_location_types:
+            return JsonResponse({"error": _("Invalid location type")}, status=400)
+        location_values["location_type"] = location_type
+
+    location = Location.objects.create(**location_values)
 
     return JsonResponse({"success": True, "location": serialize_location(location)})
 
@@ -88,6 +118,13 @@ def admin_update_location_view(request, location_id):
         return JsonResponse({"error": _("Location not found")}, status=404)
 
     data = json.loads(request.body.decode("utf-8"))
+
+    if "location_type" in data:
+        location_type = data["location_type"]
+        valid_location_types = dict(Location.LOCATION_TYPE_CHOICES)
+        if location_type not in valid_location_types:
+            return JsonResponse({"error": _("Invalid location type")}, status=400)
+        location.location_type = location_type
 
     location.name = data.get("name", "").strip()
     location.street_address = data.get("street_address", "").strip()
@@ -142,7 +179,7 @@ def admin_create_course_view(request):
         instructor=request.user,
         max_participants=data.get("max_participants", 1),
         location=location,
-        place=None,
+        default_place_id=data.get("default_place") or None,
         start_date=data.get("start_date"),
         end_date=data.get("end_date") or None,
         start_time=data.get("start_time"),
@@ -157,26 +194,63 @@ def admin_create_course_view(request):
 
     course.save()
 
-    return JsonResponse(
-        {
-            "id": course.id,
-            "name": course.name,
-            "course_type": course.course_type,
-            "subject": course.subject,
-            "term_type": course.term_type,
-            "duration_type": course.duration_type,
-            "instructor": course.instructor_id,
-            "max_participants": course.max_participants,
-            "location": course.location_id,
-            "place": course.place_id,
-            "start_date": course.start_date.isoformat(),
-            "end_date": course.end_date.isoformat() if course.end_date else None,
-            "start_time": course.start_time.isoformat(),
-            "duration_minutes": course.duration_minutes,
-            "days_of_week": course.days_of_week,
-        },
-        status=201,
-    )
+    return JsonResponse(serialize_course(course), status=201)
+
+
+@require_GET
+def admin_location_courses_view(request, location_id):
+    if not request.user.is_authenticated:
+        return JsonResponse({"error": _("Authentication required")}, status=401)
+
+    if not is_webmaster(request.user):
+        return JsonResponse({"error": _("Webmaster permissions required")}, status=403)
+
+    if not Location.objects.filter(id=location_id).exists():
+        return JsonResponse({"error": _("Location not found")}, status=404)
+
+    courses = Course.objects.filter(location_id=location_id).order_by("name", "id")
+    return JsonResponse({"courses": [serialize_course(course) for course in courses]})
+
+
+@require_http_methods(["POST"])
+def admin_update_course_view(request, course_id):
+    if not request.user.is_authenticated:
+        return JsonResponse({"error": _("Authentication required")}, status=401)
+
+    if not is_webmaster(request.user):
+        return JsonResponse({"error": _("Webmaster permissions required")}, status=403)
+
+    try:
+        course = Course.objects.get(id=course_id)
+    except Course.DoesNotExist:
+        return JsonResponse({"error": _("Course not found")}, status=404)
+
+    try:
+        data = json.loads(request.body)
+    except json.JSONDecodeError:
+        return JsonResponse({"error": _("Invalid JSON")}, status=400)
+
+    course.name = data.get("name", "")
+    course.course_type = data.get("course_type", "one_to_one")
+    course.subject = data.get("subject", "guitar")
+    course.term_type = data.get("term_type", "school_term")
+    course.duration_type = data.get("duration_type", "date_range")
+    course.max_participants = data.get("max_participants", 1)
+    course.default_place_id = data.get("default_place") or None
+    course.start_date = data.get("start_date")
+    course.end_date = data.get("end_date") or None
+    course.start_time = data.get("start_time")
+    course.duration_minutes = data.get("duration_minutes", 60)
+    course.days_of_week = data.get("days_of_week", "")
+
+    try:
+        course.full_clean()
+    except ValidationError as error:
+        return JsonResponse({"error": error.message_dict}, status=400)
+
+    course.save()
+    return JsonResponse(serialize_course(course))
+
 
 @require_http_methods(["POST"])
 def admin_create_place_view(request, location_id):
@@ -220,6 +294,7 @@ def admin_create_place_view(request, location_id):
         },
         status=201,
     )
+
 
 @require_http_methods(["POST"])
 def admin_delete_place_view(request, place_id):

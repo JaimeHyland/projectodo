@@ -12,8 +12,13 @@ urlpatterns = [
         views.admin_create_place_view,
     ),
     path(
+        "locations/<int:location_id>/courses/",
+        views.admin_location_courses_view,
+    ),
+    path(
         "places/<int:place_id>/delete/",
         views.admin_delete_place_view,
     ),
     path("create/", views.admin_create_course_view),
+    path("<int:course_id>/update/", views.admin_update_course_view),
 ]
