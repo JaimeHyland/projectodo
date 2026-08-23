@@ -97,14 +97,19 @@ export default async function AdminDashboardPage({ params }: AdminDashboardPageP
     <PageShell
       title={messages.titleAdminDashboard}
       meta={messages.descriptionAdminDashboard}
+      metaClassName="hidden sm:block"
+      metaInline
       accent="gray"
       maxWidth="6xl"
       density="compact"
-    >
-      <div className="space-y-3">
-      <CollapsibleSection title={messages.sectionUserStats} defaultOpen={false} variant="admin">
-        {counts ? (
-          <dl className="grid grid-cols-2 gap-2 sm:grid-cols-4 xl:grid-cols-8">
+      headerExtra={
+        <CollapsibleSection
+          title={messages.sectionUserStats}
+          defaultOpen={false}
+          variant="subbar"
+        >
+          {counts ? (
+            <dl className="flex overflow-x-auto">
             {[
               [messages.totalUsers, counts.total],
               [messages.ordinary, counts.ordinary],
@@ -117,21 +122,24 @@ export default async function AdminDashboardPage({ params }: AdminDashboardPageP
             ].map(([label, value]) => (
               <div
                 key={label}
-                className="min-w-0 rounded-lg border border-black/10 bg-[#f7f5f0] px-2 py-2 text-center sm:px-3"
+                className="min-w-28 flex-1 border-r border-black/10 px-3 text-center first:pl-0 last:border-r-0 last:pr-0 sm:min-w-0 sm:px-2"
               >
-                <dt className="text-xs font-semibold uppercase leading-tight tracking-wide text-[#68645e]">
+                <dt className="flex min-h-6 items-center justify-center text-[0.68rem] font-semibold uppercase leading-tight tracking-wide text-[#68645e] sm:min-h-5 sm:text-[0.6rem]">
                   {label}
                 </dt>
-                <dd className="mt-1.5 text-xl font-bold leading-none text-[#292826]">
+                <dd className="mt-0.5 text-lg font-bold leading-none text-[#292826] sm:text-base">
                   {value}
                 </dd>
               </div>
             ))}
-          </dl>
-        ) : (
-          <p>{messages.couldNotLoadUserStats}</p>
-        )}
-      </CollapsibleSection>
+            </dl>
+          ) : (
+            <p className="text-sm text-red-700">{messages.couldNotLoadUserStats}</p>
+          )}
+        </CollapsibleSection>
+      }
+    >
+      <div className="space-y-3">
       <CollapsibleSection title={messages.sectionUsers} defaultOpen={false} variant="admin">
         {adminUsers ? (
           <AdminUsersTable

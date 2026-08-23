@@ -13,7 +13,7 @@ export default async function RootLayout({ children, params }: LayoutProps) {
 
   return (
     <html lang={locale}>
-      <body className="flex flex-col min-h-screen">
+      <body className="flex min-h-screen min-h-dvh flex-col">
         <Header />
         <main className="grow">{children}</main>
         <Footer locale={locale} />

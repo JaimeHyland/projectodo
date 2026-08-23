@@ -9,7 +9,7 @@ type Props = {
   children: ReactNode;
   defaultOpen?: boolean;
   id?: string;
-  variant?: "default" | "soft" | "admin";
+  variant?: "default" | "soft" | "admin" | "subbar";
 };
 
 export function CollapsibleSection({
@@ -42,7 +42,8 @@ export function CollapsibleSection({
           setUserToggled(true);
           setIsOpen(!displayedIsOpen);
         }}
-        className="w-full text-left"
+        className={variant === "subbar" ? "w-fit text-left" : "w-full text-left"}
+        aria-expanded={displayedIsOpen}
       >
         <h2
           id={id}
@@ -51,11 +52,17 @@ export function CollapsibleSection({
               ? "flex items-center justify-between bg-[#e7eef0] px-6 py-4 text-xl font-semibold"
               : variant === "admin"
                 ? "flex items-center justify-between border-l-4 border-l-[#8b8b85] bg-[#f0eee8] px-4 py-2.5 text-base font-semibold text-[#302e2b] transition-colors hover:bg-[#e9e6de]"
+                : variant === "subbar"
+                  ? "inline-flex items-center gap-1.5 py-0 text-sm font-semibold text-[#5f5a53] transition-colors hover:text-black"
                 : "flex items-center justify-between border-t border-black bg-gray-300 px-3 py-2 text-xl font-semibold"
           }
         >
           {title}
-          {displayedIsOpen ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
+          {displayedIsOpen ? (
+            <ChevronUp size={variant === "subbar" ? 14 : 20} />
+          ) : (
+            <ChevronDown size={variant === "subbar" ? 14 : 20} />
+          )}
         </h2>
       </button>
 
@@ -66,6 +73,8 @@ export function CollapsibleSection({
               ? "p-6"
               : variant === "admin"
                 ? "p-3 text-left sm:p-4"
+                : variant === "subbar"
+                  ? "mt-1 border-t border-black/10 pt-1.5"
                 : "mb-4 mt-2 px-2 pb-4"
           }
         >
