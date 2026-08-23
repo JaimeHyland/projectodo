@@ -1,3 +1,5 @@
+import { notFound, redirect } from 'next/navigation';
+
 import { serverApiFetch } from './server-api';
 
 
@@ -15,4 +17,18 @@ export async function getCurrentUser() {
     isSuperuser: data.is_superuser,
     groups: data.groups ?? [],
   };
+}
+
+export async function requireAdminDashboardAccess(locale: string) {
+  const user = await getCurrentUser();
+
+  if (!user) {
+    redirect(`/${locale}?auth=login`);
+  }
+
+  if (!user.isSuperuser && !user.groups.includes('webmaster')) {
+    notFound();
+  }
+
+  return user;
 }

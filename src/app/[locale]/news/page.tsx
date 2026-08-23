@@ -1,3 +1,4 @@
+import { requireAdminDashboardAccess } from "@/lib/server-authorization";
 import en from "@/messages/news/en.json";
 import de from "@/messages/news/de.json";
 import es from "@/messages/news/es.json";
@@ -9,6 +10,8 @@ interface NewsPageProps {
 
 export default async function NewsPage({ params }: NewsPageProps) {
   const { locale } = await params;
+  await requireAdminDashboardAccess(locale);
+
   const messages = locale === "de" ? de : locale === "es" ? es : en;
 
   return (

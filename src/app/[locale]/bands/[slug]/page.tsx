@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 
 import { serverApiFetch } from "@/lib/server-api";
+import { requireAdminDashboardAccess } from "@/lib/server-authorization";
 
 type BandPageProps = {
   params: Promise<{
@@ -55,7 +56,8 @@ async function getBandPage(slug: string): Promise<PublicBandPage> {
 }
 
 export default async function PublicBandPage({ params }: BandPageProps) {
-  const { slug } = await params;
+  const { locale, slug } = await params;
+  await requireAdminDashboardAccess(locale);
 
   console.log("Public band slug:", slug);
   const page = await getBandPage(slug);

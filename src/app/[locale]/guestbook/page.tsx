@@ -1,3 +1,4 @@
+import { requireAdminDashboardAccess } from "@/lib/server-authorization";
 import en from "@/messages/guestbook/en.json";
 import de from "@/messages/guestbook/de.json";
 import es from "@/messages/guestbook/es.json";
@@ -9,6 +10,8 @@ interface GuestbookPageProps {
 
 export default async function GuestbookPage({ params }: GuestbookPageProps) {
   const { locale } = await params;
+  await requireAdminDashboardAccess(locale);
+
   const messages = locale === "de" ? de : locale === "es" ? es : en;
 
   const guestbook = messages.guestbook;

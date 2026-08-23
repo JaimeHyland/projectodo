@@ -4,6 +4,7 @@ import en from "@/messages/bands/en.json";
 import de from "@/messages/bands/de.json";
 import es from "@/messages/bands/es.json";
 import { serverApiFetch } from "@/lib/server-api";
+import { requireAdminDashboardAccess } from "@/lib/server-authorization";
 
 interface BandsPageProps {
   params: Promise<{ locale: string }>;
@@ -34,6 +35,8 @@ async function getBandPages(): Promise<PublicBandPageSummary[]> {
 
 export default async function BandsPage({ params }: BandsPageProps) {
   const { locale } = await params;
+  await requireAdminDashboardAccess(locale);
+
   const messages = locale === "de" ? de : locale === "es" ? es : en;
 
   const pages = await getBandPages();

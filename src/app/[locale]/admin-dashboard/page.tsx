@@ -1,5 +1,4 @@
-import { redirect, notFound } from 'next/navigation';
-import { getCurrentUser } from '@/lib/server-authorization';
+import { requireAdminDashboardAccess } from '@/lib/server-authorization';
 import { serverApiFetch } from '@/lib/server-api';
 import { CollapsibleSection } from '@/components/CollapsibleSection';
 
@@ -80,20 +79,10 @@ async function getAdminUsers(): Promise<AdminUser[] | null> {
 }
 
 export default async function AdminDashboardPage({ params }: AdminDashboardPageProps) {
-  const user = await getCurrentUser();
   const { locale } = await params;
   const messages = locale === "de" ? de : locale === "es" ? es : en;
 
-  if (!user) {
-    redirect(`/${locale}?auth=login`);
-  }
-
-  const canViewAdminDashboard =
-    user.isSuperuser || user.groups.includes('webmaster');
-
-  if (!canViewAdminDashboard) {
-    notFound();
-  }
+  await requireAdminDashboardAccess(locale);
 
   const counts = await getUserGroupCounts();
   const adminUsers = await getAdminUsers();

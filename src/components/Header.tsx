@@ -41,8 +41,6 @@ export function Header() {
   const [showChangePasswordModal, setShowChangePasswordModal] = useState(false);
   const [user, setUser] = useState<User | null>(null);
   const isWebmaster = user?.isSuperuser || user?.groups.includes('webmaster');
-  const isPressorWebmaster = user?.isSuperuser || user?.groups.includes('press') || user?.groups.includes('webmaster');
-  const isLoggedIn = user !== null;
   const searchParams = useSearchParams();
   const pathname = usePathname() ?? '/';
   const router = useRouter();
@@ -68,13 +66,13 @@ export function Header() {
   const menuItems = [
     { label: headerMessages.menuHome, href: '/' },
     { label: headerMessages.menuLessons, href: '/lessons' },
-    { label: headerMessages.menuBands, href: '/bands' },
-    { label: headerMessages.menuNews, href: '/news' },
-    ...(isPressorWebmaster
-      ? [{ label: headerMessages.menuPress, href: '/press' }]
-      : []),
-    ...(isLoggedIn
-      ? [{ label: headerMessages.menuGuestbook, href: '/guestbook' }]
+    ...(isWebmaster
+      ? [
+          { label: headerMessages.menuBands, href: '/bands' },
+          { label: headerMessages.menuNews, href: '/news' },
+          { label: headerMessages.menuPress, href: '/press' },
+          { label: headerMessages.menuGuestbook, href: '/guestbook' },
+        ]
       : []),
     { label: headerMessages.menuContact, href: '/contact' },
     ...(isWebmaster
@@ -537,6 +535,8 @@ export function Header() {
 
                   const protectedPaths = [
                     '/press',
+                    '/bands',
+                    '/news',
                     '/admin-dashboard',
                     '/guestbook',
                   ];

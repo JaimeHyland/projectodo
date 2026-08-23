@@ -1,7 +1,7 @@
-import { notFound, redirect } from "next/navigation";
+import { notFound } from "next/navigation";
 
 import { serverApiFetch } from "@/lib/server-api";
-import { getCurrentUser } from "@/lib/server-authorization";
+import { requireAdminDashboardAccess } from "@/lib/server-authorization";
 import BandWebpageBuilder from "./BandWebpageBuilder";
 
 type PageProps = {
@@ -27,18 +27,7 @@ async function getBandPage(bandId: string) {
 
 export default async function BandWebpageBuilderPage({ params }: PageProps) {
   const { locale, bandId } = await params;
-  const user = await getCurrentUser();
-
-  if (!user) {
-    redirect(`/${locale}?auth=login`);
-  }
-
-  const canViewAdminDashboard =
-    user.isSuperuser || user.groups.includes("webmaster");
-
-  if (!canViewAdminDashboard) {
-    notFound();
-  }
+  await requireAdminDashboardAccess(locale);
 
   const page = await getBandPage(bandId);
 

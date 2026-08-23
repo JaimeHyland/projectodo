@@ -1,6 +1,4 @@
-import { redirect, notFound } from 'next/navigation';
-import { getCurrentUser } from '@/lib/server-authorization';
-
+import { requireAdminDashboardAccess } from '@/lib/server-authorization';
 
 import en from "@/messages/press/en.json";
 import de from "@/messages/press/de.json";
@@ -12,19 +10,10 @@ interface PressPageProps {
 }
 
 export default async function PressPage({ params }: PressPageProps) {
-  const user = await getCurrentUser();
   const { locale } = await params;
-  const messages = locale === "de" ? de : locale === "es" ? es : en;
-  
-  const canViewPress =
-    user &&
-    (user.isSuperuser ||
-      user.groups.includes('press') ||
-      user.groups.includes('webmaster'));
+  await requireAdminDashboardAccess(locale);
 
-  if (!canViewPress) {
-    notFound();
-  }
+  const messages = locale === "de" ? de : locale === "es" ? es : en;
 
   return (
   
