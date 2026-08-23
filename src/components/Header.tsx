@@ -277,7 +277,15 @@ export function Header() {
         </div>
 
         {/* Language selector */}
-        <div ref={localeMenuRef} className="absolute right-6 top-[35%] -translate-y-1/2 z-50">
+        <div
+          ref={localeMenuRef}
+          className="absolute right-6 top-[35%] z-50 -translate-y-1/2"
+          onMouseEnter={() => setLocaleMenuOpen(true)}
+          onMouseLeave={() => setLocaleMenuOpen(false)}
+          onKeyDown={(event) => {
+            if (event.key === 'Escape') setLocaleMenuOpen(false);
+          }}
+        >
           <button
             type="button"
             onClick={() => setLocaleMenuOpen((prev) => !prev)}
@@ -288,12 +296,14 @@ export function Header() {
                 hover:ring-4 hover:ring-white/70
                 hover:bg-white/20
             "
-            aria-label="Select language"
+            aria-label={headerMessages.ariaSelectLanguage}
             aria-expanded={localeMenuOpen}
+            aria-haspopup="menu"
+            aria-controls="language-switcher-menu"
           >
             <Image
               src="/globe.png"
-              alt="Language selector"
+              alt={headerMessages.altLanguageSelector}
               width={56}
               height={56}
               className="
@@ -309,8 +319,13 @@ export function Header() {
           </button>
 
           {localeMenuOpen && (
-            <div className="absolute right-0 mt-2 bg-white/85 backdrop-blur-sm p-2 rounded shadow-md text-sm min-w-[120px]">
-              <ul className="space-y-1">
+            <div
+              id="language-switcher-menu"
+              className="absolute right-0 top-full min-w-[140px] rounded-xl border border-black/10 bg-white/95 p-2 text-sm shadow-lg backdrop-blur-sm"
+              role="menu"
+              aria-label={headerMessages.ariaSelectLanguage}
+            >
+              <ul className="space-y-1" role="none">
                 {SUPPORTED_LOCALES.map((locale) => (
                   <li key={locale}>
                     <button
@@ -322,6 +337,8 @@ export function Header() {
                       className={`block w-full text-left px-2 py-1 rounded text-[#3a5c03] hover:bg-white/70 ${
                         currentLocale === locale ? 'font-bold' : ''
                       }`}
+                      role="menuitemradio"
+                      aria-checked={currentLocale === locale}
                     >
                       {locale === 'en'
                         ? headerMessages.localeEn
