@@ -124,14 +124,14 @@ export default function AdminUsersTable({ users, messages }: Props) {
 
   return (
     <>
-      <div className="overflow-x-auto">
-        <table className="w-full border-collapse text-sm">
+      <div className="admin-table-shell">
+        <table className="admin-table">
           <thead>
-            <tr className="border-b bg-gray-100">
-              <th className="p-2 text-left">{messages.username}</th>
-              <th className="p-2 text-left">{messages.email}</th>
-              <th className="p-2 text-left">{messages.roles}</th>
-              <th className="p-2 text-left">{messages.actions}</th>
+            <tr>
+              <th>{messages.username}</th>
+              <th>{messages.email}</th>
+              <th>{messages.roles}</th>
+              <th>{messages.actions}</th>
             </tr>
           </thead>
 
@@ -141,23 +141,23 @@ export default function AdminUsersTable({ users, messages }: Props) {
                 adminUser.is_superuser || adminUser.is_current_user;
 
               return (
-                <tr key={adminUser.id} className="border-b">
-                  <td className="p-2">{adminUser.username}</td>
-                  <td className="p-2">{adminUser.email || "—"}</td>
-                  <td className="p-2">
+                <tr key={adminUser.id}>
+                  <td className="font-medium">{adminUser.username}</td>
+                  <td>{adminUser.email || "—"}</td>
+                  <td>
                     {adminUser.is_superuser
                       ? ["superuser", ...adminUser.groups].join(", ")
                       : adminUser.groups.length > 0
                         ? adminUser.groups.join(", ")
                         : "ordinary"}
                   </td>
-                  <td className="p-2">
-                    <div className="flex gap-2">
+                  <td>
+                    <div className="flex flex-wrap gap-2">
                       <button
                         type="button"
                         disabled={isProtectedUser}
                         onClick={() => openEdit(adminUser)}
-                        className="rounded bg-gray-700 px-3 py-1 text-white disabled:cursor-not-allowed disabled:bg-gray-300 disabled:text-gray-600"
+                        className="admin-button admin-button-secondary"
                       >
                         Edit
                       </button>
@@ -166,7 +166,7 @@ export default function AdminUsersTable({ users, messages }: Props) {
                         type="button"
                         disabled={isProtectedUser}
                         onClick={() => setDeletingUser(adminUser)}
-                        className="rounded bg-red-700 px-3 py-1 text-white disabled:cursor-not-allowed disabled:bg-gray-300 disabled:text-gray-600"
+                        className="admin-button admin-button-danger"
                       >
                         Delete
                       </button>

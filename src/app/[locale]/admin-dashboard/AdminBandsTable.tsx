@@ -200,33 +200,33 @@ async function confirmEdit() {
         <button
           type="button"
           onClick={() => setIsCreating(true)}
-          className="rounded bg-[#3a5c03] px-4 py-2 text-white"
+          className="admin-button admin-button-primary px-4 py-2"
         >
           {messages.createBand}
         </button>
       </div>
 
-      <div className="overflow-x-auto">
-        <table className="w-full border-collapse text-sm">
+      <div className="admin-table-shell">
+        <table className="admin-table">
           <thead>
-            <tr className="border-b bg-gray-100">
-              <th className="p-2 text-left">{messages.name}</th>
-              <th className="p-2 text-left">{messages.bandLeaderLabel}</th>
-              <th className="p-2 text-left">{messages.contactEmail}</th>
-              <th className="p-2 text-left">{messages.genres}</th>
-              <th className="p-2 text-center">{messages.published}</th>
-              <th className="p-2 text-left">{messages.actions}</th>
+            <tr>
+              <th>{messages.name}</th>
+              <th>{messages.bandLeaderLabel}</th>
+              <th>{messages.contactEmail}</th>
+              <th>{messages.genres}</th>
+              <th className="text-center">{messages.published}</th>
+              <th>{messages.actions}</th>
             </tr>
           </thead>
 
           <tbody>
             {visibleBands.map((band) => (
-              <tr key={band.id} className="border-b">
-                <td className="p-2">{band.name}</td>
-                <td className="p-2">{band.band_leader?.username ?? "—"}</td>
-                <td className="p-2">{band.contact_email || "—"}</td>
-                <td className="p-2">{band.genres.join(", ") || "—"}</td>
-                <td className="p-2 text-center">
+              <tr key={band.id}>
+                <td className="font-medium">{band.name}</td>
+                <td>{band.band_leader?.username ?? "—"}</td>
+                <td>{band.contact_email || "—"}</td>
+                <td>{band.genres.join(", ") || "—"}</td>
+                <td className="text-center">
                   <input
                     type="checkbox"
                     checked={band.page?.published ?? false}
@@ -235,20 +235,20 @@ async function confirmEdit() {
                     className="h-4 w-4 accent-[#3a5c03]"
                   />
                 </td>
-                <td className="p-2">
-                  <div className="flex gap-2">
+                <td>
+                  <div className="flex flex-wrap gap-2">
                     <button
                       type="button"
                       disabled={!band.can_manage}
                       onClick={() => openEdit(band)}
-                      className="rounded bg-gray-700 px-3 py-1 text-white disabled:cursor-not-allowed disabled:bg-gray-300 disabled:text-gray-600"
+                      className="admin-button admin-button-secondary"
                     >
                       {messages.edit}
                     </button>
                     {band.can_manage && (
                       <Link
                         href={`/${locale}/admin-dashboard/bands/${band.id}/webpage`}
-                        className="rounded-md border px-3 py-1 text-sm hover:bg-gray-100"
+                        className="admin-button admin-button-outline"
                       >
                         {band.page ? "Edit webpage" : "Create webpage"}
                       </Link>
@@ -257,7 +257,7 @@ async function confirmEdit() {
                       type="button"
                       disabled={!band.can_delete}
                       onClick={() => setDeletingBand(band)}
-                      className="rounded bg-red-700 px-3 py-1 text-white disabled:cursor-not-allowed disabled:bg-gray-300 disabled:text-gray-600"
+                      className="admin-button admin-button-danger"
                     >
                       {messages.delete}
                     </button>

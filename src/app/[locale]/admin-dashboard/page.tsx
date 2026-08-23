@@ -1,6 +1,7 @@
 import { requireAdminDashboardAccess } from '@/lib/server-authorization';
 import { serverApiFetch } from '@/lib/server-api';
 import { CollapsibleSection } from '@/components/CollapsibleSection';
+import { PageShell } from '@/components/PageShell';
 
 import type {
   AdminUser,
@@ -93,11 +94,15 @@ export default async function AdminDashboardPage({ params }: AdminDashboardPageP
   locale === "de" || locale === "es" || locale === "en" ? locale : "en";
 
   return (
-    <main className="p-4 text-center sm:p-8">
-      <h1 className="text-2xl font-bold">{messages.titleAdminDashboard}</h1>
-      <p className="mb-8 text-lg">{messages.descriptionAdminDashboard}</p>
-
-      <CollapsibleSection title={messages.sectionUserStats} defaultOpen={false}>
+    <PageShell
+      title={messages.titleAdminDashboard}
+      meta={messages.descriptionAdminDashboard}
+      accent="gray"
+      maxWidth="6xl"
+      density="compact"
+    >
+      <div className="space-y-3">
+      <CollapsibleSection title={messages.sectionUserStats} defaultOpen={false} variant="admin">
         {counts ? (
           <dl className="grid grid-cols-2 gap-2 sm:grid-cols-4 xl:grid-cols-8">
             {[
@@ -112,12 +117,12 @@ export default async function AdminDashboardPage({ params }: AdminDashboardPageP
             ].map(([label, value]) => (
               <div
                 key={label}
-                className="min-w-0 rounded-md border border-gray-200 bg-gray-50 px-2 py-2 sm:px-3"
+                className="min-w-0 rounded-lg border border-black/10 bg-[#f7f5f0] px-2 py-2 text-center sm:px-3"
               >
-                <dt className="text-xs font-medium leading-tight text-gray-600">
+                <dt className="text-xs font-semibold uppercase leading-tight tracking-wide text-[#68645e]">
                   {label}
                 </dt>
-                <dd className="mt-1 text-xl font-semibold leading-none text-gray-900">
+                <dd className="mt-1.5 text-xl font-bold leading-none text-[#292826]">
                   {value}
                 </dd>
               </div>
@@ -127,7 +132,7 @@ export default async function AdminDashboardPage({ params }: AdminDashboardPageP
           <p>{messages.couldNotLoadUserStats}</p>
         )}
       </CollapsibleSection>
-      <CollapsibleSection title={messages.sectionUsers} defaultOpen={false}>
+      <CollapsibleSection title={messages.sectionUsers} defaultOpen={false} variant="admin">
         {adminUsers ? (
           <AdminUsersTable
           users={adminUsers}
@@ -137,7 +142,7 @@ export default async function AdminDashboardPage({ params }: AdminDashboardPageP
           <p>{messages.couldNotLoadUsers}</p>
         )}
       </CollapsibleSection>
-      <CollapsibleSection title={messages.sectionLocations} defaultOpen={false}>
+      <CollapsibleSection title={messages.sectionLocations} defaultOpen={false} variant="admin">
         {locations ? (
           <AdminLocationsTable
             locations={locations}
@@ -149,7 +154,7 @@ export default async function AdminDashboardPage({ params }: AdminDashboardPageP
         )}
       </CollapsibleSection>
       
-      <CollapsibleSection title={messages.sectionBands} defaultOpen={false}>
+      <CollapsibleSection title={messages.sectionBands} defaultOpen={false} variant="admin">
         {bands ? (
           <AdminBandsTable
           bands={bands}
@@ -161,7 +166,8 @@ export default async function AdminDashboardPage({ params }: AdminDashboardPageP
           <p>{messages.couldNotLoadBands}</p>
         )}
       </CollapsibleSection>
-    </main>
+      </div>
+    </PageShell>
   );
 }
 

@@ -17,6 +17,7 @@ type PageShellProps = {
   accent?: PageAccent;
   meta?: ReactNode;
   maxWidth?: "3xl" | "4xl" | "5xl" | "6xl";
+  density?: "default" | "compact";
 };
 
 const widthClasses = {
@@ -32,16 +33,41 @@ export function PageShell({
   accent = "orange",
   meta,
   maxWidth = "4xl",
+  density = "default",
 }: PageShellProps) {
+  const compact = density === "compact";
+
   return (
-    <main className="bg-[#f5f2eb] px-4 py-8 text-[#292826] sm:px-6 sm:py-12 lg:px-8 lg:py-14">
-      <div className={`mx-auto space-y-6 sm:space-y-8 ${widthClasses[maxWidth]}`}>
-        <header className="rounded-2xl border border-black/10 bg-white px-6 py-7 shadow-[0_10px_32px_rgba(55,49,40,0.08)] sm:px-9 sm:py-9">
-          <div className={`mb-5 h-1 w-14 rounded-full ${accentClasses[accent]}`} />
-          <h1 className="text-3xl font-bold tracking-tight text-[#22211f] sm:text-4xl">
+    <main
+      className={
+        compact
+          ? "bg-[#f5f2eb] px-3 py-3 text-[#292826] sm:px-5 sm:py-4 lg:px-6"
+          : "bg-[#f5f2eb] px-4 py-8 text-[#292826] sm:px-6 sm:py-12 lg:px-8 lg:py-14"
+      }
+    >
+      <div
+        className={`mx-auto ${compact ? "space-y-4" : "space-y-6 sm:space-y-8"} ${widthClasses[maxWidth]}`}
+      >
+        <header
+          className={
+            compact
+              ? "rounded-xl border border-black/10 bg-white px-5 py-4 shadow-[0_8px_24px_rgba(55,49,40,0.07)] sm:px-6 sm:py-5"
+              : "rounded-2xl border border-black/10 bg-white px-6 py-7 shadow-[0_10px_32px_rgba(55,49,40,0.08)] sm:px-9 sm:py-9"
+          }
+        >
+          <div
+            className={`${compact ? "mb-3 h-0.5 w-12" : "mb-5 h-1 w-14"} rounded-full ${accentClasses[accent]}`}
+          />
+          <h1
+            className={`${compact ? "text-2xl" : "text-3xl sm:text-4xl"} font-bold tracking-tight text-[#22211f]`}
+          >
             {title}
           </h1>
-          {meta && <div className="mt-3 text-sm text-[#68645e]">{meta}</div>}
+          {meta && (
+            <div className={`${compact ? "mt-2" : "mt-3"} text-sm text-[#68645e]`}>
+              {meta}
+            </div>
+          )}
         </header>
 
         {children}

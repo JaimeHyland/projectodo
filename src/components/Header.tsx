@@ -475,7 +475,7 @@ export function Header() {
               </ul>
             </div>
             <div
-              className="hidden desktop:block w-full h-1"
+              className="hidden h-1 w-full rounded-t-lg desktop:block"
               style={{ backgroundColor: activeColor }}
             />
           </div>

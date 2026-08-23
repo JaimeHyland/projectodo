@@ -580,37 +580,37 @@ async function confirmSaveCourse() {
         <button
           type="button"
           onClick={openCreate}
-          className="rounded bg-[#3a5c03] px-4 py-2 text-white"
+          className="admin-button admin-button-primary px-4 py-2"
         >
           {messages.addLocation}
         </button>
       </div>
 
-      <div className="overflow-x-auto">
-        <table className="w-full border-collapse text-sm">
+      <div className="admin-table-shell">
+        <table className="admin-table">
           <thead>
-            <tr className="border-b bg-gray-100">
-              <th className="p-2 text-left">{messages.name}</th>
-              <th className="p-2 text-left">{messages.streetAddress}</th>
-              <th className="p-2 text-left">{messages.city}</th>
-              <th className="p-2 text-left">{messages.actions}</th>
+            <tr>
+              <th>{messages.name}</th>
+              <th>{messages.streetAddress}</th>
+              <th>{messages.city}</th>
+              <th>{messages.actions}</th>
             </tr>
           </thead>
 
           <tbody>
             {locations.map((location) => (
-              <tr key={location.id} className="border-b">
-                <td className="p-2">{location.name}</td>
-                <td className="p-2">{location.street_address}</td>
-                <td className="p-2">
+              <tr key={location.id}>
+                <td className="font-medium">{location.name}</td>
+                <td>{location.street_address}</td>
+                <td>
                   {location.postcode} {location.city}
                 </td>
-                <td className="p-2">
-                  <div className="flex gap-2">
+                <td>
+                  <div className="flex flex-wrap gap-2">
                     <button
                       type="button"
                       onClick={() => openManageCourses(location)}
-                      className="rounded bg-[#3a5c03] px-3 py-1 text-white"
+                      className="admin-button admin-button-primary"
                     >
                       {messages.manageCourses}
                     </button>
@@ -618,7 +618,7 @@ async function confirmSaveCourse() {
                     <button
                       type="button"
                       onClick={() => openEdit(location)}
-                      className="rounded bg-gray-700 px-3 py-1 text-white"
+                      className="admin-button admin-button-secondary"
                     >
                       {messages.edit}
                     </button>
@@ -626,7 +626,7 @@ async function confirmSaveCourse() {
                     <button
                       type="button"
                       onClick={() => setDeletingLocation(location)}
-                      className="rounded bg-red-700 px-3 py-1 text-white"
+                      className="admin-button admin-button-danger"
                     >
                       {messages.delete}
                     </button>
