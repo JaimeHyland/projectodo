@@ -86,7 +86,7 @@ export function Header() {
     '#7bae37',
     '#008bae',
     '#ca8f81',
-    '#3a5c03',
+    '#f8a020',
     '#f2f3ae',
     '#008bae',
   ];
