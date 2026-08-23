@@ -3,6 +3,7 @@ import Link from "next/link";
 import en from "@/messages/privacy/en.json";
 import de from "@/messages/privacy/de.json";
 import es from "@/messages/privacy/es.json";
+import { ContentPanel, PageShell } from "@/components/PageShell";
 
 interface PrivacySection {
   heading: string;
@@ -29,17 +30,19 @@ export default async function PrivacyPage({ params }: PrivacyPageProps) {
   const messages = messagesByLocale[locale] ?? messagesByLocale.en;
 
   return (
-    <main className="mx-auto max-w-3xl space-y-8 p-4 sm:p-8">
-      <header className="space-y-2 text-center">
-        <h1 className="text-2xl font-bold">{messages.titlePrivacy}</h1>
-        <p className="text-sm text-gray-600">{messages.lastUpdated}</p>
-      </header>
-
-      <p>{messages.introduction}</p>
+    <PageShell
+      title={messages.titlePrivacy}
+      accent="gray"
+      maxWidth="4xl"
+      meta={messages.lastUpdated}
+    >
+      <ContentPanel className="border-l-4 border-l-[#8b8b85] leading-7 text-[#514f4b]">
+        <p>{messages.introduction}</p>
+      </ContentPanel>
 
       {messages.sections.map((section) => (
-        <section key={section.heading} className="space-y-3">
-          <h2 className="text-xl font-semibold">{section.heading}</h2>
+        <ContentPanel key={section.heading} className="space-y-3 leading-7 text-[#514f4b]">
+          <h2 className="text-xl font-bold text-[#292826]">{section.heading}</h2>
 
           {section.paragraphs.map((paragraph) => (
             <p key={paragraph}>{paragraph}</p>
@@ -57,7 +60,7 @@ export default async function PrivacyPage({ params }: PrivacyPageProps) {
             <p key={link.href}>
               <Link
                 href={link.href}
-                className="underline"
+                className="font-medium underline underline-offset-4"
                 target={link.href.startsWith("http") ? "_blank" : undefined}
                 rel={link.href.startsWith("http") ? "noreferrer" : undefined}
               >
@@ -65,8 +68,8 @@ export default async function PrivacyPage({ params }: PrivacyPageProps) {
               </Link>
             </p>
           ))}
-        </section>
+        </ContentPanel>
       ))}
-    </main>
+    </PageShell>
   );
 }

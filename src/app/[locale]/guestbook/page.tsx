@@ -2,6 +2,7 @@ import { requireAdminDashboardAccess } from "@/lib/server-authorization";
 import en from "@/messages/guestbook/en.json";
 import de from "@/messages/guestbook/de.json";
 import es from "@/messages/guestbook/es.json";
+import { ContentPanel, PageShell } from "@/components/PageShell";
 
 interface GuestbookPageProps {
   params: Promise<{ locale: string }>;
@@ -17,14 +18,13 @@ export default async function GuestbookPage({ params }: GuestbookPageProps) {
   const guestbook = messages.guestbook;
 
   return (
-    <main className="mx-auto max-w-3xl space-y-6 p-8 text-center">
-      <h1 className="text-2xl font-bold">{messages.titleGuestbook}</h1>
-
-      <p>{guestbook.intro}</p>
-
-      <section className="rounded-md border p-6">
-        <p>{guestbook.emptyState}</p>
-      </section>
-    </main>
+    <PageShell title={messages.titleGuestbook} accent="orange" maxWidth="4xl">
+      <ContentPanel className="space-y-6 text-center leading-7 text-[#514f4b]">
+        <p>{guestbook.intro}</p>
+        <div className="rounded-xl border border-dashed border-black/20 bg-[#faf8f3] p-6">
+          <p>{guestbook.emptyState}</p>
+        </div>
+      </ContentPanel>
+    </PageShell>
   );
 }

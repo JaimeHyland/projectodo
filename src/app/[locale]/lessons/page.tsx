@@ -1,4 +1,5 @@
 import { CollapsibleSection } from "@/components/CollapsibleSection";
+import { ContentPanel, PageShell } from "@/components/PageShell";
 
 import en from "@/messages/lessons/en.json";
 import de from "@/messages/lessons/de.json";
@@ -48,13 +49,11 @@ export default async function LessonsPage({ params }: LessonsPageProps) {
   const locations = await getLocations();
 
   return (
-    <main className="mx-auto max-w-3xl space-y-8 p-8">
-      <h1 className="text-2xl font-bold text-center">
-        {messages.titleLessons}
-      </h1>
-
-      <section className="space-y-4">
-        <h2 className="text-xl font-semibold">{lessons.headline}</h2>
+    <PageShell title={messages.titleLessons} accent="gold" maxWidth="5xl">
+      <ContentPanel className="space-y-4 leading-7 text-[#514f4b]">
+        <h2 className="text-2xl font-bold tracking-tight text-[#292826]">
+          {lessons.headline}
+        </h2>
 
         {lessons.intro.map((p) => (
           <p key={p}>{p}</p>
@@ -63,13 +62,13 @@ export default async function LessonsPage({ params }: LessonsPageProps) {
         {lessons.benefits.map((p) => (
           <p key={p}>{p}</p>
         ))}
-      </section>
+      </ContentPanel>
 
-      <CollapsibleSection title={lessons.locationsTitle} defaultOpen>
+      <CollapsibleSection title={lessons.locationsTitle} defaultOpen variant="soft">
         {locations ? (
-          <div className="space-y-4">
+          <div className="grid gap-4 sm:grid-cols-2">
             {locations.map((location) => (
-              <div key={location.id}>
+              <div key={location.id} className="rounded-xl border border-black/10 bg-[#f8f7f3] p-4">
                 <h4 className="font-semibold">{location.name}</h4>
                 <p>{location.street_address}</p>
                 <p>
@@ -85,7 +84,7 @@ export default async function LessonsPage({ params }: LessonsPageProps) {
         )}
       </CollapsibleSection>
 
-      <section className="space-y-4">
+      <ContentPanel className="space-y-4 border-l-4 border-l-[#d5a300]">
         <p className="font-semibold">{lessons.contact.label}</p>
 
         <div className="space-y-1">
@@ -95,7 +94,7 @@ export default async function LessonsPage({ params }: LessonsPageProps) {
           <p>{lessons.contact.details.email}</p>
           <p>{lessons.contact.details.website}</p>
         </div>
-      </section>
-    </main>
+      </ContentPanel>
+    </PageShell>
   );
 }

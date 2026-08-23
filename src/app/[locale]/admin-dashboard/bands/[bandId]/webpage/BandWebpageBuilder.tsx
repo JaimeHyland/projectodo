@@ -44,7 +44,7 @@ export default function BandWebpageBuilder({
   const [descriptionHtml, setDescriptionHtml] = useState(
     page?.description_html ?? "",
   );
-  const [published, setPublished] = useState(page?.published ?? true);
+  const [published, setPublished] = useState(page?.published ?? false);
   const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 

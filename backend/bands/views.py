@@ -56,7 +56,7 @@ def create_band_page(request, band_id):
         band=band,
         slug=make_unique_band_page_slug(band),
         description_html=data.get("description_html", ""),
-        published=data.get("published", True),
+        published=data.get("published") is True,
     )
 
     return JsonResponse(

@@ -22,6 +22,7 @@ type Messages = {
   contactTel: string;
   websiteUrl: string;
   genres: string;
+  published: string;
   createBand: string;
   editBand: string;
   confirm: string;
@@ -213,6 +214,7 @@ async function confirmEdit() {
               <th className="p-2 text-left">{messages.bandLeaderLabel}</th>
               <th className="p-2 text-left">{messages.contactEmail}</th>
               <th className="p-2 text-left">{messages.genres}</th>
+              <th className="p-2 text-center">{messages.published}</th>
               <th className="p-2 text-left">{messages.actions}</th>
             </tr>
           </thead>
@@ -224,6 +226,15 @@ async function confirmEdit() {
                 <td className="p-2">{band.band_leader?.username ?? "—"}</td>
                 <td className="p-2">{band.contact_email || "—"}</td>
                 <td className="p-2">{band.genres.join(", ") || "—"}</td>
+                <td className="p-2 text-center">
+                  <input
+                    type="checkbox"
+                    checked={band.page?.published ?? false}
+                    disabled
+                    aria-label={`${messages.published}: ${band.name}`}
+                    className="h-4 w-4 accent-[#3a5c03]"
+                  />
+                </td>
                 <td className="p-2">
                   <div className="flex gap-2">
                     <button

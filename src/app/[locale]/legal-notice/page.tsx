@@ -3,6 +3,7 @@ import Link from "next/link";
 import en from "@/messages/legal-notice/en.json";
 import de from "@/messages/legal-notice/de.json";
 import es from "@/messages/legal-notice/es.json";
+import { ContentPanel, PageShell } from "@/components/PageShell";
 
 
 interface LegalNoticePageProps {
@@ -41,14 +42,10 @@ export default async function LegalNoticePage({
   const messages = messagesByLocale[locale] ?? messagesByLocale.en;
 
   return (
-    <main className="mx-auto max-w-3xl space-y-8 p-8">
-      <h1 className="text-center text-2xl font-bold">
-        {messages.titleLegalNotice}
-      </h1>
-
+    <PageShell title={messages.titleLegalNotice} accent="gray" maxWidth="4xl">
       {messages.legalNotice.sections.map((section: LegalNoticeSection) => (
-        <section key={section.heading} className="space-y-4">
-          <h2 className="text-xl font-semibold">{section.heading}</h2>
+        <ContentPanel key={section.heading} className="space-y-4 leading-7 text-[#514f4b]">
+          <h2 className="text-xl font-bold text-[#292826]">{section.heading}</h2>
 
           {section.paragraphs.map((paragraph: string[], index: number) => (
             <p key={index}>
@@ -66,15 +63,16 @@ export default async function LegalNoticePage({
               {link.label}:{" "}
               <Link
                 href={link.href}
-                className="underline"
+                className="font-medium underline underline-offset-4"
                 target={link.href.startsWith("http") ? "_blank" : undefined}
+                rel={link.href.startsWith("http") ? "noreferrer" : undefined}
               >
                 {link.text}
               </Link>
             </p>
           ))}
-        </section>
+        </ContentPanel>
       ))}
-    </main>
+    </PageShell>
   );
 }

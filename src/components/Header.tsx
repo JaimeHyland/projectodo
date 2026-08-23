@@ -66,9 +66,9 @@ export function Header() {
   const menuItems = [
     { label: headerMessages.menuHome, href: '/' },
     { label: headerMessages.menuLessons, href: '/lessons' },
+    { label: headerMessages.menuBands, href: '/bands' },
     ...(isWebmaster
       ? [
-          { label: headerMessages.menuBands, href: '/bands' },
           { label: headerMessages.menuNews, href: '/news' },
           { label: headerMessages.menuPress, href: '/press' },
           { label: headerMessages.menuGuestbook, href: '/guestbook' },
@@ -80,16 +80,16 @@ export function Header() {
       : []),
   ];
 
-  const tabColors = [
-    '#b8b8b8',
-    '#fabe00',
-    '#7bae37',
-    '#8ecae6',
-    '#c6b5dc',
-    '#f8a020',
-    '#f2f3ae',
-    '#d8d8c8',
-  ];
+  const tabColors: Record<string, string> = {
+    '/': '#b8b8b8',
+    '/lessons': '#fabe00',
+    '/bands': '#7bae37',
+    '/news': '#8ecae6',
+    '/press': '#c6b5dc',
+    '/guestbook': '#f8a020',
+    '/contact': '#f2f3ae',
+    '/admin-dashboard': '#d8d8c8',
+  };
 
   useEffect(() => {
     const authParam = searchParams.get('auth');
@@ -249,12 +249,10 @@ export function Header() {
     );
   };
 
-  const activeIndex = menuItems.findIndex((item) => isItemActive(item.href));
+  const activeItem = menuItems.find((item) => isItemActive(item.href));
 
   const activeColor =
-    activeIndex !== -1
-      ? tabColors[activeIndex % tabColors.length]
-      : 'transparent';
+    activeItem ? tabColors[activeItem.href] : 'transparent';
 
 
   return (
@@ -445,12 +443,12 @@ export function Header() {
           <div className="max-w-7xl mx-auto flex flex-col items-center">
             <div className="px-4 w-full flex justify-center"> 
               <ul className="hidden desktop:flex space-x-2">
-                {menuItems.map((item, index) => (
+                {menuItems.map((item) => (
                   <li key={item.href}>
                     <HeaderLink
                       href={item.href}
                       isActive={isItemActive(item.href)}
-                      style={{ backgroundColor: tabColors[index % tabColors.length] }}
+                      style={{ backgroundColor: tabColors[item.href] }}
                       className="px-4 py-1 rounded-t-lg relative z-10 whitespace-nowrap"
                     >
                       {item.label}
@@ -535,7 +533,6 @@ export function Header() {
 
                   const protectedPaths = [
                     '/press',
-                    '/bands',
                     '/news',
                     '/admin-dashboard',
                     '/guestbook',
@@ -576,13 +573,13 @@ export function Header() {
             />
 
             <div className="desktop:hidden absolute right-4 top-full mt-2 w-56 bg-white border shadow-lg rounded-lg p-2 flex flex-col gap-1 text-sm z-50">
-              {menuItems.map((item, index) => (
+              {menuItems.map((item) => (
                 <HeaderLink
                   key={item.href}
                   href={item.href}
                   isActive={isItemActive(item.href)}
                   className="w-full text-left rounded-md"
-                  style={{ backgroundColor: tabColors[index % tabColors.length] }}
+                  style={{ backgroundColor: tabColors[item.href] }}
                   onClick={() => setMenuOpen(false)}
                 >
                   {item.label}

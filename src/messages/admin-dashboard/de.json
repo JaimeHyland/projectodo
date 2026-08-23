@@ -95,6 +95,7 @@
     "contactTel": "Kontakt-Telefon",
     "websiteUrl": "Website-URL",
     "genres": "Genres",
+    "published": "Veröffentlicht",
     "editBand": "Band bearbeiten",
     "deleteBand": "Band löschen",
     "confirmDeleteBand": "Sind Sie sicher, dass Sie {name} löschen möchten?",

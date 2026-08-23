@@ -1,7 +1,6 @@
 import { notFound } from "next/navigation";
 
 import { serverApiFetch } from "@/lib/server-api";
-import { requireAdminDashboardAccess } from "@/lib/server-authorization";
 
 type BandPageProps = {
   params: Promise<{
@@ -52,49 +51,52 @@ async function getBandPage(slug: string): Promise<PublicBandPage> {
     notFound();
   }
 
-  return response.json();
+  const page: PublicBandPage = await response.json();
+
+  if (!page.published) {
+    notFound();
+  }
+
+  return page;
 }
 
 export default async function PublicBandPage({ params }: BandPageProps) {
-  const { locale, slug } = await params;
-  await requireAdminDashboardAccess(locale);
+  const { slug } = await params;
 
-  console.log("Public band slug:", slug);
   const page = await getBandPage(slug);
 
   return (
     <main
-      className="mx-auto max-w-4xl p-8"
+      className="min-h-full px-4 py-8 sm:px-6 sm:py-10"
       style={{
         color: page.foreground_colour,
         backgroundColor: page.background_colour,
       }}
     >
-      <h1 className="mb-4 text-3xl font-bold">
-        {page.band.name}
-      </h1>
+      <article className="mx-auto max-w-3xl">
+      <h1 className="text-3xl font-bold">{page.band.name}</h1>
 
       {page.band.genres.length > 0 && (
-        <p className="mb-6 text-sm opacity-80">
+        <p className="mt-2 text-sm opacity-75">
           {page.band.genres.join(", ")}
         </p>
       )}
 
       {page.description_html && (
-        <section className="mb-8">
-          <p className="whitespace-pre-line">
+        <section className="mt-8">
+          <p className="whitespace-pre-line leading-7">
             {page.description_html}
           </p>
         </section>
       )}
 
       {page.band.members.length > 0 && (
-        <section className="mb-8">
-          <h2 className="mb-3 text-xl font-semibold">
+        <section className="mt-8">
+          <h2 className="text-xl font-semibold">
             Members
           </h2>
 
-          <ul className="space-y-2">
+          <ul className="mt-3 list-disc space-y-2 pl-6">
             {page.band.members.map((member) => (
               <li key={member.id}>
                 <span className="font-medium">{member.name}</span>
@@ -113,18 +115,18 @@ export default async function PublicBandPage({ params }: BandPageProps) {
       {(page.band.contact_email ||
         page.band.contact_tel ||
         page.band.website_url) && (
-        <section>
-          <h2 className="mb-3 text-xl font-semibold">
+        <section className="mt-8">
+          <h2 className="text-xl font-semibold">
             Contact
           </h2>
 
-          <div className="space-y-1">
+          <div className="mt-3 space-y-1 leading-7">
             {page.band.contact_email && (
               <p>
                 Email:{" "}
                 <a
                   href={`mailto:${page.band.contact_email}`}
-                  className="underline"
+                  className="underline underline-offset-2"
                 >
                   {page.band.contact_email}
                 </a>
@@ -140,7 +142,7 @@ export default async function PublicBandPage({ params }: BandPageProps) {
                 Website:{" "}
                 <a
                   href={page.band.website_url}
-                  className="underline"
+                  className="underline underline-offset-2"
                   target="_blank"
                   rel="noreferrer"
                 >
@@ -151,6 +153,7 @@ export default async function PublicBandPage({ params }: BandPageProps) {
           </div>
         </section>
       )}
+      </article>
     </main>
   );
 }

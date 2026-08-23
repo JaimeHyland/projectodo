@@ -1,6 +1,7 @@
 import en from "@/messages/contact/en.json";
 import de from "@/messages/contact/de.json";
 import es from "@/messages/contact/es.json";
+import { ContentPanel, PageShell } from "@/components/PageShell";
 
 interface ContactPageProps {
   params: Promise<{ locale: string }>;
@@ -15,21 +16,18 @@ export default async function ContactPage({ params }: ContactPageProps) {
   const contact = messages.contact;
 
   return (
-    <main className="mx-auto max-w-2xl space-y-6 p-8">
-      <h1 className="text-2xl font-bold text-center">
-        {messages.titleContact}
-      </h1>
-
-      <section className="space-y-2 text-center">
+    <PageShell title={messages.titleContact} accent="gold" maxWidth="4xl">
+      <div className="grid gap-5 md:grid-cols-2">
+      <ContentPanel className="space-y-2">
         <p className="font-semibold">{contact.name}</p>
         <p>{contact.person}</p>
 
         {contact.address.map((line) => (
           <p key={line}>{line}</p>
         ))}
-      </section>
+      </ContentPanel>
 
-      <section className="space-y-1 text-center">
+      <ContentPanel className="space-y-3">
         <p>
           {contact.details.phoneLabel}: {contact.details.phone}
         </p>
@@ -41,7 +39,7 @@ export default async function ContactPage({ params }: ContactPageProps) {
         </p>
         <p>
           {contact.details.emailLabel}:{" "}
-          <Link href={`mailto:${contact.details.email}`} className="underline">
+          <Link href={`mailto:${contact.details.email}`} className="font-medium underline underline-offset-4">
             {contact.details.email}
           </Link>
         </p>
@@ -49,13 +47,15 @@ export default async function ContactPage({ params }: ContactPageProps) {
           {contact.details.websiteLabel}:{" "}
           <Link
             href={`https://${contact.details.website}`}
-            className="underline"
+            className="font-medium underline underline-offset-4"
             target="_blank"
+            rel="noreferrer"
           >
             {contact.details.website}
           </Link>
         </p>
-      </section>
-    </main>
+      </ContentPanel>
+      </div>
+    </PageShell>
   );
 }
