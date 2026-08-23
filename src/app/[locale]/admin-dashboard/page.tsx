@@ -93,36 +93,35 @@ export default async function AdminDashboardPage({ params }: AdminDashboardPageP
   locale === "de" || locale === "es" || locale === "en" ? locale : "en";
 
   return (
-    <main className="p-8 text-center">
+    <main className="p-4 text-center sm:p-8">
       <h1 className="text-2xl font-bold">{messages.titleAdminDashboard}</h1>
       <p className="mb-8 text-lg">{messages.descriptionAdminDashboard}</p>
 
       <CollapsibleSection title={messages.sectionUserStats} defaultOpen={false}>
         {counts ? (
-          <dl className="grid grid-cols-2 gap-3">
-            <dt className="font-medium">{messages.totalUsers}</dt>
-            <dd>{counts.total}</dd>
-
-            <dt className="font-medium">{messages.ordinary}</dt>
-            <dd>{counts.ordinary}</dd>
-
-            <dt className="font-medium">{messages.superusers}</dt>
-            <dd>{counts.superusers}</dd>
-
-            <dt className="font-medium">{messages.webmasters}</dt>
-            <dd>{counts.webmasters}</dd>
-
-            <dt className="font-medium">{messages.teachers}</dt>
-            <dd>{counts.teachers}</dd>
-
-            <dt className="font-medium">{messages.students}</dt>
-            <dd>{counts.students}</dd>
-
-            <dt className="font-medium">{messages.bandLeaders}</dt>
-            <dd>{counts.band_leaders}</dd>
-
-            <dt className="font-medium">{messages.press}</dt>
-            <dd>{counts.press}</dd>
+          <dl className="grid grid-cols-2 gap-2 sm:grid-cols-4 xl:grid-cols-8">
+            {[
+              [messages.totalUsers, counts.total],
+              [messages.ordinary, counts.ordinary],
+              [messages.superusers, counts.superusers],
+              [messages.webmasters, counts.webmasters],
+              [messages.teachers, counts.teachers],
+              [messages.students, counts.students],
+              [messages.bandLeaders, counts.band_leaders],
+              [messages.press, counts.press],
+            ].map(([label, value]) => (
+              <div
+                key={label}
+                className="min-w-0 rounded-md border border-gray-200 bg-gray-50 px-2 py-2 sm:px-3"
+              >
+                <dt className="text-xs font-medium leading-tight text-gray-600">
+                  {label}
+                </dt>
+                <dd className="mt-1 text-xl font-semibold leading-none text-gray-900">
+                  {value}
+                </dd>
+              </div>
+            ))}
           </dl>
         ) : (
           <p>{messages.couldNotLoadUserStats}</p>
