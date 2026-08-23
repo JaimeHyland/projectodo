@@ -1,5 +1,7 @@
 import Link from "next/link";
 import { FaFacebook, FaInstagram, FaYoutube, FaTiktok } from "react-icons/fa";
+import { CopyrightDetailsButton } from "@/components/CopyrightDetailsButton";
+import { MitLicenseDetailsButton } from "@/components/MitLicenseDetailsButton";
 
 import en from "@/messages/footer/en.json";
 import de from "@/messages/footer/de.json";
@@ -17,13 +19,25 @@ export function Footer({ locale }: FooterProps) {
   return (
     <footer className="bg-gray-900 text-white p-4 text-sm">
       <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 items-center gap-4">
-        {/* Left */}
-        <div className="flex flex-wrap items-center gap-4 justify-center md:justify-start">
-          <Link href={`/${locale}/legal-notice`} className="hover:underline">
-            {messages.linkImpressum}
-          </Link>
-          <span>{messages.textCopyright}</span>
-          <span>{messages.MITLicense}</span>
+        {/* Legal and privacy */}
+        <div className="flex flex-col items-center gap-3 md:items-start">
+          <nav
+            aria-label={messages.privacyAndLegalLabel}
+            className="flex flex-wrap justify-center gap-x-4 gap-y-2 md:justify-start"
+          >
+            <Link
+              href={`/${locale}/legal-notice`}
+              className="font-medium underline underline-offset-4 hover:text-gray-200"
+            >
+              {messages.linkImpressum}
+            </Link>
+            <Link
+              href={`/${locale}/privacy`}
+              className="font-medium underline underline-offset-4 hover:text-gray-200"
+            >
+              {messages.linkPrivacy}
+            </Link>
+          </nav>
         </div>
 
         {/* Centre */}
@@ -70,10 +84,15 @@ export function Footer({ locale }: FooterProps) {
         </div>
 
         {/* Right */}
-        <div className="flex justify-center md:justify-end">
-          <button className="bg-gray-700 px-2 py-1 rounded hover:bg-gray-600">
-            {messages.btnManagePermissions}
-          </button>
+        <div className="flex flex-wrap justify-center gap-4 md:justify-end">
+          <CopyrightDetailsButton
+            copyright={messages.textCopyright}
+            messages={messages.copyrightDetails}
+          />
+          <MitLicenseDetailsButton
+            label={messages.MITLicense}
+            messages={messages.mitLicenseDetails}
+          />
         </div>
       </div>
     </footer>

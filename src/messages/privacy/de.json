@@ -1,0 +1,82 @@
+{
+  "titlePrivacy": "Datenschutzerklärung",
+  "lastUpdated": "Stand: 23. August 2026",
+  "introduction": "Diese Erklärung informiert darüber, wie personenbezogene Daten bei der Nutzung von Projectodo verarbeitet werden. Sie gilt für die Website, Benutzerkonten sowie die zugehörigen Anmelde- und E-Mail-Funktionen.",
+  "sections": [
+    {
+      "heading": "1. Verantwortlicher",
+      "paragraphs": [
+        "Verantwortlich für die Verarbeitung Ihrer personenbezogenen Daten ist Fidel Conde, Körnerstraße 26, 10785 Berlin, Deutschland. Sie erreichen den Verantwortlichen unter info@projectodo.de oder telefonisch unter +49 30 26 55 46 28."
+      ]
+    },
+    {
+      "heading": "2. Aufruf der Website und Server-Protokolle",
+      "paragraphs": [
+        "Beim Aufruf der Website können die Hosting-Systeme technische Angaben wie IP-Adresse, Datum und Uhrzeit, aufgerufene URL, Referrer, Browser, Betriebssystem und Antwortstatus verarbeiten. Dies ist erforderlich, um die Website auszuliefern, Fehler zu diagnostizieren und den Dienst vor Missbrauch zu schützen.",
+        "Rechtsgrundlage ist Art. 6 Abs. 1 lit. f der Datenschutz-Grundverordnung der Europäischen Union (EU-DSGVO), gestützt auf berechtigte Interessen an einem zuverlässigen und sicheren Dienst. Protokolldaten werden nur so lange gespeichert, wie dies nach den Einstellungen des jeweiligen Anbieters für Betrieb und Sicherheit erforderlich ist. Danach werden sie gelöscht oder anonymisiert, sofern eine längere Aufbewahrung nicht zur Untersuchung eines Vorfalls oder aufgrund gesetzlicher Pflichten erforderlich ist."
+      ]
+    },
+    {
+      "heading": "3. Benutzerkonten und Authentifizierung",
+      "paragraphs": [
+        "Wenn Sie ein Konto erstellen oder verwenden, verarbeiten wir Benutzername, E-Mail-Adresse, Passwort-Hash, Kontostatus, zugewiesene Rollen und Gruppen, Anmeldesitzungsdaten und Zeitstempel. Passwörter werden nicht im Klartext gespeichert.",
+        "Die Verarbeitung ist erforderlich, um das Konto anzulegen und zu verwalten, Sie zu authentifizieren und geschützte Funktionen bereitzustellen. Rechtsgrundlage ist Art. 6 Abs. 1 lit. b der EU-DSGVO sowie für Zugriffskontrolle und Dienstsicherheit Art. 6 Abs. 1 lit. f der EU-DSGVO. Kontodaten werden grundsätzlich für die Dauer des Kontos gespeichert und gelöscht, sobald sie nicht mehr benötigt werden. Gesetzliche Pflichten und eine begrenzte Aufbewahrung in Sicherungskopien bleiben vorbehalten."
+      ]
+    },
+    {
+      "heading": "4. E-Mail-Bestätigung und Passwort-Zurücksetzung",
+      "paragraphs": [
+        "Für Registrierung, E-Mail-Bestätigung und Passwort-Zurücksetzung verarbeiten wir E-Mail-Adresse, Benutzername und einen sicher erzeugten Einmal-Token. Bestätigungs- und Zurücksetzungs-Token laufen nach 30 Minuten ab. E-Mails werden über unseren E-Mail-Dienstleister versandt.",
+        "Rechtsgrundlage sind Art. 6 Abs. 1 lit. b und Art. 6 Abs. 1 lit. f der EU-DSGVO (sichere Kontoverwaltung). Verwendete oder abgelaufene Token werden gelöscht."
+      ]
+    },
+    {
+      "heading": "5. Cookies und vergleichbare Speichertechniken",
+      "paragraphs": [
+        "Die Website verwendet derzeit ausschließlich Funktions- und Sicherheits-Cookies. Optionale Werbe- oder verhaltensbezogene Analyse-Cookies werden derzeit nicht eingesetzt. Unbedingt erforderliche Speicherungen und Zugriffe für einen vom Nutzer ausdrücklich gewünschten Dienst beruhen auf § 25 Abs. 2 Nr. 2 des deutschen Telekommunikation-Digitale-Dienste-Datenschutz-Gesetzes (TDDDG). Soweit Cookie-Daten personenbezogen sind, beruht die Verarbeitung je nach Zweck auf Art. 6 Abs. 1 lit. b oder f der EU-DSGVO."
+      ],
+      "items": [
+        "NEXT_LOCALE: speichert die ausgewählte oder erkannte Sprache für bis zu ein Jahr.",
+        "csrftoken: schützt Formulare und Kontoaktionen vor gefälschten Anfragen und kann bis zu ungefähr ein Jahr gespeichert bleiben.",
+        "sessionid: hält eine authentifizierte Anmeldesitzung aufrecht und bleibt normalerweise bis zu zwei Wochen gespeichert."
+      ]
+    },
+    {
+      "heading": "6. Dienstleister und Empfänger",
+      "paragraphs": [
+        "Für den Betrieb nutzen wir externe Anbieter, darunter Vercel für das Frontend-Hosting, Heroku/Salesforce für das Backend-Hosting, Supabase für die Datenbank-Infrastruktur, Amazon Web Services für statische Dateien und STRATO für den E-Mail-Versand. Diese Anbieter verarbeiten Daten in unserem Auftrag oder, soweit einschlägig, in eigener datenschutzrechtlicher Verantwortung.",
+        "Abhängig von der Konfiguration der Anbieter und möglichen Support-Zugriffen können Daten außerhalb des Europäischen Wirtschaftsraums verarbeitet werden. Soweit erforderlich, werden Übermittlungen durch einen Angemessenheitsbeschluss, Standardvertragsklauseln oder eine andere zulässige Garantie abgesichert."
+      ]
+    },
+    {
+      "heading": "7. Ihre Rechte",
+      "paragraphs": [
+        "Unter den jeweiligen gesetzlichen Voraussetzungen haben Sie Rechte auf Auskunft, Berichtigung, Löschung, Einschränkung der Verarbeitung, Datenübertragbarkeit und Widerspruch. Soweit eine Verarbeitung auf Einwilligung beruht, können Sie diese jederzeit mit Wirkung für die Zukunft widerrufen. Sie können sich außerdem bei einer Datenschutzaufsichtsbehörde beschweren."
+      ],
+      "links": [
+        {
+          "label": "Berliner Beauftragte für Datenschutz und Informationsfreiheit",
+          "href": "https://www.datenschutz-berlin.de/"
+        }
+      ]
+    },
+    {
+      "heading": "8. Erforderliche Angaben und automatisierte Entscheidungen",
+      "paragraphs": [
+        "Bei Registrierung oder Authentifizierung als erforderlich gekennzeichnete Angaben werden benötigt, um die gewünschte Kontofunktion bereitzustellen. Ohne diese Angaben kann das Konto oder die Funktion nicht angeboten werden. Eine automatisierte Entscheidungsfindung oder ein Profiling im Sinne von Art. 22 der EU-DSGVO findet nicht statt."
+      ]
+    },
+    {
+      "heading": "9. Externe Links",
+      "paragraphs": [
+        "Links zu sozialen Netzwerken und anderen externen Websites sind einfache Verweise. Daten werden erst dann an diese Anbieter übermittelt, wenn Sie einen Link aufrufen. Anschließend gelten die Datenschutzhinweise des jeweiligen Anbieters."
+      ]
+    },
+    {
+      "heading": "10. Änderungen dieser Erklärung",
+      "paragraphs": [
+        "Wir können diese Erklärung anpassen, wenn sich der Dienst, die eingesetzten Anbieter oder die rechtlichen Anforderungen ändern. Das Datum am Seitenanfang kennzeichnet die aktuelle Fassung."
+      ]
+    }
+  ]
+}

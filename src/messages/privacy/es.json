@@ -1,0 +1,82 @@
+{
+  "titlePrivacy": "Política de privacidad",
+  "lastUpdated": "Última actualización: 23 de agosto de 2026",
+  "introduction": "Esta política explica cómo se tratan los datos personales al utilizar Projectodo. Se aplica al sitio web, las cuentas de usuario y las funciones relacionadas de autenticación y correo electrónico.",
+  "sections": [
+    {
+      "heading": "1. Responsable del tratamiento",
+      "paragraphs": [
+        "El responsable del tratamiento de sus datos personales es Fidel Conde, Körnerstraße 26, 10785 Berlín, Alemania. Puede contactar con el responsable en info@projectodo.de o por teléfono en el +49 30 26 55 46 28."
+      ]
+    },
+    {
+      "heading": "2. Acceso al sitio y registros del servidor",
+      "paragraphs": [
+        "Al acceder al sitio, los sistemas de alojamiento pueden tratar información técnica como la dirección IP, la fecha y hora, la URL solicitada, la página de referencia, el navegador, el sistema operativo y el estado de respuesta. Esto es necesario para mostrar el sitio, diagnosticar fallos y proteger el servicio frente a usos indebidos.",
+        "La base jurídica es el artículo 6.1.f del Reglamento General de Protección de Datos de la Unión Europea (RGPD de la UE), basado en el interés legítimo en prestar un servicio fiable y seguro. Los registros se conservan únicamente durante el tiempo necesario para el funcionamiento y la seguridad conforme a la configuración del proveedor correspondiente. Después se eliminan o anonimizan, salvo que sea necesario conservarlos durante más tiempo para investigar un incidente o cumplir una obligación legal."
+      ]
+    },
+    {
+      "heading": "3. Cuentas de usuario y autenticación",
+      "paragraphs": [
+        "Si crea o utiliza una cuenta, tratamos su nombre de usuario, dirección de correo electrónico, hash de la contraseña, estado de la cuenta, funciones y grupos asignados, información de la sesión y marcas de tiempo. Las contraseñas no se almacenan en texto sin cifrar.",
+        "El tratamiento es necesario para crear y administrar la cuenta, autenticarle y ofrecer funciones restringidas. La base jurídica es el artículo 6.1.b del RGPD de la UE y, para el control de acceso y la seguridad del servicio, el artículo 6.1.f del RGPD de la UE. Los datos se conservan normalmente mientras exista la cuenta y se eliminan cuando dejan de ser necesarios, sin perjuicio de obligaciones legales y de una conservación limitada en copias de seguridad."
+      ]
+    },
+    {
+      "heading": "4. Verificación del correo y restablecimiento de contraseña",
+      "paragraphs": [
+        "Para el registro, la verificación del correo y el restablecimiento de contraseña tratamos la dirección de correo, el nombre de usuario y un token seguro de un solo uso. Los tokens de verificación y restablecimiento caducan a los 30 minutos. Los mensajes se envían mediante nuestro proveedor de correo electrónico.",
+        "La base jurídica son los artículos 6.1.b y 6.1.f del RGPD de la UE (administración segura de cuentas). Los tokens utilizados o caducados se eliminan."
+      ]
+    },
+    {
+      "heading": "5. Cookies y almacenamiento similar",
+      "paragraphs": [
+        "Actualmente el sitio solo utiliza cookies funcionales y de seguridad. No se utilizan cookies opcionales de publicidad ni de análisis del comportamiento. El almacenamiento y acceso estrictamente necesarios para un servicio solicitado expresamente por el usuario se basan en el artículo 25.2, número 2, de la Ley alemana de Protección de Datos de Telecomunicaciones y Servicios Digitales (TDDDG). Cuando los datos de cookies sean personales, el tratamiento se basa, según corresponda, en el artículo 6.1.b o 6.1.f del RGPD de la UE."
+      ],
+      "items": [
+        "NEXT_LOCALE: recuerda el idioma seleccionado o detectado durante un máximo de un año.",
+        "csrftoken: protege formularios y acciones de cuenta frente a solicitudes falsificadas y puede conservarse durante aproximadamente un año.",
+        "sessionid: mantiene una sesión autenticada y normalmente se conserva durante un máximo de dos semanas."
+      ]
+    },
+    {
+      "heading": "6. Proveedores y destinatarios",
+      "paragraphs": [
+        "Utilizamos proveedores externos para operar el servicio, entre ellos Vercel para alojar el frontend, Heroku/Salesforce para el backend, Supabase para la infraestructura de base de datos, Amazon Web Services para archivos estáticos y STRATO para el envío de correo. Estos proveedores tratan datos por cuenta nuestra o bajo su propia responsabilidad jurídica cuando corresponda.",
+        "Según la configuración y el acceso de soporte de los proveedores, algunos datos pueden tratarse fuera del Espacio Económico Europeo. Cuando sea necesario, las transferencias estarán protegidas mediante una decisión de adecuación, cláusulas contractuales tipo u otra garantía válida."
+      ]
+    },
+    {
+      "heading": "7. Sus derechos",
+      "paragraphs": [
+        "Cuando se cumplan los requisitos legales correspondientes, tiene derecho de acceso, rectificación, supresión, limitación, portabilidad y oposición. Cuando el tratamiento se base en el consentimiento, puede retirarlo en cualquier momento sin afectar al tratamiento lícito anterior. También puede presentar una reclamación ante una autoridad de protección de datos."
+      ],
+      "links": [
+        {
+          "label": "Comisionada de Berlín para la Protección de Datos y la Libertad de Información",
+          "href": "https://www.datenschutz-berlin.de/"
+        }
+      ]
+    },
+    {
+      "heading": "8. Datos obligatorios y decisiones automatizadas",
+      "paragraphs": [
+        "Los datos marcados como obligatorios durante el registro o la autenticación son necesarios para proporcionar la función solicitada. Sin ellos no puede ofrecerse la cuenta o la función. No utilizamos decisiones automatizadas ni elaboración de perfiles en el sentido del artículo 22 del RGPD de la UE."
+      ]
+    },
+    {
+      "heading": "9. Enlaces externos",
+      "paragraphs": [
+        "Los enlaces a redes sociales y otros sitios externos son enlaces ordinarios. Solo se envían datos a esos proveedores cuando usted abre uno de los enlaces. A partir de ese momento se aplican sus propias políticas de privacidad."
+      ]
+    },
+    {
+      "heading": "10. Cambios en esta política",
+      "paragraphs": [
+        "Podemos actualizar esta política cuando cambien el servicio, los proveedores o los requisitos legales. La fecha al principio de la página identifica la versión vigente."
+      ]
+    }
+  ]
+}

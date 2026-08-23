@@ -2,7 +2,25 @@
     "linkImpressum": "Impressum",
     "textCopyright": "© Jaime Hyland 2026",
     "MITLicense": "Lizenz MIT",
-    "btnManagePermissions": "Datenschutzeinstellungen verwalten",
+    "linkPrivacy": "Datenschutzerklärung",
+    "privacyAndLegalLabel": "Rechtliche Hinweise und Datenschutz",
+    "copyrightDetails": {
+        "title": "Urheberrecht und Website-Credits",
+        "description": "Webdesign und Entwicklung von Jaime Hyland.",
+        "portfolioLabel": "Jaimes Online-Portfolio",
+        "portfolioLinkText": "jaime-hyland.com",
+        "emailLabel": "E-Mail",
+        "close": "Schließen"
+    },
+    "mitLicenseDetails": {
+        "title": "MIT-Lizenz",
+        "permissions": "Die MIT-Lizenz ist eine freizügige Open-Source-Lizenz. Sie erlaubt es allen, den Projectodo-Code zu verwenden, zu kopieren, zu verändern, zusammenzuführen, zu veröffentlichen, zu verbreiten, unterzulizenzieren oder Kopien davon zu verkaufen.",
+        "attribution": "Der Urheberrechtsvermerk und der MIT-Lizenztext müssen in allen Kopien oder wesentlichen Teilen der Software erhalten bleiben. Dadurch bleibt Jaime Hyland als Urheberrechtsinhaber genannt.",
+        "warranty": "Die Software wird ohne Gewährleistung bereitgestellt. Für die Nutzung des Codes ist der vollständige Lizenztext im Repository maßgeblich.",
+        "repositoryLabel": "Öffentliches Projectodo-Repository",
+        "repositoryLinkText": "github.com/JaimeHyland/projectodo",
+        "close": "Schließen"
+    },
     "linkFacebook": "Projectodo auf Facebook",
     "linkInstagram": "Projectodo auf Instagram",
     "linkYoutube": "Projectodo auf YouTube",

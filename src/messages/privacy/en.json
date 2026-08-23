@@ -1,0 +1,82 @@
+{
+  "titlePrivacy": "Privacy notice",
+  "lastUpdated": "Last updated: 23 August 2026",
+  "introduction": "This notice explains how personal data is processed when you use Projectodo. It applies to the website, user accounts and related authentication and email functions.",
+  "sections": [
+    {
+      "heading": "1. Controller",
+      "paragraphs": [
+        "The controller responsible for processing your personal data is Fidel Conde, Körnerstraße 26, 10785 Berlin, Germany. You can contact the controller at info@projectodo.de or by telephone on +49 30 26 55 46 28."
+      ]
+    },
+    {
+      "heading": "2. Accessing the website and server logs",
+      "paragraphs": [
+        "When you access the website, the hosting systems may process technical information such as your IP address, date and time of access, requested URL, referrer, browser, operating system and response status. This is necessary to deliver the website, diagnose faults and protect the service against misuse.",
+        "The legal basis is Article 6(1)(f) of the European Union General Data Protection Regulation (EU GDPR), covering legitimate interests in providing a reliable and secure service. Log data is retained only for as long as it is required for operation and security under the relevant provider settings, and is then deleted or anonymised unless longer retention is required to investigate an incident or comply with law."
+      ]
+    },
+    {
+      "heading": "3. User accounts and authentication",
+      "paragraphs": [
+        "If you create or use an account, we process your username, email address, password hash, account status, assigned roles and groups, login session information and timestamps. Passwords are not stored in plain text.",
+        "Processing is necessary to create and administer the account, authenticate you and provide restricted functions. The legal basis is Article 6(1)(b) of the EU GDPR and, for access control and service security, Article 6(1)(f) of the EU GDPR. Account data is normally retained while the account exists and is deleted when it is no longer required, subject to legal obligations and limited backup retention."
+      ]
+    },
+    {
+      "heading": "4. Email verification and password reset",
+      "paragraphs": [
+        "For registration, email verification and password resets, we process your email address, username and a securely generated single-use token. Verification and reset tokens expire after 30 minutes. Emails are delivered through our email service provider.",
+        "The legal basis is Article 6(1)(b) and Article 6(1)(f) of the EU GDPR (secure account administration). Used or expired tokens are deleted."
+      ]
+    },
+    {
+      "heading": "5. Cookies and similar storage",
+      "paragraphs": [
+        "The website currently uses only functional and security cookies. It does not currently use optional advertising or behavioural-analytics cookies. Storage and access that are strictly necessary for a service requested by the user are based on section 25(2), no. 2 of the German Telecommunications Digital Services Data Protection Act (TDDDG). Where cookie data is personal, processing is based on Article 6(1)(b) or (f) of the EU GDPR as applicable."
+      ],
+      "items": [
+        "NEXT_LOCALE: remembers the selected or detected language for up to one year.",
+        "csrftoken: protects forms and account actions against forged requests and may remain for up to approximately one year.",
+        "sessionid: maintains an authenticated login session and normally remains for up to two weeks."
+      ]
+    },
+    {
+      "heading": "6. Service providers and recipients",
+      "paragraphs": [
+        "We use external providers to operate the service, including Vercel for frontend hosting, Heroku/Salesforce for backend hosting, Supabase for database infrastructure, Amazon Web Services for static assets and STRATO for email delivery. These providers process data on our behalf or under their own legal responsibilities where applicable.",
+        "Depending on provider configuration and support access, data may be processed outside the European Economic Area. Where required, transfers are protected by an adequacy decision, standard contractual clauses or another lawful safeguard."
+      ]
+    },
+    {
+      "heading": "7. Your rights",
+      "paragraphs": [
+        "Subject to the applicable conditions, you have rights of access, rectification, erasure, restriction, data portability and objection. Where processing relies on consent, you may withdraw it at any time without affecting earlier lawful processing. You also have the right to lodge a complaint with a data protection supervisory authority."
+      ],
+      "links": [
+        {
+          "label": "Berlin Commissioner for Data Protection and Freedom of Information",
+          "href": "https://www.datenschutz-berlin.de/"
+        }
+      ]
+    },
+    {
+      "heading": "8. Required information and automated decisions",
+      "paragraphs": [
+        "Information marked as required during registration or authentication is necessary to provide the requested account function. Without it, the account or function cannot be provided. We do not use automated decision-making or profiling within the meaning of Article 22 of the EU GDPR."
+      ]
+    },
+    {
+      "heading": "9. External links",
+      "paragraphs": [
+        "Links to social networks and other external websites are ordinary links. Data is sent to those providers only when you follow a link. Their own privacy notices then apply."
+      ]
+    },
+    {
+      "heading": "10. Changes to this notice",
+      "paragraphs": [
+        "We may update this notice when the service, providers or legal requirements change. The date at the top identifies the current version."
+      ]
+    }
+  ]
+}
