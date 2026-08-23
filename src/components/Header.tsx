@@ -81,14 +81,14 @@ export function Header() {
   ];
 
   const tabColors = [
-    '#2e744b',
+    '#b8b8b8',
     '#fabe00',
     '#7bae37',
     '#008bae',
     '#ca8f81',
     '#f8a020',
     '#f2f3ae',
-    '#008bae',
+    '#d8d8c8',
   ];
 
   useEffect(() => {
