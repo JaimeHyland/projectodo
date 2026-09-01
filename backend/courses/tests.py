@@ -1,5 +1,6 @@
 from datetime import date, time
 import json
+from unittest.mock import patch
 
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group
@@ -8,6 +9,7 @@ from django.test import TestCase
 
 from courses.models import Course, CourseMeeting, Location, Place
 from courses.services.meeting_generation import generate_course_meetings_for_course
+from courses.services.berlin_holidays import HolidayPeriod
 
 
 class LocationApiTests(TestCase):
@@ -176,6 +178,21 @@ class CourseAdminApiTests(TestCase):
             response.json()["courses"][0]["default_place"],
             self.place.id,
         )
+        self.assertFalse(response.json()["courses"][0]["meetings_created"])
+
+        CourseMeeting.objects.create(
+            course=self.course,
+            instructor=self.webmaster,
+            location=self.location,
+            default_place=self.place,
+            date=self.course.start_date,
+            start_time=self.course.start_time,
+        )
+
+        response = self.client.get(
+            f"/api/courses/locations/{self.location.id}/courses/"
+        )
+        self.assertTrue(response.json()["courses"][0]["meetings_created"])
 
     def test_course_update_changes_editable_fields_only(self):
         payload = {
@@ -206,6 +223,100 @@ class CourseAdminApiTests(TestCase):
         self.assertEqual(self.course.location, self.location)
         self.assertEqual(self.course.instructor, self.webmaster)
         self.assertIsNone(self.course.default_place)
+
+    def test_ordinary_user_cannot_manage_courses_or_meetings(self):
+        User = get_user_model()
+        ordinary_user = User.objects.create_user(
+            username="ordinary-user",
+            password="test-password",
+        )
+        self.client.force_login(ordinary_user)
+
+        response = self.client.post(
+            "/api/courses/create/",
+            data=json.dumps({
+                "name": "Unauthorized course",
+                "location": self.location.id,
+                "start_date": "2026-09-01",
+                "start_time": "10:00",
+            }),
+            content_type="application/json",
+        )
+
+        self.assertEqual(response.status_code, 403)
+        self.assertFalse(Course.objects.filter(name="Unauthorized course").exists())
+
+        preview = self.client.get(
+            f"/api/courses/{self.course.id}/meetings/preview/"
+        )
+        generate = self.client.post(
+            f"/api/courses/{self.course.id}/meetings/generate/"
+        )
+
+        self.assertEqual(preview.status_code, 403)
+        self.assertEqual(generate.status_code, 403)
+        self.assertEqual(CourseMeeting.objects.count(), 0)
+
+    @patch("courses.services.meeting_planning.get_berlin_holiday_calendar")
+    def test_meeting_preview_and_generation_exclude_berlin_holidays(
+        self,
+        mock_calendar,
+    ):
+        self.course.duration_type = "date_range"
+        self.course.term_type = "school_term"
+        self.course.start_date = date(2026, 8, 3)
+        self.course.end_date = date(2026, 8, 24)
+        self.course.days_of_week = "MO"
+        self.course.save()
+        mock_calendar.return_value = {
+            "public": [
+                HolidayPeriod(
+                    date(2026, 8, 10),
+                    date(2026, 8, 10),
+                    "Public holiday",
+                    "public",
+                )
+            ],
+            "school": [
+                HolidayPeriod(
+                    date(2026, 8, 17),
+                    date(2026, 8, 17),
+                    "School holiday",
+                    "school",
+                )
+            ],
+        }
+
+        preview = self.client.get(
+            f"/api/courses/{self.course.id}/meetings/preview/"
+        )
+
+        self.assertEqual(preview.status_code, 200)
+        self.assertEqual(
+            [item["date"] for item in preview.json()["meetings"]],
+            ["2026-08-03", "2026-08-24"],
+        )
+        self.assertEqual(
+            [item["date"] for item in preview.json()["excluded"]],
+            ["2026-08-10", "2026-08-17"],
+        )
+        self.assertEqual(preview.json()["new_count"], 2)
+
+        generated = self.client.post(
+            f"/api/courses/{self.course.id}/meetings/generate/"
+        )
+
+        self.assertEqual(generated.status_code, 200)
+        self.assertEqual(generated.json()["created_count"], 2)
+        self.assertEqual(generated.json()["new_count"], 0)
+        self.assertEqual(
+            list(
+                self.course.meetings.order_by("date").values_list(
+                    "date", flat=True
+                )
+            ),
+            [date(2026, 8, 3), date(2026, 8, 24)],
+        )
 
 
 class CoursePlaceTests(TestCase):

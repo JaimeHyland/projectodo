@@ -4,10 +4,14 @@ from django.http import JsonResponse
 from django.views.decorators.http import require_GET, require_http_methods
 from django.utils.translation import gettext as _
 from django.core.exceptions import ValidationError
+from django.db.models import Exists, OuterRef
 
 from user_accounts.permissions import is_webmaster
 
-from .models import Course, Location, Place
+from .models import Course, CourseMeeting, Location, Place
+from .services.berlin_holidays import HolidayCalendarUnavailable
+from .services.meeting_generation import generate_course_meetings_for_course
+from .services.meeting_planning import HOLIDAY_SOURCE_URL, build_course_meeting_plan
 
 
 def serialize_location(location, include_places=False):
@@ -42,6 +46,10 @@ def serialize_place(place):
 
 
 def serialize_course(course):
+    meetings_created = getattr(course, "meetings_created", None)
+    if meetings_created is None:
+        meetings_created = course.meetings.exists()
+
     return {
         "id": course.id,
         "name": course.name,
@@ -58,7 +66,47 @@ def serialize_course(course):
         "start_time": course.start_time.isoformat(),
         "duration_minutes": course.duration_minutes,
         "days_of_week": course.days_of_week,
+        "meetings_created": meetings_created,
     }
+
+
+def serialize_meeting_plan(course, plan):
+    existing_dates = plan["existing_dates"]
+    return {
+        "course": {"id": course.id, "name": course.name},
+        "jurisdiction": "Berlin, Germany",
+        "source_url": HOLIDAY_SOURCE_URL,
+        "meetings": [
+            {
+                "date": meeting_date.isoformat(),
+                "status": (
+                    "existing" if meeting_date in existing_dates else "new"
+                ),
+            }
+            for meeting_date in plan["scheduled_dates"]
+        ],
+        "excluded": [
+            {
+                "date": item["date"].isoformat(),
+                "kind": item["kind"],
+                "name": item["name"],
+            }
+            for item in plan["excluded"]
+        ],
+        "new_count": sum(
+            meeting_date not in existing_dates
+            for meeting_date in plan["scheduled_dates"]
+        ),
+        "existing_count": len(existing_dates),
+    }
+
+
+def meeting_plan_response(course):
+    try:
+        plan = build_course_meeting_plan(course)
+    except HolidayCalendarUnavailable as error:
+        return None, JsonResponse({"error": str(error)}, status=503)
+    return plan, None
 
 
 @require_GET
@@ -160,6 +208,9 @@ def admin_create_course_view(request):
     if not request.user.is_authenticated:
         return JsonResponse({"error": _("Authentication required")}, status=401)
 
+    if not is_webmaster(request.user):
+        return JsonResponse({"error": _("Webmaster permissions required")}, status=403)
+
     try:
         data = json.loads(request.body)
     except json.JSONDecodeError:
@@ -208,7 +259,16 @@ def admin_location_courses_view(request, location_id):
     if not Location.objects.filter(id=location_id).exists():
         return JsonResponse({"error": _("Location not found")}, status=404)
 
-    courses = Course.objects.filter(location_id=location_id).order_by("name", "id")
+    courses = (
+        Course.objects
+        .filter(location_id=location_id)
+        .annotate(
+            meetings_created=Exists(
+                CourseMeeting.objects.filter(course_id=OuterRef("pk"))
+            )
+        )
+        .order_by("name", "id")
+    )
     return JsonResponse({"courses": [serialize_course(course) for course in courses]})
 
 
@@ -252,10 +312,67 @@ def admin_update_course_view(request, course_id):
     return JsonResponse(serialize_course(course))
 
 
+@require_GET
+def admin_course_meeting_preview_view(request, course_id):
+    if not request.user.is_authenticated:
+        return JsonResponse({"error": _("Authentication required")}, status=401)
+
+    if not is_webmaster(request.user):
+        return JsonResponse({"error": _("Webmaster permissions required")}, status=403)
+
+    try:
+        course = Course.objects.get(id=course_id)
+    except Course.DoesNotExist:
+        return JsonResponse({"error": _("Course not found")}, status=404)
+
+    plan, error_response = meeting_plan_response(course)
+    if error_response:
+        return error_response
+
+    return JsonResponse(serialize_meeting_plan(course, plan))
+
+
+@require_http_methods(["POST"])
+def admin_generate_course_meetings_view(request, course_id):
+    if not request.user.is_authenticated:
+        return JsonResponse({"error": _("Authentication required")}, status=401)
+
+    if not is_webmaster(request.user):
+        return JsonResponse({"error": _("Webmaster permissions required")}, status=403)
+
+    try:
+        course = Course.objects.get(id=course_id)
+    except Course.DoesNotExist:
+        return JsonResponse({"error": _("Course not found")}, status=404)
+
+    plan, error_response = meeting_plan_response(course)
+    if error_response:
+        return error_response
+
+    before_count = course.meetings.count()
+    generate_course_meetings_for_course(
+        course,
+        holiday_periods=plan["school_periods"],
+        public_holidays=plan["public_dates"],
+    )
+    created_count = course.meetings.count() - before_count
+
+    refreshed_plan, error_response = meeting_plan_response(course)
+    if error_response:
+        return error_response
+
+    response_data = serialize_meeting_plan(course, refreshed_plan)
+    response_data["created_count"] = created_count
+    return JsonResponse(response_data)
+
+
 @require_http_methods(["POST"])
 def admin_create_place_view(request, location_id):
     if not request.user.is_authenticated:
         return JsonResponse({"error": _("Authentication required")}, status=401)
+
+    if not is_webmaster(request.user):
+        return JsonResponse({"error": _("Webmaster permissions required")}, status=403)
 
     try:
         data = json.loads(request.body)
@@ -300,6 +417,9 @@ def admin_create_place_view(request, location_id):
 def admin_delete_place_view(request, place_id):
     if not request.user.is_authenticated:
         return JsonResponse({"error": _("Authentication required")}, status=401)
+
+    if not is_webmaster(request.user):
+        return JsonResponse({"error": _("Webmaster permissions required")}, status=403)
 
     try:
         place = Place.objects.get(id=place_id)

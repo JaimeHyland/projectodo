@@ -15,26 +15,44 @@ DAY_CODES = {
 }
 
 
-def generate_course_meetings_for_course(course):
+def course_meeting_dates(
+    course,
+    holiday_periods=None,
+    public_holidays=None,
+):
     if course.duration_type == "one_off":
-        dates = [course.start_date]
-    else:
-        end_date = course.end_date
-        if not end_date:
-            return []
+        return [course.start_date]
 
-        selected_weekdays = [
-            DAY_CODES[day.strip()]
-            for day in course.days_of_week.split(",")
-            if day.strip()
-        ]
+    end_date = course.end_date
+    if not end_date:
+        return []
 
-        dates = generate_session_dates(
-            first_date=course.start_date,
-            weekdays=selected_weekdays,
-            last_date=end_date,
-            runs_during_school_holidays=course.term_type == "all_year",
-        )
+    selected_weekdays = [
+        DAY_CODES[day.strip()]
+        for day in course.days_of_week.split(",")
+        if day.strip()
+    ]
+
+    return generate_session_dates(
+        first_date=course.start_date,
+        weekdays=selected_weekdays,
+        last_date=end_date,
+        holiday_periods=holiday_periods,
+        public_holidays=public_holidays,
+        runs_during_school_holidays=course.term_type == "all_year",
+    )
+
+
+def generate_course_meetings_for_course(
+    course,
+    holiday_periods=None,
+    public_holidays=None,
+):
+    dates = course_meeting_dates(
+        course,
+        holiday_periods=holiday_periods,
+        public_holidays=public_holidays,
+    )
 
     meetings = []
 

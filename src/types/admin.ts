@@ -68,4 +68,5 @@ export type AdminCourse = {
   start_time: string;
   duration_minutes: number;
   days_of_week: string;
+  meetings_created: boolean;
 };

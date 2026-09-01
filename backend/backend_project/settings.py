@@ -59,6 +59,12 @@ FRONTEND_URL = config(
     cast=str
 )
 
+OPEN_HOLIDAYS_API_URL = config(
+    "OPEN_HOLIDAYS_API_URL",
+    default="https://openholidaysapi.org",
+    cast=str,
+)
+
 APPEND_SLASH = False
 
 # Application definition

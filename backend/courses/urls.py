@@ -21,4 +21,12 @@ urlpatterns = [
     ),
     path("create/", views.admin_create_course_view),
     path("<int:course_id>/update/", views.admin_update_course_view),
+    path(
+        "<int:course_id>/meetings/preview/",
+        views.admin_course_meeting_preview_view,
+    ),
+    path(
+        "<int:course_id>/meetings/generate/",
+        views.admin_generate_course_meetings_view,
+    ),
 ]

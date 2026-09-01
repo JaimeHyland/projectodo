@@ -135,6 +135,9 @@ class Course(models.Model):
         if self.duration_type == "date_range" and not self.end_date:
             raise ValidationError({"end_date": "End date is required for date range courses."})
 
+        if self.end_date and self.end_date < self.start_date:
+            raise ValidationError({"end_date": "End date cannot be before start date."})
+
         if self.duration_type != "one_off" and not self.days_of_week:
             raise ValidationError({"days_of_week": "Days of week are required for recurring courses."})
 

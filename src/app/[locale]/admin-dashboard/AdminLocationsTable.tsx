@@ -93,6 +93,24 @@ type Messages = {
   deletePlace: string;
   confirmDeletePlace: string;
   couldNotDeletePlace: string;
+  planMeetings: string;
+  meetingPreview: string;
+  meetingPreviewFor: string;
+  loadingMeetingPreview: string;
+  couldNotLoadMeetingPreview: string;
+  berlinHolidayNotice: string;
+  meetingsToCreate: string;
+  meetingsAlreadyExist: string;
+  excludedMeetings: string;
+  noExcludedMeetings: string;
+  publicHoliday: string;
+  schoolHoliday: string;
+  generateMeetings: string;
+  generatingMeetings: string;
+  meetingsCreated: string;
+  couldNotGenerateMeetings: string;
+  noNewMeetings: string;
+  meetingsCreatedFlag: string;
 };
 
 type DashboardPlace = {
@@ -131,6 +149,17 @@ type CourseFormState = {
 
 type CoursesResponse = {
   courses: AdminCourse[];
+};
+
+type MeetingPlan = {
+  course: { id: number; name: string };
+  jurisdiction: string;
+  source_url: string;
+  meetings: { date: string; status: "new" | "existing" }[];
+  excluded: { date: string; kind: "public" | "school" | "holiday"; name: string }[];
+  new_count: number;
+  existing_count: number;
+  created_count?: number;
 };
 
 type PlaceFormState = {
@@ -188,6 +217,11 @@ export default function AdminLocationsTable({ locations, messages, locale }: Pro
   const [isLoadingCourses, setIsLoadingCourses] = useState(false);
   const [courseLocation, setCourseLocation] = useState<DashboardLocation | null>(null);
   const [editingCourse, setEditingCourse] = useState<AdminCourse | null>(null);
+  const [meetingCourse, setMeetingCourse] = useState<AdminCourse | null>(null);
+  const [meetingPlan, setMeetingPlan] = useState<MeetingPlan | null>(null);
+  const [isLoadingMeetingPlan, setIsLoadingMeetingPlan] = useState(false);
+  const [isGeneratingMeetings, setIsGeneratingMeetings] = useState(false);
+  const [meetingResult, setMeetingResult] = useState<string | null>(null);
   const [courseForm, setCourseForm] = useState<CourseFormState>(emptyCourseForm);
   const [deletingPlace, setDeletingPlace] = useState<DashboardPlace | null>(null);
 
@@ -256,6 +290,88 @@ export default function AdminLocationsTable({ locations, messages, locale }: Pro
     const data: CoursesResponse = await response.json();
     setManagedCourses(data.courses);
     setIsLoadingCourses(false);
+  }
+
+  function formatMeetingDate(value: string) {
+    return new Intl.DateTimeFormat(inputLocale, {
+      dateStyle: "medium",
+      timeZone: "UTC",
+    }).format(new Date(`${value}T00:00:00Z`));
+  }
+
+  async function openMeetingPreview(course: AdminCourse) {
+    setMeetingCourse(course);
+    setMeetingPlan(null);
+    setMeetingResult(null);
+    setIsLoadingMeetingPlan(true);
+    setError(null);
+
+    const response = await fetch(
+      apiUrl(`courses/${course.id}/meetings/preview/`),
+      { credentials: "include" },
+    );
+
+    if (!response.ok) {
+      console.error("Meeting preview failed", await response.text());
+      setError(messages.couldNotLoadMeetingPreview);
+      setIsLoadingMeetingPlan(false);
+      return;
+    }
+
+    setMeetingPlan(await response.json());
+    setIsLoadingMeetingPlan(false);
+  }
+
+  function closeMeetingPreview() {
+    setMeetingCourse(null);
+    setMeetingPlan(null);
+    setMeetingResult(null);
+    setIsLoadingMeetingPlan(false);
+    setIsGeneratingMeetings(false);
+    setError(null);
+  }
+
+  async function confirmGenerateMeetings() {
+    if (!meetingCourse) return;
+
+    setIsGeneratingMeetings(true);
+    setMeetingResult(null);
+    setError(null);
+    const csrfToken = getCookie("csrftoken");
+    const response = await fetch(
+      apiUrl(`courses/${meetingCourse.id}/meetings/generate/`),
+      {
+        method: "POST",
+        credentials: "include",
+        headers: { "X-CSRFToken": csrfToken ?? "" },
+      },
+    );
+
+    if (!response.ok) {
+      console.error("Meeting generation failed", await response.text());
+      setError(messages.couldNotGenerateMeetings);
+      setIsGeneratingMeetings(false);
+      return;
+    }
+
+    const plan: MeetingPlan = await response.json();
+    setMeetingPlan(plan);
+    if ((plan.created_count ?? 0) > 0) {
+      setManagedCourses((courses) =>
+        courses.map((course) =>
+          course.id === meetingCourse.id
+            ? { ...course, meetings_created: true }
+            : course,
+        ),
+      );
+    }
+    setMeetingResult(
+      messages.meetingsCreated.replace(
+        "{count}",
+        String(plan.created_count ?? 0),
+      ),
+    );
+    setIsGeneratingMeetings(false);
   }
 
   function closeCourseManager() {
@@ -771,11 +887,14 @@ async function confirmSaveCourse() {
             ) : managedCourses.length ? (
               <ul className="space-y-2">
                 {managedCourses.map((course) => (
-                  <li key={course.id}>
+                  <li
+                    key={course.id}
+                    className="flex flex-col gap-2 rounded border bg-white p-3 sm:flex-row sm:items-center"
+                  >
                     <button
                       type="button"
                       onClick={() => openEditCourse(course)}
-                      className="w-full rounded border bg-white p-3 text-left hover:bg-gray-50"
+                      className="min-w-0 flex-1 text-left hover:text-black"
                     >
                       <span className="block font-medium">{course.name}</span>
                       <span className="block text-sm text-gray-700">
@@ -784,6 +903,32 @@ async function confirmSaveCourse() {
                         {course.course_type === "one_to_one" ? messages.oneToOne : messages.group}
                       </span>
                     </button>
+                    <label className="flex shrink-0 items-center gap-2 text-xs font-medium text-gray-600">
+                      <input
+                        type="checkbox"
+                        checked={course.meetings_created}
+                        disabled
+                        readOnly
+                        className="h-3.5 w-3.5 accent-[#3a5c03]"
+                      />
+                      {messages.meetingsCreatedFlag}
+                    </label>
+                    <div className="flex shrink-0 gap-2">
+                      <button
+                        type="button"
+                        onClick={() => openEditCourse(course)}
+                        className="admin-button admin-button-secondary"
+                      >
+                        {messages.edit}
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => openMeetingPreview(course)}
+                        className="admin-button admin-button-primary"
+                      >
+                        {messages.planMeetings}
+                      </button>
+                    </div>
                   </li>
                 ))}
               </ul>
@@ -809,6 +954,111 @@ async function confirmSaveCourse() {
                 className="rounded bg-[#3a5c03] px-4 py-2 text-white"
               >
                 {messages.createNewCourse}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {meetingCourse && (
+        <div className="fixed inset-0 z-[60] flex items-start justify-center bg-black/40 p-4 sm:items-center">
+          <div className="max-h-[calc(100vh-2rem)] w-full max-w-3xl overflow-y-auto rounded bg-white p-4 shadow-lg sm:p-6">
+            <h3 className="text-lg font-semibold">{messages.meetingPreview}</h3>
+            <p className="mb-4 text-gray-700">
+              {messages.meetingPreviewFor.replace("{name}", meetingCourse.name)}
+            </p>
+
+            {isLoadingMeetingPlan ? (
+              <p className="rounded border bg-gray-50 p-4 text-gray-700">
+                {messages.loadingMeetingPreview}
+              </p>
+            ) : meetingPlan ? (
+              <>
+                <p className="mb-4 rounded border border-blue-200 bg-blue-50 p-3 text-sm text-blue-950">
+                  {messages.berlinHolidayNotice}{" "}
+                  <a
+                    href={meetingPlan.source_url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="font-medium underline underline-offset-2"
+                  >
+                    OpenHolidays API
+                  </a>
+                </p>
+
+                <div className="mb-4 grid grid-cols-2 gap-3">
+                  <div className="rounded border bg-stone-50 p-3 text-center">
+                    <div className="text-2xl font-bold">{meetingPlan.new_count}</div>
+                    <div className="text-sm text-gray-700">{messages.meetingsToCreate}</div>
+                  </div>
+                  <div className="rounded border bg-stone-50 p-3 text-center">
+                    <div className="text-2xl font-bold">{meetingPlan.existing_count}</div>
+                    <div className="text-sm text-gray-700">{messages.meetingsAlreadyExist}</div>
+                  </div>
+                </div>
+
+                {meetingPlan.meetings.length > 0 && (
+                  <ul className="mb-4 grid max-h-48 grid-cols-1 gap-1 overflow-y-auto rounded border p-3 text-sm sm:grid-cols-2">
+                    {meetingPlan.meetings.map((meeting) => (
+                      <li key={meeting.date} className="flex justify-between gap-2">
+                        <span>{formatMeetingDate(meeting.date)}</span>
+                        {meeting.status === "existing" && (
+                          <span className="text-gray-500">{messages.meetingsAlreadyExist}</span>
+                        )}
+                      </li>
+                    ))}
+                  </ul>
+                )}
+
+                <h4 className="mb-2 font-semibold">{messages.excludedMeetings}</h4>
+                {meetingPlan.excluded.length ? (
+                  <ul className="max-h-40 space-y-1 overflow-y-auto rounded border bg-stone-50 p-3 text-sm">
+                    {meetingPlan.excluded.map((item) => (
+                      <li key={`${item.date}-${item.kind}`}>
+                        <span className="font-medium">{formatMeetingDate(item.date)}</span>
+                        {" — "}
+                        {item.name} ({item.kind === "public" ? messages.publicHoliday : messages.schoolHoliday})
+                      </li>
+                    ))}
+                  </ul>
+                ) : (
+                  <p className="rounded border bg-stone-50 p-3 text-sm text-gray-700">
+                    {messages.noExcludedMeetings}
+                  </p>
+                )}
+              </>
+            ) : null}
+
+            {meetingResult && (
+              <p className="mt-4 rounded border border-green-200 bg-green-50 p-3 text-green-900">
+                {meetingResult}
+              </p>
+            )}
+            {error && <p className="mt-4 text-red-700">{error}</p>}
+
+            <div className="mt-6 flex flex-wrap justify-end gap-3">
+              <button
+                type="button"
+                onClick={closeMeetingPreview}
+                className="admin-button admin-button-outline"
+              >
+                {messages.close}
+              </button>
+              <button
+                type="button"
+                onClick={confirmGenerateMeetings}
+                disabled={
+                  !meetingPlan ||
+                  meetingPlan.new_count === 0 ||
+                  isGeneratingMeetings
+                }
+                className="admin-button admin-button-primary"
+              >
+                {isGeneratingMeetings
+                  ? messages.generatingMeetings
+                  : meetingPlan?.new_count === 0
+                    ? messages.noNewMeetings
+                    : messages.generateMeetings}
               </button>
             </div>
           </div>
