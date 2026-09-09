@@ -9,6 +9,7 @@ from django.db.models import Exists, OuterRef
 from user_accounts.permissions import is_webmaster
 
 from .models import Course, CourseMeeting, Location, Place
+from .services.course_activation import SchedulingValidationError, change_course_status
 from .services.berlin_holidays import HolidayCalendarUnavailable
 from .services.meeting_generation import generate_course_meetings_for_course
 from .services.meeting_planning import HOLIDAY_SOURCE_URL, build_course_meeting_plan
@@ -53,6 +54,7 @@ def serialize_course(course):
     return {
         "id": course.id,
         "name": course.name,
+        "status": course.status,
         "course_type": course.course_type,
         "subject": course.subject,
         "term_type": course.term_type,
@@ -79,8 +81,11 @@ def serialize_meeting_plan(course, plan):
         "meetings": [
             {
                 "date": meeting_date.isoformat(),
+                "proposal_id": f"{course.pk}:{meeting_date.isoformat()}:{course.start_time.isoformat()}",
+                "conflicts": plan["conflicts"].get(meeting_date, []),
                 "status": (
-                    "existing" if meeting_date in existing_dates else "new"
+                    "existing" if meeting_date in existing_dates else
+                    "conflict" if meeting_date in plan["conflicts"] else "new"
                 ),
             }
             for meeting_date in plan["scheduled_dates"]
@@ -94,10 +99,11 @@ def serialize_meeting_plan(course, plan):
             for item in plan["excluded"]
         ],
         "new_count": sum(
-            meeting_date not in existing_dates
+            meeting_date not in existing_dates and meeting_date not in plan["conflicts"]
             for meeting_date in plan["scheduled_dates"]
         ),
         "existing_count": len(existing_dates),
+        "conflict_count": len(plan["conflicts"]),
     }
 
 
@@ -240,10 +246,12 @@ def admin_create_course_view(request):
 
     try:
         course.full_clean()
+        course.save()
+    except SchedulingValidationError as error:
+        return JsonResponse({"issues": error.issues}, status=400)
     except ValidationError as error:
         return JsonResponse({"error": error.message_dict}, status=400)
 
-    course.save()
 
     return JsonResponse(serialize_course(course), status=201)
 
@@ -305,10 +313,12 @@ def admin_update_course_view(request, course_id):
 
     try:
         course.full_clean()
+        course.save()
+    except SchedulingValidationError as error:
+        return JsonResponse({"issues": error.issues}, status=400)
     except ValidationError as error:
         return JsonResponse({"error": error.message_dict}, status=400)
 
-    course.save()
     return JsonResponse(serialize_course(course))
 
 
@@ -349,20 +359,26 @@ def admin_generate_course_meetings_view(request, course_id):
     if error_response:
         return error_response
 
-    before_count = course.meetings.count()
-    generate_course_meetings_for_course(
-        course,
-        holiday_periods=plan["school_periods"],
-        public_holidays=plan["public_dates"],
-    )
-    created_count = course.meetings.count() - before_count
+    try:
+        result = generate_course_meetings_for_course(
+            course,
+            holiday_periods=plan["school_periods"],
+            public_holidays=plan["public_dates"],
+        )
+    except SchedulingValidationError as error:
+        return JsonResponse({"issues": error.issues}, status=400)
+    except ValidationError as error:
+        return JsonResponse({"error": error.message_dict}, status=400)
 
     refreshed_plan, error_response = meeting_plan_response(course)
     if error_response:
         return error_response
 
     response_data = serialize_meeting_plan(course, refreshed_plan)
-    response_data["created_count"] = created_count
+    response_data["created_count"] = len(result.created_dates)
+    response_data["created_dates"] = result.created_dates
+    response_data["existing_dates"] = result.existing_dates
+    response_data["conflict_dates"] = list(result.conflicts)
     return JsonResponse(response_data)
 
 
@@ -429,3 +445,71 @@ def admin_delete_place_view(request, place_id):
     place.delete()
 
     return JsonResponse({"success": True})
+
+
+@require_http_methods(["POST"])
+def admin_course_status_view(request, course_id):
+    if not request.user.is_authenticated:
+        return JsonResponse({"error": _("Authentication required")}, status=401)
+    if not is_webmaster(request.user):
+        return JsonResponse({"error": _("Webmaster permissions required")}, status=403)
+    try:
+        course = Course.objects.get(pk=course_id)
+    except Course.DoesNotExist:
+        return JsonResponse({"error": _("Course not found")}, status=404)
+    try:
+        data = json.loads(request.body)
+        if not isinstance(data, dict):
+            raise ValueError("Expected an object")
+    except (ValueError, UnicodeDecodeError):
+        return JsonResponse({"error": _("Invalid JSON")}, status=400)
+    try:
+        change_course_status(course, data.get("status"))
+    except SchedulingValidationError as error:
+        return JsonResponse({"issues": error.issues}, status=400)
+    except ValidationError as error:
+        return JsonResponse({"error": error.message_dict}, status=400)
+    return JsonResponse(serialize_course(course))
+
+
+@require_GET
+def admin_course_diagnostics_view(request, course_id):
+    if not request.user.is_authenticated:
+        return JsonResponse({"error": _("Authentication required")}, status=401)
+    if not is_webmaster(request.user):
+        return JsonResponse({"error": _("Webmaster permissions required")}, status=403)
+    try:
+        course = Course.objects.get(pk=course_id)
+    except Course.DoesNotExist:
+        return JsonResponse({"error": _("Course not found")}, status=404)
+    from .services.course_diagnostics import course_diagnostics
+    return JsonResponse(course_diagnostics(course))
+
+
+@require_http_methods(["PATCH"])
+def admin_resolve_meeting_view(request, meeting_id):
+    if not request.user.is_authenticated:
+        return JsonResponse({"error": _("Authentication required")}, status=401)
+    if not is_webmaster(request.user):
+        return JsonResponse({"error": _("Webmaster permissions required")}, status=403)
+    try:
+        data = json.loads(request.body)
+    except (ValueError, UnicodeDecodeError):
+        return JsonResponse({"ok": False, "errors": [{"type": "invalid_json"}]}, status=400)
+    from .services.meeting_resolution import resolve_meeting
+    from django.db import IntegrityError
+    try:
+        result = resolve_meeting(meeting_id, data)
+    except CourseMeeting.DoesNotExist:
+        return JsonResponse({"error": _("Meeting not found")}, status=404)
+    except SchedulingValidationError as error:
+        return JsonResponse({"ok": False, "errors": error.issues}, status=400)
+    except ValidationError as error:
+        return JsonResponse({"ok": False, "errors": [
+            {"type": "invalid_meeting", "fields": error.message_dict}
+        ]}, status=400)
+    except IntegrityError:
+        return JsonResponse({"ok": False, "errors": [
+            {"type": "integrity_conflict", "meeting_id": meeting_id}
+        ]}, status=409)
+    return JsonResponse(result)

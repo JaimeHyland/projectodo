@@ -78,7 +78,7 @@ def _fetch_holidays(endpoint, valid_from, valid_to, kind):
         ) from error
 
 
-def _year_holidays(year):
+def _year_holidays(year, *, cache_results=True):
     cache_key = f"berlin-holidays:{year}:v1"
     cached = cache.get(cache_key)
     if cached is not None:
@@ -94,16 +94,17 @@ def _year_holidays(year):
             "SchoolHolidays", valid_from, valid_to, "school"
         ),
     }
-    cache.set(cache_key, result, timeout=60 * 60 * 24)
+    if cache_results:
+        cache.set(cache_key, result, timeout=60 * 60 * 24)
     return result
 
 
-def get_berlin_holiday_calendar(valid_from, valid_to):
+def get_berlin_holiday_calendar(valid_from, valid_to, *, cache_results=True):
     public_holidays = []
     school_holidays = []
 
     for year in range(valid_from.year, valid_to.year + 1):
-        year_data = _year_holidays(year)
+        year_data = _year_holidays(year, cache_results=cache_results)
         public_holidays.extend(year_data["public"])
         school_holidays.extend(year_data["school"])
 

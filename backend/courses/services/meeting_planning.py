@@ -1,8 +1,7 @@
 from datetime import timedelta
 
-from courses.models import CourseMeeting
 from courses.services.berlin_holidays import get_berlin_holiday_calendar
-from courses.services.meeting_generation import course_meeting_dates
+from courses.services.meeting_generation import course_meeting_dates, plan_meeting_dates
 
 
 HOLIDAY_SOURCE_URL = "https://openholidaysapi.org"
@@ -19,9 +18,11 @@ def _dates_in_periods(periods, valid_from, valid_to):
     return dates
 
 
-def build_course_meeting_plan(course):
+def build_course_meeting_plan(course, *, cache_holidays=True):
     valid_to = course.end_date or course.start_date
-    calendar = get_berlin_holiday_calendar(course.start_date, valid_to)
+    calendar = get_berlin_holiday_calendar(
+        course.start_date, valid_to, cache_results=cache_holidays,
+    )
     public_dates = _dates_in_periods(
         calendar["public"], course.start_date, valid_to
     )
@@ -37,13 +38,11 @@ def build_course_meeting_plan(course):
     )
     possible_dates = course_meeting_dates(course)
     scheduled_set = set(scheduled_dates)
-    existing_dates = set(
-        CourseMeeting.objects.filter(
-            course=course,
-            date__in=scheduled_dates,
-            start_time=course.start_time,
-        ).values_list("date", flat=True)
-    )
+    proposals = list(plan_meeting_dates(course, scheduled_dates))
+    existing_dates = {meeting.date for meeting, status, _ in proposals
+                      if status == "existing"}
+    conflicts = {meeting.date: details for meeting, status, details in proposals
+                 if details}
 
     excluded = []
     if course.duration_type != "one_off":
@@ -77,6 +76,7 @@ def build_course_meeting_plan(course):
     return {
         "scheduled_dates": scheduled_dates,
         "existing_dates": existing_dates,
+        "conflicts": conflicts,
         "excluded": excluded,
         "school_periods": school_periods,
         "public_dates": public_dates,

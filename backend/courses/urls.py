@@ -3,6 +3,7 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
+    path("meetings/<int:meeting_id>/", views.admin_resolve_meeting_view),
     path("locations/", views.public_locations_view),
     path("locations/create/", views.admin_create_location_view),
     path("locations/<int:location_id>/update/", views.admin_update_location_view),
@@ -19,6 +20,8 @@ urlpatterns = [
         "places/<int:place_id>/delete/",
         views.admin_delete_place_view,
     ),
+    path("<int:course_id>/diagnostics/", views.admin_course_diagnostics_view),
+    path("<int:course_id>/status/", views.admin_course_status_view),
     path("create/", views.admin_create_course_view),
     path("<int:course_id>/update/", views.admin_update_course_view),
     path(
