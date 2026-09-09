@@ -59,3 +59,6 @@ node_modules/
 /blob-report/
 /playwright/.cache/
 /playwright/.auth/
+
+# Generated code-review archive
+/projectodo-code-review.zip
