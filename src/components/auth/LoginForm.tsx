@@ -73,7 +73,7 @@ export default function LoginForm({
         }),
       });
 
-      let data: any = null;
+      let data: unknown = null;
 
       try {
         data = await response.json();

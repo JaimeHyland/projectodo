@@ -2,7 +2,7 @@ from datetime import date, datetime, time
 from unittest.mock import patch
 from zoneinfo import ZoneInfo
 
-from django.test import TestCase
+from django.test import TestCase, override_settings
 
 from courses import tests_workflow as workflow
 from courses.models import Course, CourseMeeting, Location, Place
@@ -23,6 +23,49 @@ class MeetingResolutionTests(TestCase):
         response = self.client.patch(self.url, data=data, content_type="application/json")
         self.assertEqual(response.status_code, expected, response.content)
         return response.json()
+
+    def test_get_returns_assignment_context_without_writes(self):
+        from django.db import connection
+        from django.test.utils import CaptureQueriesContext
+        with CaptureQueriesContext(connection) as queries, patch(
+                "courses.services.berlin_holidays.cache.set") as cache_set:
+            response = self.client.get(self.url)
+        self.assertEqual(response.status_code, 200)
+        data = response.json()["meeting"]
+        self.assertEqual(data["instructor_source"], "inherited")
+        self.assertEqual(data["place_state"], "inherit")
+        self.assertEqual(data["course_defaults"]["place_id"], self.place.pk)
+        self.assertFalse(data["is_past"])
+        self.assertIn("+", data["start_datetime"])
+        self.assertFalse(any(q["sql"].lstrip().upper().startswith(
+            ("INSERT", "UPDATE", "DELETE")) for q in queries))
+        cache_set.assert_not_called()
+
+    def test_get_permissions_missing_and_open_cancelled_state(self):
+        self.meeting.instructor_source = "open"
+        self.meeting.instructor = None
+        self.meeting.place_is_open = True
+        self.meeting.place_open_accepted = True
+        self.meeting.cancelled = True
+        self.meeting.save()
+        data = self.client.get(self.url).json()["meeting"]
+        self.assertEqual(data["instructor_source"], "open")
+        self.assertEqual(data["place_state"], "open")
+        self.assertTrue(data["place_open_accepted"])
+        self.assertTrue(data["cancelled"])
+        self.assertEqual(self.client.get("/api/courses/meetings/999999/").status_code, 404)
+        self.client.force_login(self.other_teacher)
+        self.assertEqual(self.client.get(self.url).status_code, 403)
+        self.client.logout()
+        self.assertEqual(self.client.get(self.url).status_code, 401)
+
+    @override_settings(TIME_ZONE="Europe/Berlin")
+    def test_get_past_flag_uses_scheduled_start_not_calendar_date(self):
+        for hour, expected in ((7, False), (9, True)):
+            with patch("courses.services.meeting_resolution.timezone.now",
+                       return_value=datetime(2026, 8, 3, hour, tzinfo=ZoneInfo("UTC"))):
+                data = self.client.get(self.url).json()["meeting"]
+            self.assertEqual(data["is_past"], expected)
 
     def test_patch_preserves_unspecified_fields_and_other_rows(self):
         other = self.make_overlap(start_time=time(15))
@@ -195,7 +238,7 @@ class MeetingResolutionTests(TestCase):
                 self.assertEqual(before, CourseMeeting.objects.values().get(pk=self.meeting.pk))
 
     def test_permissions_method_and_missing_meeting(self):
-        self.assertEqual(self.client.get(self.url).status_code, 405)
+        self.assertEqual(self.client.post(self.url).status_code, 405)
         self.assertEqual(self.client.patch("/api/courses/meetings/999999/", data={}, content_type="application/json").status_code, 404)
         self.client.force_login(self.other_teacher)
         self.update({}, 403)

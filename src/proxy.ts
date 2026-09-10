@@ -4,7 +4,7 @@ import { DEFAULT_LOCALE, SUPPORTED_LOCALES } from "@/i18n/config";
 function getPreferredLocale(request: NextRequest): string {
   // 1️⃣ Check cookie (repeat visitors)
   const cookieLocale = request.cookies.get("NEXT_LOCALE")?.value;
-  if (cookieLocale && SUPPORTED_LOCALES.includes(cookieLocale as any)) {
+  if (cookieLocale && SUPPORTED_LOCALES.some(locale => locale === cookieLocale)) {
     return cookieLocale;
   }
 
@@ -14,7 +14,7 @@ function getPreferredLocale(request: NextRequest): string {
     const preferred = acceptLanguage
       .split(",")
       .map((lang) => lang.split(";")[0].trim().slice(0, 2))
-      .find((lang) => SUPPORTED_LOCALES.includes(lang as any));
+      .find((lang) => SUPPORTED_LOCALES.some(locale => locale === lang));
 
     if (preferred) return preferred;
   }

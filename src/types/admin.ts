@@ -54,6 +54,7 @@ export type LessonLocation = {
 
 export type AdminCourse = {
   id: number;
+  status: "draft" | "active" | "cancelled";
   name: string;
   course_type: "one_to_one" | "group";
   subject: "guitar" | "ukulele";

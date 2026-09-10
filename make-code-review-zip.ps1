@@ -14,6 +14,7 @@ $ExcludedDirectories = @(
     ".next",
     ".vercel",
     ".venv",
+    ".local-postgres",
     "venv",
     "node_modules",
     "__pycache__",

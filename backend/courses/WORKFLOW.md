@@ -246,3 +246,68 @@ bulk/raw SQL and unrelated resource-admin writes still bypass scheduling guards.
 No PostgreSQL concurrency redesign or concurrency guarantee for those bypasses
 is introduced. Course recurrence/status, other meetings, participants and holiday
 cache data are not mutated by this endpoint.
+
+## Activation readiness query
+
+`GET /api/courses/<id>/readiness/` uses the same authenticated webmaster permission
+as diagnostics. `course_readiness` returns the existing diagnostics payload
+unchanged and adds:
+
+- `eligible_for_activation`: true only in draft resolution mode.
+- `already_active`: true when status is active.
+- `validation_passed`: true when the returned diagnostics have no blockers.
+
+`ready_for_activation` remains identical to diagnostics: true for a draft with
+no blockers, even if accepted-open warnings remain. An active course reports
+readiness false (it is already active), while `validation_passed`, issues and
+warnings expose its current scheduling health. Cancelled courses are ineligible;
+their diagnostics concern saved meetings, not expected new generation dates.
+
+The `issues`, `warnings`, counts, ordering and machine-readable types are reused
+verbatim. No new activation rules, schema fields or mutation actions are added.
+This endpoint neither saves domain records nor writes holiday cache data. Tests
+compare readiness with diagnostics across clean, conflicted, missing-assignment,
+missing-proposal, cancelled and active cases and verify no database/cache writes.
+
+## Draft activation endpoint
+
+`POST /api/courses/<id>/activate/` requires the existing authenticated webmaster
+permission. It takes no assignment or status input and only transitions draft
+to active. `activate_draft_course` locks/reloads the course within a transaction,
+uses existing resource locks, computes fresh `course_readiness`, and delegates
+the status write to `change_course_status`. That service and the model save guard
+validate again immediately before writing. Earlier readiness requests are never
+trusted as authorization. Activation validation disables holiday cache writes.
+
+Validation failure returns HTTP 400 with the shared readiness fields, `ok=false`
+and `activated=false`. The `issues`, warnings and counts retain existing shared
+machine-readable diagnostics. Warnings alone do not block activation. No missing
+meetings are generated or resolved automatically. Success returns HTTP 200 with
+refreshed active-course readiness/diagnostics, `ok=true`, `activated=true`, and
+`already_active=false`. Here `already_active` indicates status before the request;
+`status` reports the final status. Since the result is now active, the shared
+`ready_for_activation` field is false; `validation_passed` reports current health.
+
+An already-active course returns HTTP 200, `already_active=true`, `activated=false`
+and current diagnostics, without saving. A cancelled course returns HTTP 409,
+`ok=false`, `activated=false`, and `error.type="course_cancelled"`, without changing
+status. This endpoint does not cancel, downgrade or reactivate courses.
+
+Only the target course's status changes. Meetings, assignments, acknowledgements,
+recurrence, cancellation flags and holiday data remain unchanged. Scheduling paths
+using the existing parent/resource locks serialize on row-locking databases;
+SQLite, bulk/raw SQL and unrelated resource administration retain their documented
+limitations. No new locking design, version field, migration or frontend UI is
+introduced.
+
+## Meeting editor read API
+
+`GET /api/courses/meetings/<id>/` uses the same authenticated webmaster permission
+as PATCH. It returns `ok`, `meeting`, and `course_diagnostics`, reusing the
+resolution serializer without performing a save or writing holiday cache data.
+Both GET and successful PATCH responses now include `start_datetime`, `is_past`,
+`timezone`, and `course_defaults` (instructor, place and location IDs).
+The past flag compares the actual scheduled start against the current time.
+The frontend loads choice names from the existing users and locations endpoints.
+It sends only changed fields to PATCH and refreshes readiness after a save;
+acceptance remains an explicit user choice and never excuses past assignments.

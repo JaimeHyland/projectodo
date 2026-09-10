@@ -82,7 +82,7 @@ def course_activation_issues(course, now=None, *, cache_holidays=True):
 
 
 def validate_course_activation(course, now=None):
-    issues = course_activation_issues(course, now=now)
+    issues = course_activation_issues(course, now=now, cache_holidays=False)
     if issues:
         raise SchedulingValidationError(issues)
 
@@ -127,3 +127,34 @@ def course_open_warnings(course, now=None):
             warnings.append({"meeting_id": meeting.pk, "date": meeting.date.isoformat(),
                              "open_fields": fields})
     return warnings
+
+
+@transaction.atomic
+def activate_draft_course(course_id):
+    """Draft-only activation with the same fresh diagnostics as readiness."""
+    from courses.services.course_diagnostics import course_readiness
+    from courses.services.scheduling_locks import lock_meeting_resources
+
+    course = Course.objects.select_for_update().get(pk=course_id)
+    if course.status == "cancelled":
+        return {**course_readiness(course), "ok": False, "activated": False,
+                "error": {"type": "course_cancelled"}}, 409
+    if course.status == "active":
+        return {**course_readiness(course), "ok": True, "activated": False}, 200
+
+    lock_meeting_resources(list(course.meetings.all()))
+    readiness = course_readiness(course)
+    if not readiness["ready_for_activation"]:
+        return {**readiness, "ok": False, "activated": False}, 400
+    try:
+        change_course_status(course, "active")
+    except SchedulingValidationError as error:
+        # The nested transaction has rolled back. Re-read diagnostics if time or
+        # external calendar data changed between the two validation passes.
+        readiness = course_readiness(course)
+        if not readiness["issues"]:
+            readiness.update(issues=error.issues, blocking_issue_count=len(error.issues),
+                             ready_for_activation=False, validation_passed=False)
+        return {**readiness, "ok": False, "activated": False}, 400
+    return {**course_readiness(course), "ok": True, "activated": True,
+            "already_active": False}, 200

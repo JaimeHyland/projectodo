@@ -1,25 +1,20 @@
 {
-  "titleLessons": "Clases de Música",
+  "titleLessons": "Clases de música",
   "lessons": {
     "headline": "L A  E S C U E L I T A",
-
     "intro": [
-      "Para todos aquellos que quieran aprender a tocar la guitarra o ukulele, Projectodo ofrece clases de música en su escuela de música en Berlín para principiantes y estudiantes avanzados.",
-      "Las clases en pequeños grupos son tan posibles como las instrucciones privadas individuales, y también pueden organizarse en su domicilio a petición."
+      "Para todos aquellos que quieran aprender a tocar la guitarra o ukelele, Projectodo ofrece clases de música en su escuela de música en Berlín para principiantes y estudiantes avanzados.",
+      "Ofrecemos clases en pequeños grupos y clases individuales, también en tu domicilio si lo solicitas."
     ],
-
     "benefits": [
       "Incluso en la infancia, la educación musical fomenta la concentración y el rendimiento cognitivo a través del juego – se fortalece la autoconfianza y se abre un nuevo mundo de creatividad.",
       "Especialmente los niños hiperactivos se benefician, ya que aprenden a concentrarse y a reducir la agresividad mediante la música.",
       "Los ancianos también obtienen grandes ventajas al aprender a tocar un instrumento, pues tocar música es como hacer ejercicio para el cerebro."
     ],
-
     "locationsTitle": "Lugares de enseñanza",
     "couldNotLoadLocations": "No se pudieron cargar los lugares de enseñanza.",
-
     "contact": {
       "label": "Contacto:",
-
       "details": {
         "phone": "Teléfono: +49 030 - 26 55 46 28",
         "mobile": "Móvil: +49 151 68 10 11 63",
@@ -28,5 +23,34 @@
         "website": "www.projectodo.de"
       }
     }
+  },
+  "courses": {
+    "title": "Cursos",
+    "all": "Cursos en todas las sedes",
+    "loading": "Cargando cursos…",
+    "locationsLoading": "Cargando sedes…",
+    "error": "No se pudieron cargar los cursos. Inténtalo de nuevo.",
+    "invalid": "No se ha encontrado esta sede.",
+    "emptyLocation": "Actualmente no hay cursos activos en esta sede.",
+    "emptyAll": "Actualmente no hay cursos activos disponibles.",
+    "close": "Cerrar",
+    "back": "Volver a las clases de música",
+    "retry": "Intentar de nuevo",
+    "minutes": "minutos",
+    "unassigned": "Sede por confirmar"
+  },
+  "courseLessons": {
+    "title": "Sesiones",
+    "back": "Volver a los cursos",
+    "loading": "Cargando sesiones…",
+    "invalid": "No se ha encontrado este curso activo.",
+    "error": "No se pudieron cargar las sesiones. Inténtalo de nuevo.",
+    "empty": "No hay sesiones programadas para este curso.",
+    "cancelled": "Sesión cancelada",
+    "placeOpen": "Espacio por confirmar",
+    "timezone": "Zona horaria",
+    "dateHeader": "Fecha",
+    "timeHeader": "Hora / duración",
+    "venueHeader": "Sede"
   }
 }

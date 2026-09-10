@@ -1,5 +1,6 @@
 "use client";
 
+import { CourseReadinessPanel, type ReadinessMessages } from "./CourseReadinessPanel";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { apiUrl } from "@/lib/api";
@@ -19,7 +20,7 @@ function getCookie(name: string): string | undefined {
 
 type LocationFormState = Omit<LessonLocation, "id" | "location_type">;
 
-type Messages = {
+type Messages = ReadinessMessages & {
   addLocation: string;
   createCourse: string;
   manageCourses: string;
@@ -292,6 +293,8 @@ export default function AdminLocationsTable({ locations, messages, locale }: Pro
     setIsLoadingCourses(false);
   }
 
+
+
   function formatMeetingDate(value: string) {
     return new Intl.DateTimeFormat(inputLocale, {
       dateStyle: "medium",
@@ -390,6 +393,11 @@ export default function AdminLocationsTable({ locations, messages, locale }: Pro
       default_place: null,
     });
     setError(null);
+  }
+
+  function updateCourseStatus(id: number, status: AdminCourse["status"]) {
+    setManagedCourses(current => current.map(course => course.id === id ? { ...course, status } : course));
+    setEditingCourse(current => current?.id === id ? { ...current, status } : current);
   }
 
   function openEditCourse(course: AdminCourse) {
@@ -686,7 +694,9 @@ async function confirmSaveCourse() {
     return;
   }
 
+  const editedLocation = editingCourse ? courseLocation : null;
   closeCourseForm();
+  if (editedLocation) await openManageCourses(editedLocation);
   router.refresh();
 }
 
@@ -889,7 +899,7 @@ async function confirmSaveCourse() {
                 {managedCourses.map((course) => (
                   <li
                     key={course.id}
-                    className="flex flex-col gap-2 rounded border bg-white p-3 sm:flex-row sm:items-center"
+                    className="flex flex-col gap-2 rounded border bg-white p-3 sm:flex-row sm:flex-wrap sm:items-center"
                   >
                     <button
                       type="button"
@@ -913,7 +923,7 @@ async function confirmSaveCourse() {
                       />
                       {messages.meetingsCreatedFlag}
                     </label>
-                    <div className="flex shrink-0 gap-2">
+                    <div className="flex shrink-0 flex-wrap gap-2">
                       <button
                         type="button"
                         onClick={() => openEditCourse(course)}
@@ -929,6 +939,7 @@ async function confirmSaveCourse() {
                         {messages.planMeetings}
                       </button>
                     </div>
+                    <CourseReadinessPanel course={course} messages={messages} onStatusChange={updateCourseStatus} />
                   </li>
                 ))}
               </ul>
@@ -1076,6 +1087,7 @@ async function confirmSaveCourse() {
               {messages.coursesFor.replace("{name}", courseLocation.name)}
             </p>
 
+            {editingCourse && <CourseReadinessPanel course={editingCourse} messages={messages} onStatusChange={updateCourseStatus} />}
             <div className="space-y-3">
               <label className="block">
                 <span className="mb-1 block font-medium">{messages.courseName}</span>

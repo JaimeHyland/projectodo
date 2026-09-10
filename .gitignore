@@ -62,3 +62,10 @@ node_modules/
 
 # Generated code-review archive
 /projectodo-code-review.zip
+
+# Local development SQLite database and journal files
+/backend/db.sqlite3
+/backend/db.sqlite3-*
+
+# Private local PostgreSQL cluster, credentials, and deployment exports
+/backend/.local-postgres/

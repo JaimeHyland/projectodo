@@ -57,3 +57,14 @@ def course_diagnostics(course):
         "issues": issues,
         "warnings": warnings,
     }
+
+
+def course_readiness(course):
+    """Expose lifecycle eligibility alongside the existing diagnostic result."""
+    diagnostics = course_diagnostics(course)
+    return {
+        **diagnostics,
+        "eligible_for_activation": course.status == "draft",
+        "already_active": course.status == "active",
+        "validation_passed": diagnostics["blocking_issue_count"] == 0,
+    }

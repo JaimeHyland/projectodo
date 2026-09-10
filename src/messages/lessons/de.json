@@ -2,19 +2,17 @@
   "titleLessons": "Unterricht",
   "lessons": {
     "headline": "L A  E S C U E L I T A",
-
     "intro": [
       "Für alle, die selbst zur Gitarre oder Ukulele greifen möchten, bietet Projectodo Unterricht in seiner Musikschule in Berlin für Anfänger und Fortgeschrittene.",
       "Der Unterricht in kleinen Gruppen ist ebenso möglich wie der private Einzelunterricht, auf Wunsch auch bei Ihnen direkt zu Hause."
     ],
-
     "benefits": [
       "Schon bei der musikalischen Früherziehung wird spielerisch die Konzentration und die Leistung des Gehirns gefördert – das Selbstbewusstsein wird gestärkt und eine neue Welt zur Kreativität eröffnet.",
       "Davon profitieren besonders hyperaktive Kinder, die durch das Musizieren lernen, sich gezielt zu konzentrieren und Aggressionen abzubauen.",
       "Auch Senioren ziehen großen Nutzen aus dem Erlernen eines Instruments, denn Musizieren ist wie Sport für das Gehirn."
     ],
     "locationsTitle": "Unterrichtsorte",
-    "couldNotLoadLocations": "Konnte Unterrichtsorte nicht laden.",
+    "couldNotLoadLocations": "Unterrichtsorte konnten nicht geladen werden.",
     "contact": {
       "label": "Kontakt:",
       "details": {
@@ -25,5 +23,34 @@
         "website": "www.projectodo.de"
       }
     }
+  },
+  "courses": {
+    "title": "Kurse",
+    "all": "Kurse an allen Unterrichtsorten",
+    "loading": "Kurse werden geladen…",
+    "locationsLoading": "Unterrichtsorte werden geladen…",
+    "error": "Die Kurse konnten nicht geladen werden. Bitte erneut versuchen.",
+    "invalid": "Dieser Unterrichtsort wurde nicht gefunden.",
+    "emptyLocation": "Für diesen Unterrichtsort gibt es derzeit keine aktiven Kurse.",
+    "emptyAll": "Derzeit sind keine aktiven Kurse verfügbar.",
+    "close": "Schließen",
+    "back": "Zurück zum Unterricht",
+    "retry": "Erneut versuchen",
+    "minutes": "Minuten",
+    "unassigned": "Unterrichtsort wird noch bekannt gegeben"
+  },
+  "courseLessons": {
+    "title": "Unterrichtstermine",
+    "back": "Zurück zu den Kursen",
+    "loading": "Unterrichtstermine werden geladen…",
+    "invalid": "Dieser aktive Kurs wurde nicht gefunden.",
+    "error": "Die Unterrichtstermine konnten nicht geladen werden. Bitte erneut versuchen.",
+    "empty": "Für diesen Kurs sind keine Unterrichtstermine geplant.",
+    "cancelled": "Termin abgesagt",
+    "placeOpen": "Raum wird noch bekannt gegeben",
+    "timezone": "Zeitzone",
+    "dateHeader": "Datum",
+    "timeHeader": "Uhrzeit / Dauer",
+    "venueHeader": "Unterrichtsort"
   }
 }

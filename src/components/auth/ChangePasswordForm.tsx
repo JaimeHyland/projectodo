@@ -118,23 +118,27 @@ export default function ChangePasswordForm({
         }),
       });
 
-      let data: any = null;
+      let data: Record<string, unknown>;
       const contentType = response.headers.get("content-type") || "";
 
       if (contentType.includes("application/json")) {
-        data = await response.json();
+        const body: unknown = await response.json();
+        if (typeof body !== "object" || body === null || Array.isArray(body)) {
+          throw new Error("Invalid authentication response");
+        }
+        data = body as Record<string, unknown>;
       } else {
         const text = await response.text();
         throw new Error(text.slice(0, 200));
       }
 
       if (!response.ok) {
-        setError(data.error || messages.changePassword.textChangeFailed);
+        setError((typeof data.error === "string" && data.error) || messages.changePassword.textChangeFailed);
         setLoading(false);
         return;
       }
 
-      setMessage(data.message || messages.changePassword.messageSuccess);
+      setMessage((typeof data.message === "string" && data.message) || messages.changePassword.messageSuccess);
       setOldPassword("");
       setNewPassword("");
       setNewPasswordConfirm("");
