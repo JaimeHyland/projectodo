@@ -1,0 +1,497 @@
+{
+  "home.titleHome": {
+    "en": "Welcome to Projectodo",
+    "de": "Willkommen bei Projectodo!",
+    "es": "¡Bienvenido a Projectodo!"
+  },
+  "home.home.intro.imageSrc": {
+    "en": "/guitarist.jpg",
+    "de": "/guitarist.jpg",
+    "es": "/guitarist.jpg"
+  },
+  "home.home.intro.imageAlt": {
+    "en": "A guitarist performing",
+    "de": "Musiker tritt auf",
+    "es": "Un guitarrista en acción"
+  },
+  "home.home.intro.paragraphs.0": {
+    "en": "Projectodo is your musicians manager, your sound equipment rental service and recording studio for your music productions.",
+    "de": "Projectodo ist Ihre Musiker-Verwaltung, der Verleih von Soundausstattung und das Aufnahmezimmer für Ihre Musikproduktionen.",
+    "es": "Projectodo es tu gestor de músicos, tu servicio de alquiler de equipos de sonido y tu estudio de grabación para tus producciones musicales."
+  },
+  "home.home.intro.paragraphs.1": {
+    "en": "Family celebrations, jubilees, inaugurations, weddings — we arrange your events with experienced musicians, whether as a duet, trio, quartet or quintet. We offer you the best service so that your party becomes a success.",
+    "de": "Familienfeiern, Jubiläen, Neueröffnungen, Hochzeiten — wir organisieren Ihre Veranstaltungen mit erfahrenen Musikern, egal ob als Duett, Trio, Quartett oder Quintett. Wir bieten Ihnen den besten Service, damit Ihre Party ein Erfolg wird.",
+    "es": "Celebraciones familiares, aniversarios, inauguraciones, bodas — organizamos tus eventos con músicos experimentados, ya sea como dúo, tríos, cuarteto o quíntet. Te ofrecemos el mejor servicio para que tu fiesta sea un éxito."
+  },
+  "home.home.intro.claim": {
+    "en": "...simply contact us, we'll take care of the rest!",
+    "de": "...einfach kontaktieren, wir kümmern uns um den Rest!",
+    "es": "...simplemente contactarnos, ¡nos encargamos del resto!"
+  },
+  "home.home.sections.lessons.title": {
+    "en": "Lessons",
+    "de": "Unterricht",
+    "es": "Clases"
+  },
+  "home.home.sections.lessons.body": {
+    "en": "From small children to seniors, we offer music lessons for all levels and ages. Our teachers are professional musicians with long experience in teaching. One-to-one or small groups; in-person or online or online",
+    "de": "Von Kleinkindern bis zu Senioren bieten wir Musikunterricht für alle Niveaus und Altersgruppen an. Unsere Lehrkräfte sind professionelle Musiker mit langjähriger Unterrichtserfahrung. Einzelunterricht oder in kleinen Gruppen; presenziell oder online",
+    "es": "Desde pequeños niños hasta seniores, ofrecemos clases de música para todos los niveles y edades. Nuestros profesores son músicos profesionales con experiencia en la enseñanza. Particulares o en pequeños grupos; presenciales o en línea"
+  },
+  "home.home.sections.bands.title": {
+    "en": "Bands",
+    "de": "Bands",
+    "es": "Grupos"
+  },
+  "home.home.sections.bands.body": {
+    "en": "We can provide you with talented and experienced musicians for any type of occasion! From solo to sextet and also larger bands on request.",
+    "de": "Wir können Ihnen erfahrene Musiker für jede Art von Anlass zur Verfügung stellen! Von Solo bis Sextett und auch größere Bands auf Anfrage.",
+    "es": "¡Podemos proporcionarte músicos experimentados para cualquier tipo de ocasión! Desde solistas hasta sextetos y también grupos más grandes bajo petición."
+  },
+  "lessons.titleLessons": {
+    "en": "Music Lessons",
+    "de": "Unterricht",
+    "es": "Clases de música"
+  },
+  "lessons.lessons.headline": {
+    "en": "L A  E S C U E L I T A",
+    "de": "L A  E S C U E L I T A",
+    "es": "L A  E S C U E L I T A"
+  },
+  "lessons.lessons.intro.0": {
+    "en": "For anyone who wants to pick up the guitar or ukulele, Projectodo offers music lessons in their music school in Berlin for beginners and advanced players.",
+    "de": "Für alle, die selbst zur Gitarre oder Ukulele greifen möchten, bietet Projectodo Unterricht in seiner Musikschule in Berlin für Anfänger und Fortgeschrittene.",
+    "es": "Para todos aquellos que quieran aprender a tocar la guitarra o ukelele, Projectodo ofrece clases de música en su escuela de música en Berlín para principiantes y estudiantes avanzados."
+  },
+  "lessons.lessons.intro.1": {
+    "en": "Lessons in small groups are just as possible as private one-to-one lessons, and can also be arranged at your home upon request.",
+    "de": "Der Unterricht in kleinen Gruppen ist ebenso möglich wie der private Einzelunterricht, auf Wunsch auch bei Ihnen direkt zu Hause.",
+    "es": "Ofrecemos clases en pequeños grupos y clases individuales, también en tu domicilio si lo solicitas."
+  },
+  "lessons.lessons.benefits.0": {
+    "en": "Even in early childhood, musical education fosters concentration and cognitive performance through play – self-confidence is strengthened and a new world of creativity is opened.",
+    "de": "Schon bei der musikalischen Früherziehung wird spielerisch die Konzentration und die Leistung des Gehirns gefördert – das Selbstbewusstsein wird gestärkt und eine neue Welt zur Kreativität eröffnet.",
+    "es": "Incluso en la infancia, la educación musical fomenta la concentración y el rendimiento cognitivo a través del juego – se fortalece la autoconfianza y se abre un nuevo mundo de creatividad."
+  },
+  "lessons.lessons.benefits.1": {
+    "en": "Especially hyperactive children benefit, as they learn to concentrate and reduce aggression through music.",
+    "de": "Davon profitieren besonders hyperaktive Kinder, die durch das Musizieren lernen, sich gezielt zu konzentrieren und Aggressionen abzubauen.",
+    "es": "Especialmente los niños hiperactivos se benefician, ya que aprenden a concentrarse y a reducir la agresividad mediante la música."
+  },
+  "lessons.lessons.benefits.2": {
+    "en": "Senior citizens also gain significant benefits from learning to play an instrument, as playing music is like exercise for the brain.",
+    "de": "Auch Senioren ziehen großen Nutzen aus dem Erlernen eines Instruments, denn Musizieren ist wie Sport für das Gehirn.",
+    "es": "Los ancianos también obtienen grandes ventajas al aprender a tocar un instrumento, pues tocar música es como hacer ejercicio para el cerebro."
+  },
+  "lessons.lessons.locationsTitle": {
+    "en": "Lesson venues",
+    "de": "Unterrichtsorte",
+    "es": "Lugares de enseñanza"
+  },
+  "lessons.lessons.contact.label": {
+    "en": "Contact:",
+    "de": "Kontakt:",
+    "es": "Contacto:"
+  },
+  "lessons.lessons.contact.details.phone": {
+    "en": "Phone: +49 030 - 26 55 46 28",
+    "de": "Fon: +49 030 - 26 55 46 28",
+    "es": "Teléfono: +49 030 - 26 55 46 28"
+  },
+  "lessons.lessons.contact.details.mobile": {
+    "en": "Mobile: +49 151 68 10 11 63",
+    "de": "Funk: +49 151 68 10 11 63",
+    "es": "Móvil: +49 151 68 10 11 63"
+  },
+  "lessons.lessons.contact.details.fax": {
+    "en": "Fax: +49 030 - 26 93 13 40",
+    "de": "Fax: +49 030 - 26 93 13 40",
+    "es": "Fax: +49 030 - 26 93 13 40"
+  },
+  "lessons.lessons.contact.details.email": {
+    "en": "info@projectodo.de",
+    "de": "info@projectodo.de",
+    "es": "info@projectodo.de"
+  },
+  "lessons.lessons.contact.details.website": {
+    "en": "www.projectodo.de",
+    "de": "www.projectodo.de",
+    "es": "www.projectodo.de"
+  },
+  "bands.titleBands": {
+    "en": "Bands",
+    "de": "Bands",
+    "es": "Grupos"
+  },
+  "production.titleProduction": {
+    "en": "Production",
+    "de": "Production",
+    "es": "Producción"
+  },
+  "production.production.image.src": {
+    "en": "/produktion.jpg",
+    "de": "/produktion.jpg",
+    "es": "/produktion.jpg"
+  },
+  "production.production.image.alt": {
+    "en": "Music production",
+    "de": "Music production",
+    "es": "Producción musical"
+  },
+  "production.production.paragraphs.0": {
+    "en": "Here is a selection of our productions. Please convince yourself by means of these samples.",
+    "de": "Here is a selection of our productions. Please convince yourself by means of these samples.",
+    "es": "Aquí tienes una selección de nuestras producciones. Por favor, convéncete con estos ejemplos."
+  },
+  "production.production.paragraphs.1": {
+    "en": "Orders are possible by inquiry.",
+    "de": "Orders are possible by inquiry.",
+    "es": "Los pedidos son posibles mediante consulta."
+  },
+  "production.production.highlight": {
+    "en": "Choose from the menu on the left to get further information about our CD productions.",
+    "de": "Choose from the menu on the left to get further information about our CD productions.",
+    "es": "Elige de el menú de la izquierda para obtener más información sobre nuestras producciones de CD."
+  },
+  "technical.titleTechnical": {
+    "en": "Technical services",
+    "de": "Technik",
+    "es": "Technik"
+  },
+  "technical.technical.image.src": {
+    "en": "/technik.jpg",
+    "de": "/technik.jpg",
+    "es": "/technik.jpg"
+  },
+  "technical.technical.image.alt": {
+    "en": "Recording equipment",
+    "de": "Ein Aufnahmegerät",
+    "es": "Un equipo de grabación"
+  },
+  "technical.technical.paragraphs.0": {
+    "en": "Projectodo offers our customers suitable recording equipment for many individual needs.",
+    "de": "Projectodo bietet unseren Kunden ein passendes Recording-Equipment für viele individuelle Bedürfnisse.",
+    "es": "Projectodo ofrece a nuestros clientes un equipo de grabación adecuado para muchas necesidades individuales."
+  },
+  "technical.technical.paragraphs.1": {
+    "en": "Whether advertising spots, voice or music recordings – we provide you with not only the technology but also our years of experience in the field of audio production.",
+    "de": "Ob Werbespots, Sprach- oder Musikaufnahmen – wir stellen Ihnen neben der Technik auch unsere langjährige Erfahrung im Bereich von Audioproduktionen zur Verfügung.",
+    "es": "Ya sean spots publicitarios, grabaciones de voz o música – además de la tecnología, también ofrecemos nuestra amplia experiencia en el área de producción audiovisual."
+  },
+  "contact.titleContact": {
+    "en": "Contact",
+    "de": "Kontakt",
+    "es": "Contacto"
+  },
+  "contact.contact.name": {
+    "en": "Projectodo",
+    "de": "Projectodo",
+    "es": "Projectodo"
+  },
+  "contact.contact.person": {
+    "en": "Fidel Conde",
+    "de": "Fidel Conde",
+    "es": "Fidel Conde"
+  },
+  "contact.contact.address.0": {
+    "en": "Körnerstraße 26",
+    "de": "Körnerstraße 26",
+    "es": "Körnerstraße 26"
+  },
+  "contact.contact.address.1": {
+    "en": "10785 Berlin",
+    "de": "10785 Berlin",
+    "es": "10785 Berlín"
+  },
+  "contact.contact.details.phone": {
+    "en": "+49 030 - 26 55 46 28",
+    "de": "+49 030 - 26 55 46 28",
+    "es": "+49 030 - 26 55 46 28"
+  },
+  "contact.contact.details.mobile": {
+    "en": "+49 151 68 10 11 63",
+    "de": "+49 151 68 10 11 63",
+    "es": "+49 151 68 10 11 63"
+  },
+  "contact.contact.details.fax": {
+    "en": "+49 030 - 26 93 13 40",
+    "de": "+49 030 - 26 93 13 40",
+    "es": "+49 030 - 26 93 13 40"
+  },
+  "contact.contact.details.email": {
+    "en": "info@projectodo.de",
+    "de": "info@projectodo.de",
+    "es": "info@projectodo.de"
+  },
+  "contact.contact.details.website": {
+    "en": "www.projectodo.de",
+    "de": "www.projectodo.de",
+    "es": "www.projectodo.de"
+  },
+  "privacy.titlePrivacy": {
+    "en": "Privacy notice",
+    "de": "Datenschutzerklärung",
+    "es": "Política de privacidad"
+  },
+  "privacy.lastUpdated": {
+    "en": "Last updated: 23 August 2026",
+    "de": "Stand: 23. August 2026",
+    "es": "Última actualización: 23 de agosto de 2026"
+  },
+  "privacy.introduction": {
+    "en": "This notice explains how personal data is processed when you use Projectodo. It applies to the website, user accounts and related authentication and email functions.",
+    "de": "Diese Erklärung informiert darüber, wie personenbezogene Daten bei der Nutzung von Projectodo verarbeitet werden. Sie gilt für die Website, Benutzerkonten sowie die zugehörigen Anmelde- und E-Mail-Funktionen.",
+    "es": "Esta política explica cómo se tratan los datos personales al utilizar Projectodo. Se aplica al sitio web, las cuentas de usuario y las funciones relacionadas de autenticación y correo electrónico."
+  },
+  "privacy.sections.0.heading": {
+    "en": "1. Controller",
+    "de": "1. Verantwortlicher",
+    "es": "1. Responsable del tratamiento"
+  },
+  "privacy.sections.0.paragraphs.0": {
+    "en": "The controller responsible for processing your personal data is Fidel Conde, Körnerstraße 26, 10785 Berlin, Germany. You can contact the controller at info@projectodo.de or by telephone on +49 30 26 55 46 28.",
+    "de": "Verantwortlich für die Verarbeitung Ihrer personenbezogenen Daten ist Fidel Conde, Körnerstraße 26, 10785 Berlin, Deutschland. Sie erreichen den Verantwortlichen unter info@projectodo.de oder telefonisch unter +49 30 26 55 46 28.",
+    "es": "El responsable del tratamiento de sus datos personales es Fidel Conde, Körnerstraße 26, 10785 Berlín, Alemania. Puede contactar con el responsable en info@projectodo.de o por teléfono en el +49 30 26 55 46 28."
+  },
+  "privacy.sections.1.heading": {
+    "en": "2. Accessing the website and server logs",
+    "de": "2. Aufruf der Website und Server-Protokolle",
+    "es": "2. Acceso al sitio y registros del servidor"
+  },
+  "privacy.sections.1.paragraphs.0": {
+    "en": "When you access the website, the hosting systems may process technical information such as your IP address, date and time of access, requested URL, referrer, browser, operating system and response status. This is necessary to deliver the website, diagnose faults and protect the service against misuse.",
+    "de": "Beim Aufruf der Website können die Hosting-Systeme technische Angaben wie IP-Adresse, Datum und Uhrzeit, aufgerufene URL, Referrer, Browser, Betriebssystem und Antwortstatus verarbeiten. Dies ist erforderlich, um die Website auszuliefern, Fehler zu diagnostizieren und den Dienst vor Missbrauch zu schützen.",
+    "es": "Al acceder al sitio, los sistemas de alojamiento pueden tratar información técnica como la dirección IP, la fecha y hora, la URL solicitada, la página de referencia, el navegador, el sistema operativo y el estado de respuesta. Esto es necesario para mostrar el sitio, diagnosticar fallos y proteger el servicio frente a usos indebidos."
+  },
+  "privacy.sections.1.paragraphs.1": {
+    "en": "The legal basis is Article 6(1)(f) of the European Union General Data Protection Regulation (EU GDPR), covering legitimate interests in providing a reliable and secure service. Log data is retained only for as long as it is required for operation and security under the relevant provider settings, and is then deleted or anonymised unless longer retention is required to investigate an incident or comply with law.",
+    "de": "Rechtsgrundlage ist Art. 6 Abs. 1 lit. f der Datenschutz-Grundverordnung der Europäischen Union (EU-DSGVO), gestützt auf berechtigte Interessen an einem zuverlässigen und sicheren Dienst. Protokolldaten werden nur so lange gespeichert, wie dies nach den Einstellungen des jeweiligen Anbieters für Betrieb und Sicherheit erforderlich ist. Danach werden sie gelöscht oder anonymisiert, sofern eine längere Aufbewahrung nicht zur Untersuchung eines Vorfalls oder aufgrund gesetzlicher Pflichten erforderlich ist.",
+    "es": "La base jurídica es el artículo 6.1.f del Reglamento General de Protección de Datos de la Unión Europea (RGPD de la UE), basado en el interés legítimo en prestar un servicio fiable y seguro. Los registros se conservan únicamente durante el tiempo necesario para el funcionamiento y la seguridad conforme a la configuración del proveedor correspondiente. Después se eliminan o anonimizan, salvo que sea necesario conservarlos durante más tiempo para investigar un incidente o cumplir una obligación legal."
+  },
+  "privacy.sections.2.heading": {
+    "en": "3. User accounts and authentication",
+    "de": "3. Benutzerkonten und Authentifizierung",
+    "es": "3. Cuentas de usuario y autenticación"
+  },
+  "privacy.sections.2.paragraphs.0": {
+    "en": "If you create or use an account, we process your username, email address, password hash, account status, assigned roles and groups, login session information and timestamps. Passwords are not stored in plain text.",
+    "de": "Wenn Sie ein Konto erstellen oder verwenden, verarbeiten wir Benutzername, E-Mail-Adresse, Passwort-Hash, Kontostatus, zugewiesene Rollen und Gruppen, Anmeldesitzungsdaten und Zeitstempel. Passwörter werden nicht im Klartext gespeichert.",
+    "es": "Si crea o utiliza una cuenta, tratamos su nombre de usuario, dirección de correo electrónico, hash de la contraseña, estado de la cuenta, funciones y grupos asignados, información de la sesión y marcas de tiempo. Las contraseñas no se almacenan en texto sin cifrar."
+  },
+  "privacy.sections.2.paragraphs.1": {
+    "en": "Processing is necessary to create and administer the account, authenticate you and provide restricted functions. The legal basis is Article 6(1)(b) of the EU GDPR and, for access control and service security, Article 6(1)(f) of the EU GDPR. Account data is normally retained while the account exists and is deleted when it is no longer required, subject to legal obligations and limited backup retention.",
+    "de": "Die Verarbeitung ist erforderlich, um das Konto anzulegen und zu verwalten, Sie zu authentifizieren und geschützte Funktionen bereitzustellen. Rechtsgrundlage ist Art. 6 Abs. 1 lit. b der EU-DSGVO sowie für Zugriffskontrolle und Dienstsicherheit Art. 6 Abs. 1 lit. f der EU-DSGVO. Kontodaten werden grundsätzlich für die Dauer des Kontos gespeichert und gelöscht, sobald sie nicht mehr benötigt werden. Gesetzliche Pflichten und eine begrenzte Aufbewahrung in Sicherungskopien bleiben vorbehalten.",
+    "es": "El tratamiento es necesario para crear y administrar la cuenta, autenticarle y ofrecer funciones restringidas. La base jurídica es el artículo 6.1.b del RGPD de la UE y, para el control de acceso y la seguridad del servicio, el artículo 6.1.f del RGPD de la UE. Los datos se conservan normalmente mientras exista la cuenta y se eliminan cuando dejan de ser necesarios, sin perjuicio de obligaciones legales y de una conservación limitada en copias de seguridad."
+  },
+  "privacy.sections.3.heading": {
+    "en": "4. Email verification and password reset",
+    "de": "4. E-Mail-Bestätigung und Passwort-Zurücksetzung",
+    "es": "4. Verificación del correo y restablecimiento de contraseña"
+  },
+  "privacy.sections.3.paragraphs.0": {
+    "en": "For registration, email verification and password resets, we process your email address, username and a securely generated single-use token. Verification and reset tokens expire after 30 minutes. Emails are delivered through our email service provider.",
+    "de": "Für Registrierung, E-Mail-Bestätigung und Passwort-Zurücksetzung verarbeiten wir E-Mail-Adresse, Benutzername und einen sicher erzeugten Einmal-Token. Bestätigungs- und Zurücksetzungs-Token laufen nach 30 Minuten ab. E-Mails werden über unseren E-Mail-Dienstleister versandt.",
+    "es": "Para el registro, la verificación del correo y el restablecimiento de contraseña tratamos la dirección de correo, el nombre de usuario y un token seguro de un solo uso. Los tokens de verificación y restablecimiento caducan a los 30 minutos. Los mensajes se envían mediante nuestro proveedor de correo electrónico."
+  },
+  "privacy.sections.3.paragraphs.1": {
+    "en": "The legal basis is Article 6(1)(b) and Article 6(1)(f) of the EU GDPR (secure account administration). Used or expired tokens are deleted.",
+    "de": "Rechtsgrundlage sind Art. 6 Abs. 1 lit. b und Art. 6 Abs. 1 lit. f der EU-DSGVO (sichere Kontoverwaltung). Verwendete oder abgelaufene Token werden gelöscht.",
+    "es": "La base jurídica son los artículos 6.1.b y 6.1.f del RGPD de la UE (administración segura de cuentas). Los tokens utilizados o caducados se eliminan."
+  },
+  "privacy.sections.4.heading": {
+    "en": "5. Cookies and similar storage",
+    "de": "5. Cookies und vergleichbare Speichertechniken",
+    "es": "5. Cookies y almacenamiento similar"
+  },
+  "privacy.sections.4.paragraphs.0": {
+    "en": "The website currently uses only functional and security cookies. It does not currently use optional advertising or behavioural-analytics cookies. Storage and access that are strictly necessary for a service requested by the user are based on section 25(2), no. 2 of the German Telecommunications Digital Services Data Protection Act (TDDDG). Where cookie data is personal, processing is based on Article 6(1)(b) or (f) of the EU GDPR as applicable.",
+    "de": "Die Website verwendet derzeit ausschließlich Funktions- und Sicherheits-Cookies. Optionale Werbe- oder verhaltensbezogene Analyse-Cookies werden derzeit nicht eingesetzt. Unbedingt erforderliche Speicherungen und Zugriffe für einen vom Nutzer ausdrücklich gewünschten Dienst beruhen auf § 25 Abs. 2 Nr. 2 des deutschen Telekommunikation-Digitale-Dienste-Datenschutz-Gesetzes (TDDDG). Soweit Cookie-Daten personenbezogen sind, beruht die Verarbeitung je nach Zweck auf Art. 6 Abs. 1 lit. b oder f der EU-DSGVO.",
+    "es": "Actualmente el sitio solo utiliza cookies funcionales y de seguridad. No se utilizan cookies opcionales de publicidad ni de análisis del comportamiento. El almacenamiento y acceso estrictamente necesarios para un servicio solicitado expresamente por el usuario se basan en el artículo 25.2, número 2, de la Ley alemana de Protección de Datos de Telecomunicaciones y Servicios Digitales (TDDDG). Cuando los datos de cookies sean personales, el tratamiento se basa, según corresponda, en el artículo 6.1.b o 6.1.f del RGPD de la UE."
+  },
+  "privacy.sections.4.items.0": {
+    "en": "NEXT_LOCALE: remembers the selected or detected language for up to one year.",
+    "de": "NEXT_LOCALE: speichert die ausgewählte oder erkannte Sprache für bis zu ein Jahr.",
+    "es": "NEXT_LOCALE: recuerda el idioma seleccionado o detectado durante un máximo de un año."
+  },
+  "privacy.sections.4.items.1": {
+    "en": "csrftoken: protects forms and account actions against forged requests and may remain for up to approximately one year.",
+    "de": "csrftoken: schützt Formulare und Kontoaktionen vor gefälschten Anfragen und kann bis zu ungefähr ein Jahr gespeichert bleiben.",
+    "es": "csrftoken: protege formularios y acciones de cuenta frente a solicitudes falsificadas y puede conservarse durante aproximadamente un año."
+  },
+  "privacy.sections.4.items.2": {
+    "en": "sessionid: maintains an authenticated login session and normally remains for up to two weeks.",
+    "de": "sessionid: hält eine authentifizierte Anmeldesitzung aufrecht und bleibt normalerweise bis zu zwei Wochen gespeichert.",
+    "es": "sessionid: mantiene una sesión autenticada y normalmente se conserva durante un máximo de dos semanas."
+  },
+  "privacy.sections.5.heading": {
+    "en": "6. Service providers and recipients",
+    "de": "6. Dienstleister und Empfänger",
+    "es": "6. Proveedores y destinatarios"
+  },
+  "privacy.sections.5.paragraphs.0": {
+    "en": "We use external providers to operate the service, including Vercel for frontend hosting, Heroku/Salesforce for backend hosting, Supabase for database infrastructure, Amazon Web Services for static assets and STRATO for email delivery. These providers process data on our behalf or under their own legal responsibilities where applicable.",
+    "de": "Für den Betrieb nutzen wir externe Anbieter, darunter Vercel für das Frontend-Hosting, Heroku/Salesforce für das Backend-Hosting, Supabase für die Datenbank-Infrastruktur, Amazon Web Services für statische Dateien und STRATO für den E-Mail-Versand. Diese Anbieter verarbeiten Daten in unserem Auftrag oder, soweit einschlägig, in eigener datenschutzrechtlicher Verantwortung.",
+    "es": "Utilizamos proveedores externos para operar el servicio, entre ellos Vercel para alojar el frontend, Heroku/Salesforce para el backend, Supabase para la infraestructura de base de datos, Amazon Web Services para archivos estáticos y STRATO para el envío de correo. Estos proveedores tratan datos por cuenta nuestra o bajo su propia responsabilidad jurídica cuando corresponda."
+  },
+  "privacy.sections.5.paragraphs.1": {
+    "en": "Depending on provider configuration and support access, data may be processed outside the European Economic Area. Where required, transfers are protected by an adequacy decision, standard contractual clauses or another lawful safeguard.",
+    "de": "Abhängig von der Konfiguration der Anbieter und möglichen Support-Zugriffen können Daten außerhalb des Europäischen Wirtschaftsraums verarbeitet werden. Soweit erforderlich, werden Übermittlungen durch einen Angemessenheitsbeschluss, Standardvertragsklauseln oder eine andere zulässige Garantie abgesichert.",
+    "es": "Según la configuración y el acceso de soporte de los proveedores, algunos datos pueden tratarse fuera del Espacio Económico Europeo. Cuando sea necesario, las transferencias estarán protegidas mediante una decisión de adecuación, cláusulas contractuales tipo u otra garantía válida."
+  },
+  "privacy.sections.6.heading": {
+    "en": "7. Your rights",
+    "de": "7. Ihre Rechte",
+    "es": "7. Sus derechos"
+  },
+  "privacy.sections.6.paragraphs.0": {
+    "en": "Subject to the applicable conditions, you have rights of access, rectification, erasure, restriction, data portability and objection. Where processing relies on consent, you may withdraw it at any time without affecting earlier lawful processing. You also have the right to lodge a complaint with a data protection supervisory authority.",
+    "de": "Unter den jeweiligen gesetzlichen Voraussetzungen haben Sie Rechte auf Auskunft, Berichtigung, Löschung, Einschränkung der Verarbeitung, Datenübertragbarkeit und Widerspruch. Soweit eine Verarbeitung auf Einwilligung beruht, können Sie diese jederzeit mit Wirkung für die Zukunft widerrufen. Sie können sich außerdem bei einer Datenschutzaufsichtsbehörde beschweren.",
+    "es": "Cuando se cumplan los requisitos legales correspondientes, tiene derecho de acceso, rectificación, supresión, limitación, portabilidad y oposición. Cuando el tratamiento se base en el consentimiento, puede retirarlo en cualquier momento sin afectar al tratamiento lícito anterior. También puede presentar una reclamación ante una autoridad de protección de datos."
+  },
+  "privacy.sections.6.links.0.label": {
+    "en": "Berlin Commissioner for Data Protection and Freedom of Information",
+    "de": "Berliner Beauftragte für Datenschutz und Informationsfreiheit",
+    "es": "Comisionada de Berlín para la Protección de Datos y la Libertad de Información"
+  },
+  "privacy.sections.7.heading": {
+    "en": "8. Required information and automated decisions",
+    "de": "8. Erforderliche Angaben und automatisierte Entscheidungen",
+    "es": "8. Datos obligatorios y decisiones automatizadas"
+  },
+  "privacy.sections.7.paragraphs.0": {
+    "en": "Information marked as required during registration or authentication is necessary to provide the requested account function. Without it, the account or function cannot be provided. We do not use automated decision-making or profiling within the meaning of Article 22 of the EU GDPR.",
+    "de": "Bei Registrierung oder Authentifizierung als erforderlich gekennzeichnete Angaben werden benötigt, um die gewünschte Kontofunktion bereitzustellen. Ohne diese Angaben kann das Konto oder die Funktion nicht angeboten werden. Eine automatisierte Entscheidungsfindung oder ein Profiling im Sinne von Art. 22 der EU-DSGVO findet nicht statt.",
+    "es": "Los datos marcados como obligatorios durante el registro o la autenticación son necesarios para proporcionar la función solicitada. Sin ellos no puede ofrecerse la cuenta o la función. No utilizamos decisiones automatizadas ni elaboración de perfiles en el sentido del artículo 22 del RGPD de la UE."
+  },
+  "privacy.sections.8.heading": {
+    "en": "9. External links",
+    "de": "9. Externe Links",
+    "es": "9. Enlaces externos"
+  },
+  "privacy.sections.8.paragraphs.0": {
+    "en": "Links to social networks and other external websites are ordinary links. Data is sent to those providers only when you follow a link. Their own privacy notices then apply.",
+    "de": "Links zu sozialen Netzwerken und anderen externen Websites sind einfache Verweise. Daten werden erst dann an diese Anbieter übermittelt, wenn Sie einen Link aufrufen. Anschließend gelten die Datenschutzhinweise des jeweiligen Anbieters.",
+    "es": "Los enlaces a redes sociales y otros sitios externos son enlaces ordinarios. Solo se envían datos a esos proveedores cuando usted abre uno de los enlaces. A partir de ese momento se aplican sus propias políticas de privacidad."
+  },
+  "privacy.sections.9.heading": {
+    "en": "10. Changes to this notice",
+    "de": "10. Änderungen dieser Erklärung",
+    "es": "10. Cambios en esta política"
+  },
+  "privacy.sections.9.paragraphs.0": {
+    "en": "We may update this notice when the service, providers or legal requirements change. The date at the top identifies the current version.",
+    "de": "Wir können diese Erklärung anpassen, wenn sich der Dienst, die eingesetzten Anbieter oder die rechtlichen Anforderungen ändern. Das Datum am Seitenanfang kennzeichnet die aktuelle Fassung.",
+    "es": "Podemos actualizar esta política cuando cambien el servicio, los proveedores o los requisitos legales. La fecha al principio de la página identifica la versión vigente."
+  },
+  "legal-notice.titleLegalNotice": {
+    "en": "Legal notice",
+    "de": "Impressum",
+    "es": "Aviso legal"
+  },
+  "legal-notice.legalNotice.sections.0.heading": {
+    "en": "Details on service provider",
+    "de": "Anbieterkennzeichnung",
+    "es": "Detalles del proveedor de servicios"
+  },
+  "legal-notice.legalNotice.sections.0.paragraphs.0.0": {
+    "en": "Fidel Conde",
+    "de": "Fidel Conde",
+    "es": "Fidel Conde"
+  },
+  "legal-notice.legalNotice.sections.0.paragraphs.0.1": {
+    "en": "Körnerstraße 26",
+    "de": "Körnerstraße 26",
+    "es": "Körnerstraße 26"
+  },
+  "legal-notice.legalNotice.sections.0.paragraphs.0.2": {
+    "en": "10785 Berlin",
+    "de": "10785 Berlin",
+    "es": "10785 Berlin"
+  },
+  "legal-notice.legalNotice.sections.0.paragraphs.1.0": {
+    "en": "Fon: 030 - 26 55 46 28",
+    "de": "Fon: 030 - 26 55 46 28",
+    "es": "Tel: 030 - 26 55 46 28"
+  },
+  "legal-notice.legalNotice.sections.0.paragraphs.1.1": {
+    "en": "Fax: 030 - 26 55 46 28",
+    "de": "Fax: 030 - 26 55 46 28",
+    "es": "Fax: 030 - 26 55 46 28"
+  },
+  "legal-notice.legalNotice.sections.0.links.0.label": {
+    "en": "Mail",
+    "de": "Mail",
+    "es": "Mail"
+  },
+  "legal-notice.legalNotice.sections.0.links.0.text": {
+    "en": "info@projectodo.de",
+    "de": "info@projectodo.de",
+    "es": "info@projectodo.de"
+  },
+  "legal-notice.legalNotice.sections.0.links.1.label": {
+    "en": "Internet",
+    "de": "Internet",
+    "es": "Internet"
+  },
+  "legal-notice.legalNotice.sections.0.links.1.text": {
+    "en": "www.projectodo.de",
+    "de": "www.projectodo.de",
+    "es": "www.projectodo.de"
+  },
+  "legal-notice.legalNotice.sections.1.heading": {
+    "en": "Legal Notice",
+    "de": "Rechtlicher Hinweis",
+    "es": "Aviso legal"
+  },
+  "legal-notice.legalNotice.sections.1.paragraphs.0.0": {
+    "en": "All rights reserved. The displayed information is the property of Fidel Conde. It represents the most recent information available at the time of publication. No liability or warranty is given for the currency, accuracy and completeness of the information and data provided. The information on the websites does not constitute any legal guarantees. Fidel Conde reserves the right to make changes or updates to the provided information or data when necessary. No legal claims can be derived from the topics described here. Offers are exclusively non-binding in all their parts.",
+    "de": "Alle Rechte vorbehalten. Die dargestellten Informationen sind Eigentum von Fidel Conde. Sie stellen die zum Zeitpunkt der Publikation jeweils neuesten Informationen dar. Eine Haftung oder Garantie für die Aktualität, Richtigkeit und Vollständigkeit der zur Verfügung gestellten Informationen und Daten ist ausgeschlossen. Die Informationen auf den Webseiten stellen in keinem Fall rechtliche Zusicherungen dar. Fidel Conde behält sich das Recht vor, bei Bedarf Änderungen oder Ergänzungen der bereitgestellten Informationen oder Daten durchzuführen. Aus den hier beschriebenen Themenbereichen können keine Rechtsansprüche abgeleitet werden. Angebote sind in allen Teilen ausschließlich unverbindlich.",
+    "es": "Totos los derechos reservados. La información presentada es propiedad de Fidel Conde. Representa la información más reciente disponible en el momento de la publicación. Se excluye cualquier responsabilidad o garantía por la actualidad, exactitud y completitud de la información y datos proporcionados. La información en las páginas web no constituye en ningún caso una garantía legal. Fidel Conde se reserva el derecho a realizar cambios o actualizaciones de la información o datos proporcionados cuando sea necesario. No se pueden derivar derechos de los temas descritos aquí. Las ofertas son exclusivamente no vinculantes en todas sus partes."
+  },
+  "legal-notice.legalNotice.sections.1.paragraphs.1.0": {
+    "en": "Fidel Conde shall not be held liable for direct or indirect damages that may arise from the use of the information or data available on this website. Rights and obligations between Fidel Conde and individual users of the website or third parties do not exist. The contents of www.projectodo.de are protected by copyright law. The contents may not be reproduced or published in whole or in part without prior written permission from the copyright holder.",
+    "de": "Fidel Conde haftet weder für direkte noch indirekte Schäden, die durch die Nutzung der Informationen oder Daten entstehen, die auf dieser Webseite zu finden sind. Rechte und Pflichten zwischen Fidel Conde und dem einzelnen Nutzer der Webseite oder Dritten bestehen nicht. Die Inhalte von www.projectodo.de sind urheberrechtlich geschützt. Die Inhalte dürfen weder ganz noch teilweise ohne vorherige schriftliche Genehmigung des Urhebers vervielfältigt und/oder veröffentlicht oder in einem Informationssystem gespeichert werden.",
+    "es": "Fidel Conde no acepta responsabilidad por los daños y perjuicios que puedan derivarse del uso de la información o datos disponibles en esta página web. Fidel Conde se reserva el derecho a realizar cambios o actualizaciones de la información o datos proporcionados cuando sea necesario. No se pueden derivar derechos de los temas descritos aquí. Las ofertas son exclusivamente no vinculantes en todas sus partes."
+  },
+  "legal-notice.legalNotice.sections.2.heading": {
+    "en": "Concept & Design",
+    "de": "Konzeption & Design",
+    "es": "Diseño y desarrollo web"
+  },
+  "legal-notice.legalNotice.sections.2.paragraphs.0.0": {
+    "en": "Jaime Hyland",
+    "de": "Jaime Hyland",
+    "es": "Jaime Hyland"
+  },
+  "legal-notice.legalNotice.sections.2.links.0.label": {
+    "en": "Jaime's online portfolio",
+    "de": "Jaimes Online-Portfolio",
+    "es": "Portafolio en línea de Jaime"
+  },
+  "legal-notice.legalNotice.sections.2.links.0.text": {
+    "en": "jaime-hyland.com",
+    "de": "jaime-hyland.com",
+    "es": "jaime-hyland.com"
+  },
+  "lesson-pages.titleLessonPages": {
+    "en": "Lesson pages",
+    "de": "Unterrichtsseiten",
+    "es": "Páginas de clases"
+  },
+  "band-pages.titleBandPages": {
+    "en": "Band pages",
+    "de": "Bandseiten",
+    "es": "Páginas de grupos"
+  },
+  "home.home.sections.lessons.linkLabel": {
+    "en": "Read more...",
+    "de": "Lesen Sie mehr dazu...",
+    "es": "Leer más..."
+  },
+  "home.home.sections.bands.linkLabel": {
+    "en": "Read more...",
+    "de": "Lesen Sie mehr dazu...",
+    "es": "Leer más..."
+  }
+}
