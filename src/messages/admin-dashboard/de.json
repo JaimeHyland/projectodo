@@ -237,5 +237,25 @@
     "failed": "Die Aktivierung ist fehlgeschlagen. Bitte erneut versuchen.",
     "blocked": "Bitte vor der Aktivierung die oben aufgeführten Probleme beheben.",
     "unavailable": "Die Aktivierung ist erst nach Prüfung der Aktivierbarkeit verfügbar."
+  },
+  "cms": {
+    "title": "Website-Inhalte",
+    "language": "Sprache",
+    "page": "Seite",
+    "field": "Abschnitt / Feld",
+    "value": "Text",
+    "missing": "Fehlende Übersetzung",
+    "blank": "Ein gespeicherter leerer Wert zeigt keinen Text an. Fehlende Einträge verwenden die vorhandene Übersetzung dieser Sprache.",
+    "save": "Speichern",
+    "saved": "Gespeichert.",
+    "error": "Die Anfrage konnte nicht abgeschlossen werden. Prüfen Sie Zugriff und Verbindung und versuchen Sie es erneut.",
+    "loading": "Wird geladen…",
+    "upload": "Bild hochladen und speichern",
+    "imageHelp": "JPEG, PNG oder WebP, bis 5 MB und 20 Megapixel. Uploads werden sofort für diese Sprache gespeichert.",
+    "retry": "Erneut versuchen",
+    "currentImage": "Aktuelles Bild",
+    "image_size": "Wählen Sie ein Bild bis 5 MB.",
+    "image_format": "Wählen Sie ein gültiges JPEG-, PNG- oder WebP-Bild bis 20 Megapixel.",
+    "image_storage": "Das Bild konnte nicht gespeichert werden. Das aktuelle Bild bleibt erhalten. Kontaktieren Sie die Administration."
   }
 }

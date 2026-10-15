@@ -237,5 +237,25 @@
     "failed": "Activation failed. Please try again.",
     "blocked": "Resolve the blocking issues listed above before activation.",
     "unavailable": "Activation is unavailable until readiness has been checked."
+  },
+  "cms": {
+    "title": "Website content",
+    "language": "Language",
+    "page": "Page",
+    "field": "Section / field",
+    "value": "Text",
+    "missing": "Missing translation",
+    "blank": "Saving an empty value displays no text. Missing records use the existing translation for this language.",
+    "save": "Save",
+    "saved": "Saved.",
+    "error": "Could not complete the request. Check your access and connection, then try again.",
+    "loading": "Loading…",
+    "upload": "Upload and save image",
+    "imageHelp": "JPEG, PNG or WebP, up to 5 MB and 20 megapixels. Uploads save immediately for this language.",
+    "retry": "Try again",
+    "currentImage": "Current image",
+    "image_size": "Choose an image up to 5 MB.",
+    "image_format": "Choose a valid JPEG, PNG or WebP image up to 20 megapixels.",
+    "image_storage": "The image could not be stored. The current image is unchanged. Contact the administrator."
   }
 }

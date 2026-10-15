@@ -1,3 +1,4 @@
+import { getPageContent } from "@/lib/page-content";
 import { LessonCourseLinks } from "@/components/LessonCourseLinks";
 import { CollapsibleSection } from "@/components/CollapsibleSection";
 import { ContentPanel, PageShell } from "@/components/PageShell";
@@ -12,7 +13,7 @@ interface LessonsPageProps {
 
 export default async function LessonsPage({ params }: LessonsPageProps) {
   const { locale } = await params;
-  const messages = locale === "de" ? de : locale === "es" ? es : en;
+  const messages = await getPageContent("lessons", locale, locale === "de" ? de : locale === "es" ? es : en);
 
   const lessons = messages.lessons;
 
@@ -23,12 +24,12 @@ export default async function LessonsPage({ params }: LessonsPageProps) {
           {lessons.headline}
         </h2>
 
-        {lessons.intro.map((p) => (
-          <p key={p}>{p}</p>
+        {lessons.intro.map((p, index) => (
+          <p key={index}>{p}</p>
         ))}
 
-        {lessons.benefits.map((p) => (
-          <p key={p}>{p}</p>
+        {lessons.benefits.map((p, index) => (
+          <p key={index}>{p}</p>
         ))}
       </ContentPanel>
 

@@ -69,3 +69,7 @@ node_modules/
 
 # Private local PostgreSQL cluster, credentials, and deployment exports
 /backend/.local-postgres/
+/backend/cms-media/
+
+# Agent instructions and related files
+/AGENTS.md

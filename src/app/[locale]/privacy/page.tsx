@@ -1,3 +1,4 @@
+import { getPageContent } from "@/lib/page-content";
 import Link from "next/link";
 
 import en from "@/messages/privacy/en.json";
@@ -27,7 +28,7 @@ interface PrivacyPageProps {
 
 export default async function PrivacyPage({ params }: PrivacyPageProps) {
   const { locale } = await params;
-  const messages = messagesByLocale[locale] ?? messagesByLocale.en;
+  const messages = await getPageContent("privacy", locale, messagesByLocale[locale] ?? messagesByLocale.en);
 
   return (
     <PageShell
@@ -40,18 +41,18 @@ export default async function PrivacyPage({ params }: PrivacyPageProps) {
         <p>{messages.introduction}</p>
       </ContentPanel>
 
-      {messages.sections.map((section) => (
-        <ContentPanel key={section.heading} className="space-y-3 leading-7 text-[#514f4b]">
+      {messages.sections.map((section, sectionIndex) => (
+        <ContentPanel key={sectionIndex} className="space-y-3 leading-7 text-[#514f4b]">
           <h2 className="text-xl font-bold text-[#292826]">{section.heading}</h2>
 
-          {section.paragraphs.map((paragraph) => (
-            <p key={paragraph}>{paragraph}</p>
+          {section.paragraphs.map((paragraph, index) => (
+            <p key={index}>{paragraph}</p>
           ))}
 
           {section.items && (
             <ul className="list-disc space-y-2 pl-6">
-              {section.items.map((item) => (
-                <li key={item}>{item}</li>
+              {section.items.map((item, index) => (
+                <li key={index}>{item}</li>
               ))}
             </ul>
           )}

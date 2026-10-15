@@ -237,5 +237,25 @@
     "failed": "La activación ha fallado. Inténtalo de nuevo.",
     "blocked": "Resuelve los problemas indicados arriba antes de activar el curso.",
     "unavailable": "Primero comprueba si el curso se puede activar."
+  },
+  "cms": {
+    "title": "Contenido del sitio",
+    "language": "Idioma",
+    "page": "Página",
+    "field": "Sección / campo",
+    "value": "Texto",
+    "missing": "Traducción pendiente",
+    "blank": "Guardar un valor vacío no muestra texto. Los registros ausentes utilizan la traducción existente de este idioma.",
+    "save": "Guardar",
+    "saved": "Guardado.",
+    "error": "No se pudo completar la solicitud. Comprueba el acceso y la conexión e inténtalo de nuevo.",
+    "loading": "Cargando…",
+    "upload": "Subir y guardar imagen",
+    "imageHelp": "JPEG, PNG o WebP, hasta 5 MB y 20 megapíxeles. Las imágenes se guardan inmediatamente para este idioma.",
+    "retry": "Reintentar",
+    "currentImage": "Imagen actual",
+    "image_size": "Elige una imagen de hasta 5 MB.",
+    "image_format": "Elige una imagen JPEG, PNG o WebP válida de hasta 20 megapíxeles.",
+    "image_storage": "No se pudo almacenar la imagen. La imagen actual no ha cambiado. Contacta con la administración."
   }
 }

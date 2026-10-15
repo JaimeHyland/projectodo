@@ -1,3 +1,4 @@
+import { getPageContent } from "@/lib/page-content";
 import en from "@/messages/contact/en.json";
 import de from "@/messages/contact/de.json";
 import es from "@/messages/contact/es.json";
@@ -11,7 +12,7 @@ import Link from "next/link";
 
 export default async function ContactPage({ params }: ContactPageProps) {
   const { locale } = await params;
-  const messages = locale === "de" ? de : locale === "es" ? es : en;
+  const messages = await getPageContent("contact", locale, locale === "de" ? de : locale === "es" ? es : en);
 
   const contact = messages.contact;
 
@@ -22,8 +23,8 @@ export default async function ContactPage({ params }: ContactPageProps) {
         <p className="font-semibold">{contact.name}</p>
         <p>{contact.person}</p>
 
-        {contact.address.map((line) => (
-          <p key={line}>{line}</p>
+        {contact.address.map((line, index) => (
+          <p key={index}>{line}</p>
         ))}
       </ContentPanel>
 

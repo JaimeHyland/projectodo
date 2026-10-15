@@ -16,6 +16,8 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from django.conf import settings
+from django.conf.urls.static import static
 from .views import home
 
 
@@ -25,4 +27,8 @@ urlpatterns = [
     path('api/auth/', include('user_accounts.urls')),
     path("api/courses/", include("courses.urls")),
     path("api/bands/", include("bands.urls")),
+    path("api/content/", include("core.urls")),
 ]
+
+if settings.DEBUG:
+    urlpatterns += static("/cms-media/", document_root=settings.CMS_MEDIA_ROOT)

@@ -1,3 +1,4 @@
+import { getPageContent } from "@/lib/page-content";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -34,10 +35,14 @@ const SECTION_STYLES: Record<
 export default async function HomePage({ params }: HomePageProps) {
   const { locale } = await params;
 
-  const messages =
+  const fallback =
     messagesByLocale[locale as keyof typeof messagesByLocale] ??
     messagesByLocale.en;
 
+
+  const messages = await getPageContent("home", locale, {
+    ...fallback, home: { ...fallback.home, intro: { ...fallback.home.intro, imageSrc: "/guitarist.jpg" } },
+  });
 
   const visibleSections = messages.home.sections.filter((section) =>
     HOME_SECTION_IDS.includes(
@@ -51,25 +56,28 @@ export default async function HomePage({ params }: HomePageProps) {
       <div className="mx-auto max-w-6xl space-y-8 sm:space-y-10">
         <section className="grid overflow-hidden rounded-2xl border border-black/10 bg-white shadow-[0_18px_50px_rgba(55,49,40,0.10)] lg:grid-cols-[minmax(0,1.05fr)_minmax(22rem,0.95fr)]">
           <div className="relative min-h-64 sm:min-h-80 lg:min-h-[29rem]">
-            <Image
-              src="/guitarist.jpg"
+            {messages.home.intro.imageSrc && <Image
+              src={messages.home.intro.imageSrc}
+              unoptimized={messages.home.intro.imageSrc !== "/guitarist.jpg"}
               fill
               priority
               alt=""
               sizes="(min-width: 1024px) 53vw, 100vw"
               className="scale-110 object-cover opacity-55 blur-2xl"
-            />
+            />}
             <div className="absolute inset-0 bg-[#17202b]/60" />
             <div className="absolute inset-0 flex items-center justify-center p-8 sm:p-12">
-              <Image
-                src="/guitarist.jpg"
+              {messages.home.intro.imageSrc && <Image
+                src={messages.home.intro.imageSrc}
+              unoptimized={messages.home.intro.imageSrc !== "/guitarist.jpg"}
                 alt={messages.home.intro.imageAlt}
                 width={245}
                 height={163}
                 priority
                 sizes="(min-width: 640px) 384px, 78vw"
-                className="h-auto w-[78%] max-w-sm rounded-lg border border-white/25 shadow-2xl"
-              />
+                style={{ aspectRatio: "245 / 163" }}
+                className="object-cover h-auto w-[78%] max-w-sm rounded-lg border border-white/25 shadow-2xl"
+              />}
             </div>
           </div>
 
@@ -80,8 +88,8 @@ export default async function HomePage({ params }: HomePageProps) {
             </h1>
 
             <div className="mt-6 space-y-4 text-base leading-7 text-[#595650] sm:text-lg">
-              {messages.home.intro.paragraphs.map((paragraph) => (
-                <p key={paragraph}>{paragraph}</p>
+              {messages.home.intro.paragraphs.map((paragraph, index) => (
+                <p key={index}>{paragraph}</p>
               ))}
             </div>
 

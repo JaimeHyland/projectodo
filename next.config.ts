@@ -15,6 +15,10 @@ const nextConfig: NextConfig = {
         destination:
           `${NEXT_PUBLIC_API_BASE_URL}/api/:path*/`,
       },
+      {
+        source: "/cms-media/:path*",
+        destination: `${NEXT_PUBLIC_API_BASE_URL}/cms-media/:path*`,
+      },
     ];
   },
 };

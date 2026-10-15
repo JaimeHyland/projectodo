@@ -1,3 +1,4 @@
+import { getPageContent } from "@/lib/page-content";
 import Link from "next/link";
 
 import en from "@/messages/bands/en.json";
@@ -22,21 +23,20 @@ type PublicBandPageSummary = {
 };
 
 async function getBandPages(): Promise<PublicBandPageSummary[]> {
-  const response = await serverApiFetch("/api/bands/pages/");;
-
-  if (!response.ok) {
+  try {
+    const response = await serverApiFetch("/api/bands/pages/", { signal: AbortSignal.timeout(3000) });
+    if (!response.ok) return [];
+    const data = await response.json();
+    return data.pages ?? [];
+  } catch {
     return [];
   }
-
-  const data = await response.json();
-
-  return data.pages ?? [];
 }
 
 export default async function BandsPage({ params }: BandsPageProps) {
   const { locale } = await params;
 
-  const messages = locale === "de" ? de : locale === "es" ? es : en;
+  const messages = await getPageContent("bands", locale, locale === "de" ? de : locale === "es" ? es : en);
 
   const pages = await getBandPages();
 
