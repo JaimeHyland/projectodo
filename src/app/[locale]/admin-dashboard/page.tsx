@@ -12,6 +12,7 @@ import type {
 import AdminUsersTable from "./AdminUsersTable";
 import AdminLocationsTable, { type AppLocale } from "./AdminLocationsTable";
 import AdminBandsTable from "./AdminBandsTable";
+import PageContentEditor from "./PageContentEditor";
 
 import en from "@/messages/admin-dashboard/en.json";
 import de from "@/messages/admin-dashboard/de.json";
@@ -140,6 +141,9 @@ export default async function AdminDashboardPage({ params }: AdminDashboardPageP
       }
     >
       <div className="space-y-3">
+      <CollapsibleSection title={messages.cms.title} defaultOpen={false} variant="admin">
+        <PageContentEditor locale={appLocale} messages={messages.cms} />
+      </CollapsibleSection>
       <CollapsibleSection title={messages.sectionUsers} defaultOpen={false} variant="admin">
         {adminUsers ? (
           <AdminUsersTable

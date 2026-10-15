@@ -33,15 +33,16 @@ export function Header() {
 
   const [menuOpen, setMenuOpen] = useState(false);
   const [authMenuOpen, setAuthMenuOpen] = useState(false);
-  const [showLoginModal, setShowLoginModal] = useState(false);
-  const [showLogoutModal, setShowLogoutModal] = useState(false);
-  const [showSignupModal, setShowSignupModal] = useState(false);
-  const [showResetPasswordModal, setShowResetPasswordModal] = useState(false);
   const [localeMenuOpen, setLocaleMenuOpen] = useState(false);
-  const [showChangePasswordModal, setShowChangePasswordModal] = useState(false);
   const [user, setUser] = useState<User | null>(null);
   const isWebmaster = user?.isSuperuser || user?.groups.includes('webmaster');
   const searchParams = useSearchParams();
+  const authParam = searchParams.get('auth');
+  const showLoginModal = authParam === 'login';
+  const showSignupModal = authParam === 'signup';
+  const showLogoutModal = authParam === 'logout';
+  const showChangePasswordModal = authParam === 'change_password';
+  const showResetPasswordModal = authParam === 'request_password_reset';
   const pathname = usePathname() ?? '/';
   const router = useRouter();
   const localeMenuRef = useRef<HTMLDivElement | null>(null);
@@ -92,13 +93,6 @@ export function Header() {
   };
 
   useEffect(() => {
-    const authParam = searchParams.get('auth');
-
-    setShowLoginModal(authParam === 'login');
-    setShowSignupModal(authParam === 'signup');
-    setShowLogoutModal(authParam === 'logout');
-    setShowChangePasswordModal(authParam === 'change_password');
-    setShowResetPasswordModal(authParam === 'request_password_reset');
 
     const fetchAuthStatus = async () => {
       try {
@@ -106,7 +100,7 @@ export function Header() {
           credentials: 'include',
         });
 
-        let data: any = null;
+        let data: unknown = null;
         try {
           data = await response.json();
         } catch {
@@ -119,11 +113,14 @@ export function Header() {
           return;
         }
 
-        if (data?.is_authenticated) {
+        if (typeof data === 'object' && data !== null
+          && 'is_authenticated' in data && data.is_authenticated === true
+          && 'username' in data && typeof data.username === 'string') {
           setUser({
             username: data.username,
-            isSuperuser: data.is_superuser,
-            groups: data.groups ?? [],
+            isSuperuser: 'is_superuser' in data && data.is_superuser === true,
+            groups: 'groups' in data && Array.isArray(data.groups)
+              ? data.groups.filter((group): group is string => typeof group === 'string') : [],
           });
         } else {
           setUser(null);
@@ -160,65 +157,50 @@ export function Header() {
 
   const openLogin = () => {
     setAuthMenuOpen(false);
-    setShowLoginModal(true);
     router.replace(`${pathname}?auth=login`);
   };
 
   const closeLogin = () => {
-    setShowLoginModal(false);
     router.replace(pathname);
   };
 
   const openSignup = () => {
     setAuthMenuOpen(false);
-    setShowSignupModal(true);
     router.replace(`${pathname}?auth=signup`);
   };
 
   const closeSignup = () => {
-    setShowSignupModal(false);
     router.replace(pathname);
   };
 
   const openLogout = () => {
     setAuthMenuOpen(false);
-    setShowLogoutModal(true);
     router.replace(`${pathname}?auth=logout`);
   };
 
   const closeLogout = () => {
-    setShowLogoutModal(false);
     router.replace(pathname);
   };
 
   const openChangePassword = () => {
     setAuthMenuOpen(false);
-    setShowChangePasswordModal(true);
     router.replace(`${pathname}?auth=change_password`);
   };
 
   const closeChangePassword = () => {
-    setShowChangePasswordModal(false);
     router.replace(pathname);
   };
 
     const openResetPassword = () => {
     setAuthMenuOpen(false);
-    setShowResetPasswordModal(true);
     router.replace(`${pathname}?auth=request_password_reset`);
   };
 
   const closeResetPassword = () => {
-    setShowResetPasswordModal(false);
     router.replace(pathname);
   };
 
   const switchToResetPassword = () => {
-    setShowLoginModal(false);
-    setShowChangePasswordModal(false);
-    setShowSignupModal(false);
-    setShowLogoutModal(false);
-    setShowResetPasswordModal(true);
     router.replace(`${pathname}?auth=request_password_reset`);
   };
 

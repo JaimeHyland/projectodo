@@ -8,7 +8,7 @@ interface SetPasswordProps {
   username?: string;
   locale: string;
   messages: SetPasswordMessages;
-  onSuccess?: (data?: any) => void;
+  onSuccess?: (data?: Record<string, unknown>) => void;
   onClose?: () => void;
 }
 
@@ -120,23 +120,27 @@ export default function SetPassword({
         }),
       });
 
-      let data: any = null;
+      let data: Record<string, unknown>;
       const contentType = response.headers.get("content-type") || "";
 
       if (contentType.includes("application/json")) {
-        data = await response.json();
+        const body: unknown = await response.json();
+        if (typeof body !== "object" || body === null || Array.isArray(body)) {
+          throw new Error("Invalid authentication response");
+        }
+        data = body as Record<string, unknown>;
       } else {
         const text = await response.text();
         throw new Error(text.slice(0, 200));
       }
 
       if (!response.ok) {
-        setError(data.error || messages.setPassword.messageSetPasswordFailed);
+        setError((typeof data.error === "string" && data.error) || messages.setPassword.messageSetPasswordFailed);
         setLoading(false);
         return;
       }
 
-      setCreatedUsername(data.username || username || null);
+      setCreatedUsername((typeof data.username === "string" && data.username) || username || null);
       setStep("success");
       onSuccess?.(data);
     } catch {

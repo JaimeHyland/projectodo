@@ -1,3 +1,4 @@
+import { getPageContent } from "@/lib/page-content";
 import en from "@/messages/lesson-pages/en.json";
 import de from "@/messages/lesson-pages/de.json";
 import es from "@/messages/lesson-pages/es.json";
@@ -8,7 +9,7 @@ interface LessonPagesPageProps {
 
 export default async function BandPagesPage({ params }: LessonPagesPageProps) {
   const { locale } =  await params;
-  const messages = locale === "de" ? de : locale === "es" ? es : en;
+  const messages = await getPageContent("lesson-pages", locale, locale === "de" ? de : locale === "es" ? es : en);
 
   return (
     <main className="p-8 text-center">

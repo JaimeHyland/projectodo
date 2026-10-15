@@ -59,3 +59,17 @@ node_modules/
 /blob-report/
 /playwright/.cache/
 /playwright/.auth/
+
+# Generated code-review archive
+/projectodo-code-review.zip
+
+# Local development SQLite database and journal files
+/backend/db.sqlite3
+/backend/db.sqlite3-*
+
+# Private local PostgreSQL cluster, credentials, and deployment exports
+/backend/.local-postgres/
+/backend/cms-media/
+
+# Agent instructions and related files
+/AGENTS.md

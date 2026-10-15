@@ -2,12 +2,10 @@
   "titleLessons": "Music Lessons",
   "lessons": {
     "headline": "L A  E S C U E L I T A",
-
     "intro": [
       "For anyone who wants to pick up the guitar or ukulele, Projectodo offers music lessons in their music school in Berlin for beginners and advanced players.",
-      "Lessons in small groups are just as possible as private one-on-one instruction, and can also be arranged at your home upon request."
+      "Lessons in small groups are just as possible as private one-to-one lessons, and can also be arranged at your home upon request."
     ],
-
     "benefits": [
       "Even in early childhood, musical education fosters concentration and cognitive performance through play – self-confidence is strengthened and a new world of creativity is opened.",
       "Especially hyperactive children benefit, as they learn to concentrate and reduce aggression through music.",
@@ -17,7 +15,6 @@
     "couldNotLoadLocations": "Could not load lesson venues.",
     "contact": {
       "label": "Contact:",
-
       "details": {
         "phone": "Phone: +49 030 - 26 55 46 28",
         "mobile": "Mobile: +49 151 68 10 11 63",
@@ -26,5 +23,34 @@
         "website": "www.projectodo.de"
       }
     }
+  },
+  "courses": {
+    "title": "Courses",
+    "all": "Courses at all venues",
+    "loading": "Loading courses…",
+    "locationsLoading": "Loading lesson venues…",
+    "error": "Courses could not be loaded. Please try again.",
+    "invalid": "This lesson venue could not be found.",
+    "emptyLocation": "There are currently no active courses for this location.",
+    "emptyAll": "There are currently no active courses available.",
+    "close": "Close",
+    "back": "Back to Music Lessons",
+    "retry": "Try again",
+    "minutes": "minutes",
+    "unassigned": "Venue to be confirmed"
+  },
+  "courseLessons": {
+    "title": "Meetings",
+    "back": "Back to courses",
+    "loading": "Loading meetings…",
+    "invalid": "This active course could not be found.",
+    "error": "Meetings could not be loaded. Please try again.",
+    "empty": "No meetings have been scheduled for this course.",
+    "cancelled": "Cancelled meeting",
+    "placeOpen": "Space to be confirmed",
+    "timezone": "Time zone",
+    "dateHeader": "Date",
+    "timeHeader": "Time / duration",
+    "venueHeader": "Venue"
   }
 }

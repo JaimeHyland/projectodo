@@ -1,12 +1,13 @@
 "use client";
 
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import type { ComponentProps } from "react";
 import AuthModal from "./AuthModal";
 import SetPassword from "./SetPassword";
 
 interface SetPasswordEntryProps {
   locale: string;
-  messages: any;
+  messages: ComponentProps<typeof SetPassword>["messages"];
 }
 
 export default function SetPasswordEntry({

@@ -59,6 +59,12 @@ FRONTEND_URL = config(
     cast=str
 )
 
+OPEN_HOLIDAYS_API_URL = config(
+    "OPEN_HOLIDAYS_API_URL",
+    default="https://openholidaysapi.org",
+    cast=str,
+)
+
 APPEND_SLASH = False
 
 # Application definition
@@ -259,3 +265,22 @@ AWS_DEFAULT_ACL = None
 AWS_ACL = None
 
 AWS_QUERYSTRING_AUTH = False
+
+# Uploaded CMS images never share collected-static paths or production local disk.
+CMS_MEDIA_ROOT = BASE_DIR / "cms-media"
+if DEBUG:
+    STORAGES["cms"] = {
+        "BACKEND": "django.core.files.storage.FileSystemStorage",
+        "OPTIONS": {"location": CMS_MEDIA_ROOT, "base_url": "/cms-media/"},
+    }
+else:
+    STORAGES["cms"] = {
+        "BACKEND": "storages.backends.s3boto3.S3Boto3Storage",
+        "OPTIONS": {
+            "location": "cms-images",
+            "default_acl": None,
+            "querystring_auth": False,
+            "file_overwrite": False,
+            "object_parameters": {"CacheControl": "public, max-age=31536000, immutable"},
+        },
+    }

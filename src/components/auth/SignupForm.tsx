@@ -112,23 +112,27 @@ export default function SignupForm({
         }),
       });
 
-      let data: any = null;
+      let data: Record<string, unknown>;
       const contentType = response.headers.get("content-type") || "";
 
       if (contentType.includes("application/json")) {
-        data = await response.json();
+        const body: unknown = await response.json();
+        if (typeof body !== "object" || body === null || Array.isArray(body)) {
+          throw new Error("Invalid authentication response");
+        }
+        data = body as Record<string, unknown>;
       } else {
         const text = await response.text();
         throw new Error(text.slice(0, 200));
       }
 
       if (!response.ok) {
-        setError(data.error || messages.signup.messageSignupFailed);
+        setError((typeof data.error === "string" && data.error) || messages.signup.messageSignupFailed);
         setLoading(false);
         return;
       }
 
-      setSuccessMessage(data.message || messages.signup.messageSignupSuccess);
+      setSuccessMessage((typeof data.message === "string" && data.message) || messages.signup.messageSignupSuccess);
       onSuccess?.();
     } catch {
       setError(messages.signup.messageNetworkError);

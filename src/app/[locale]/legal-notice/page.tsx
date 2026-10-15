@@ -1,3 +1,4 @@
+import { getPageContent } from "@/lib/page-content";
 import Link from "next/link";
 
 import en from "@/messages/legal-notice/en.json";
@@ -39,18 +40,18 @@ export default async function LegalNoticePage({
   params,
 }: LegalNoticePageProps) {
   const { locale } = await params;
-  const messages = messagesByLocale[locale] ?? messagesByLocale.en;
+  const messages = await getPageContent("legal-notice", locale, messagesByLocale[locale] ?? messagesByLocale.en);
 
   return (
     <PageShell title={messages.titleLegalNotice} accent="gray" maxWidth="4xl">
-      {messages.legalNotice.sections.map((section: LegalNoticeSection) => (
-        <ContentPanel key={section.heading} className="space-y-4 leading-7 text-[#514f4b]">
+      {messages.legalNotice.sections.map((section: LegalNoticeSection, sectionIndex: number) => (
+        <ContentPanel key={sectionIndex} className="space-y-4 leading-7 text-[#514f4b]">
           <h2 className="text-xl font-bold text-[#292826]">{section.heading}</h2>
 
           {section.paragraphs.map((paragraph: string[], index: number) => (
             <p key={index}>
-              {paragraph.map((line: string) => (
-                <span key={line}>
+              {paragraph.map((line: string, lineIndex: number) => (
+                <span key={lineIndex}>
                   {line}
                   <br />
                 </span>

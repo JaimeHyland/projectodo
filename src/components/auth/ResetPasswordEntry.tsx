@@ -1,12 +1,13 @@
 "use client";
 
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import type { ComponentProps } from "react";
 import AuthModal from "./AuthModal";
 import ResetPasswordConfirm from "./ResetPasswordConfirm";
 
 interface ResetPasswordEntryProps {
   locale: string;
-  messages: any;
+  messages: ComponentProps<typeof ResetPasswordConfirm>["messages"];
 }
 
 export default function ResetPasswordEntry({
