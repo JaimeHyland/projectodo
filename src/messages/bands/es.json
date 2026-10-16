@@ -1,4 +1,18 @@
 {
-    "titleBands": "Grupos",
-    "noPublishedBands": "Todavía no se ha publicado ninguna página de grupo."
+  "titleBands": "Grupos",
+  "noPublishedBands": "Todavía no se ha publicado ninguna página de grupo.",
+  "details": {
+    "members": "Integrantes",
+    "contact": "Contacto",
+    "email": "Correo electrónico",
+    "phone": "Teléfono",
+    "website": "Sitio web",
+    "photoAlt": "Fotografía del grupo: {band}",
+    "upcomingGigs": "Próximos conciertos",
+    "media": "Fragmentos multimedia",
+    "audioExcerpt": "Fragmento de audio",
+    "videoExcerpt": "Fragmento de vídeo",
+    "captionTrack": "Subtítulos",
+    "mediaUnavailable": "Este fragmento no está disponible en este momento."
+  }
 }

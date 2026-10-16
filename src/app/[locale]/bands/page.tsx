@@ -1,5 +1,6 @@
 import { getPageContent } from "@/lib/page-content";
 import Link from "next/link";
+import { localizedText } from "@/lib/localized-content";
 
 import en from "@/messages/bands/en.json";
 import de from "@/messages/bands/de.json";
@@ -18,6 +19,7 @@ type PublicBandPageSummary = {
     id: number;
     name: string;
     description: string;
+    description_translations?: Record<string, string>;
     genres: string[];
   };
 };
@@ -69,9 +71,9 @@ export default async function BandsPage({ params }: BandsPageProps) {
                 </p>
               )}
 
-              {page.band.description && (
+              {localizedText(page.band.description_translations, locale, page.band.description) && (
                 <p className="mt-4 leading-7 text-[#514f4b]">
-                  {page.band.description}
+                  {localizedText(page.band.description_translations, locale, page.band.description)}
                 </p>
               )}
             </li>

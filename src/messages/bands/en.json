@@ -1,4 +1,18 @@
 {
-    "titleBands": "Bands",
-    "noPublishedBands": "No band pages have been published yet."
+  "titleBands": "Bands",
+  "noPublishedBands": "No band pages have been published yet.",
+  "details": {
+    "members": "Members",
+    "contact": "Contact",
+    "email": "Email",
+    "phone": "Phone",
+    "website": "Website",
+    "photoAlt": "Band photograph: {band}",
+    "upcomingGigs": "Upcoming gigs",
+    "media": "Media excerpts",
+    "audioExcerpt": "Audio excerpt",
+    "videoExcerpt": "Video excerpt",
+    "captionTrack": "Captions",
+    "mediaUnavailable": "This excerpt is currently unavailable."
+  }
 }

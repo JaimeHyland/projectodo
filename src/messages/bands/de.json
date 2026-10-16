@@ -1,4 +1,18 @@
 {
-    "titleBands": "Bands",
-    "noPublishedBands": "Es wurden noch keine Bandseiten veröffentlicht."
+  "titleBands": "Bands",
+  "noPublishedBands": "Es wurden noch keine Bandseiten veröffentlicht.",
+  "details": {
+    "members": "Mitglieder",
+    "contact": "Kontakt",
+    "email": "E-Mail",
+    "phone": "Telefon",
+    "website": "Website",
+    "photoAlt": "Bandfoto: {band}",
+    "upcomingGigs": "Kommende Auftritte",
+    "media": "Medienausschnitte",
+    "audioExcerpt": "Hörprobe",
+    "videoExcerpt": "Videoausschnitt",
+    "captionTrack": "Untertitel",
+    "mediaUnavailable": "Dieser Ausschnitt ist derzeit nicht verfügbar."
+  }
 }

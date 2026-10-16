@@ -1,21 +1,17 @@
-import io
 import json
 import logging
-import uuid
-import warnings
 from functools import wraps
 
-from django.core.files.base import ContentFile
 from django.core.files.storage import storages
 from django.db import transaction
 from django.http import JsonResponse
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.views.decorators.http import require_GET, require_POST, require_http_methods
-from PIL import Image, ImageOps, UnidentifiedImageError
 
 from user_accounts.permissions import is_webmaster
 from .cms import FIELDS, LOCALES, PAGES
 from .models import PageContent
+from .images import ImageUploadError, prepare_image
 
 logger = logging.getLogger(__name__)
 
@@ -89,30 +85,15 @@ def upload_image(request, identifier, locale):
     field = FIELDS.get(identifier)
     if not field or field["kind"] != "image" or locale not in LOCALES:
         return uncached({"error": "Not found"}, 404)
-    upload = request.FILES.get("image")
-    if not upload or upload.size > 5 * 1024 * 1024:
-        return uncached({"error": "image_size"}, 400)
     try:
-        with warnings.catch_warnings():
-            warnings.simplefilter("error", Image.DecompressionBombWarning)
-            with Image.open(upload) as image:
-                if (image.format not in ("JPEG", "PNG", "WEBP")
-                        or image.width * image.height > 20000000):
-                    raise ValueError("Unsupported image")
-                image.load()
-                output = io.BytesIO()
-                # Apply camera orientation, discard metadata and animation, and re-encode.
-                ImageOps.exif_transpose(image).convert("RGB").save(
-                    output, format="JPEG", quality=90
-                )
-    except (ValueError, OSError, UnidentifiedImageError, Image.DecompressionBombError,
-            Image.DecompressionBombWarning):
-        return uncached({"error": "image_format"}, 400)
+        content = prepare_image(request.FILES.get("image"))
+    except ImageUploadError as error:
+        return uncached({"error": str(error)}, 400)
     name = None
     storage = None
     try:
         storage = storages["cms"]
-        name = storage.save(f"{uuid.uuid4().hex}.jpg", ContentFile(output.getvalue()))
+        name = storage.save(content.name, content)
         value = storage.url(name)
         with transaction.atomic():
             PageContent.objects.update_or_create(
