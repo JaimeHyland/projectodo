@@ -1,6 +1,17 @@
 # bands/admin.py
 from django.contrib import admin
-from .models import Band, BandPage, BandGig, BandGalleryImage, BandMember
+from .models import Band, BandPage, BandGig, BandGalleryImage, BandMember, BandTicketPrice
+from .forms import BandPageForm
+
+
+class TicketPriceInline(admin.TabularInline):
+    model = BandTicketPrice
+    extra = 0
+    min_num = 1
+
+    def get_formset(self, request, obj=None, **kwargs):
+        kwargs["validate_min"] = True
+        return super().get_formset(request, obj, **kwargs)
 
 @admin.register(Band)
 class BandAdmin(admin.ModelAdmin):
@@ -11,6 +22,7 @@ class BandAdmin(admin.ModelAdmin):
 
 @admin.register(BandPage)
 class BandPageAdmin(admin.ModelAdmin):
+    form = BandPageForm
     list_display = ("band", "slug", "published", "created_at", "updated_at",)
     search_fields = ("band__name", "slug", "description_html",)
     list_filter = ("published", "created_at", "updated_at",)
@@ -46,11 +58,13 @@ class BandMemberAdmin(admin.ModelAdmin):
 
 @admin.register(BandGig)
 class BandGigAdmin(admin.ModelAdmin):
+    inlines = (TicketPriceInline,)
     list_display = (
         "band",
         "venue",
         "city",
         "date",
+        "start_time",
         "created_at",
         "updated_at",
     )

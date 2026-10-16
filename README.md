@@ -178,3 +178,121 @@ The editor screenshot was visually reviewed. Application-database migrations and
 initial import were not run; tests alone migrated/seeded a newly created test
 database, which the Django runner removed. Deployment and production S3 writes
 remain unverified.
+
+## Enhanced band pages
+
+Band pages support a validated hex background, photograph with localized captions
+and alternative text, upcoming gigs with decimal euro ticket prices and optional
+native audio/video players. Band listing descriptions, page descriptions, gig
+venues and ticket-price descriptions now have independent `en`/`de`/`es` values.
+Existing shared text remains unchanged as a fallback until a translation is
+provided. Blank description translations intentionally display no description;
+provided venue/ticket-label translations must be non-empty. Text remains escaped,
+not interpreted as HTML.
+
+Use the existing dashboard's band webpage builder. Its Content language selector
+edits the band listing description, page description and photo text separately for
+each language. The existing band-table description field also edits the dashboard's
+current language. Save a new page before uploading its photograph. Uploads save
+immediately; other page fields use Save.
+
+The same page now includes a customer-facing **Gigs and ticket prices** editor.
+Customers can list, add, edit and delete gigs, switch the gig language, enter venue
+and ticket descriptions in each language, add/remove price rows and save. Each gig
+requires a date, Berlin-local start time, venue, existing city field and at least
+one ticket price. Price rows accept non-negative euro amounts with at most two
+decimal places. Removing a price takes effect when the gig is saved; deleting a
+gig requires confirmation. Validation failures leave the draft visible. Each save
+validates the whole gig/price list and commits it atomically. Price IDs are checked
+against their parent gig; gigs cannot be moved to another band through these APIs.
+
+There is no Django-admin link or staff-account requirement in this customer
+workflow. Access uses the existing site dashboard role (superuser or webmaster).
+The backend retains its existing band-page permission policy, including the band
+leader, together with session authentication and CSRF. Optional Django staff tools
+remain available separately. No new authentication mechanism is introduced.
+
+Gig schedules use `Europe/Berlin` without changing Django's existing global UTC
+configuration. Local times missing or ambiguous at daylight-saving transitions
+are rejected; select an unambiguous scheduled time. Public responses exclude gigs
+that have already started, lack a start time, or have no ticket prices, and order
+the remainder chronologically. The browser also filters expired gigs and removes
+them at their start time without a reload. Dates/times and euros use the selected
+locale. An empty upcoming list has no section or placeholder message.
+
+### Migration and existing files
+
+`bands/migrations/0002_band_page_extras.py` adds the nullable legacy start time,
+localized image fields, media URLs and `BandTicketPrice`, validates the existing
+colour fields, and switches main photographs to the existing CMS storage alias.
+It preserves band/gig records and does not invent legacy times or prices.
+Review existing gigs and enter their times/prices before they can appear publicly.
+
+`bands/migrations/0003_multilingual_band_gigs.py` adds the four translation maps
+for band/page descriptions, venues and ticket labels. It does not overwrite or
+remove legacy text, invent translations, or alter existing gigs/prices. The
+migration command below applies both pending band migrations when necessary.
+
+After verifying the intended database, deploy the backend migration before the
+frontend update:
+
+```powershell
+backend/.venv/Scripts/python.exe backend/manage.py migrate bands
+```
+
+No application/production migration or deployment was performed during this work.
+Existing release scripts may run migrations when you later deploy.
+
+Photographs reuse the shared CMS image validator: decoded JPEG/PNG/WebP, at most
+5 MiB and 20 megapixels, orientation corrected, metadata removed, JPEG re-encoded
+and randomly named. Failed replacements retain the previous reference; existing
+files are not deleted. Local storage is `backend/cms-media/bands/main/`; production
+uses the existing S3 bucket's `cms-images/bands/main/` prefix. Verify the existing
+CMS backend read/write/delete IAM permissions; production uploads were not tested.
+No new environment variables or dependencies are required.
+
+If existing `BandPage.main_image` files were stored using Django's former default
+storage, copy them into the CMS storage before deployment, retaining their relative
+`bands/main/...` names. The migration preserves database paths but does not copy or
+delete files. Keep originals until the migrated photographs have been verified.
+Gallery-image storage is unchanged.
+
+### Media hosting
+
+Large audio/video uploads are deliberately not introduced. Supply public, direct
+HTTPS file URLs: audio `.mp3`, `.m4a`, `.ogg`, `.wav`; video `.mp4`, `.webm`; optional
+video captions `.vtt`. Embed pages, scripts, credentials in URLs and other formats
+are rejected. The host must return suitable media MIME types and support normal
+browser playback/seeking. Spoken video should include a WebVTT caption track;
+cross-origin video and caption hosts must allow anonymous CORS when using captions.
+One optional caption track belongs to the configured video; image captions remain
+independently multilingual. Players have native controls, no autoplay and
+`preload="none"`; unavailable media displays a localized message. Media files stay
+on their host, outside the relational database.
+
+### Band-page validation
+
+```powershell
+backend/.venv/Scripts/python.exe backend/manage.py check
+backend/.venv/Scripts/python.exe backend/manage.py makemigrations bands --check --dry-run
+backend/.venv/Scripts/python.exe backend/manage.py test bands
+node node_modules/typescript/bin/tsc --noEmit --incremental false
+node node_modules/@playwright/test/cli.js test --config playwright.band-pages.config.ts
+```
+
+Band tests and the shared CMS tests were run on a newly created
+`test_projectodo_local` database after confirming the active application target was
+local PostgreSQL `projectodo_local` at `127.0.0.1:5433` and that the test database
+did not already exist. The runner removed its test database afterwards.
+All 22 band tests passed, including the new translation and customer gig API
+coverage; the updated Django-admin form preservation check also passed separately.
+All ten browser scenarios passed, covering localized descriptions/venues/prices,
+legacy and blank text, customer gig/price creation, editing, removal, confirmed
+deletion and failed-save feedback. The mobile gig editor screenshot was reviewed.
+TypeScript, changed-file ESLint, targeted Flake8, Django checks, migration
+consistency and whitespace checks passed.
+
+A previously identified unrelated CMS rollback test still references the obsolete
+`messages_dir` argument of the seed-based importer; this work did not change it.
+Browser tests use an isolated mock backend on port 8126 and Next on port 3103.
+No application/production migration, deployment, staging or commit was performed.

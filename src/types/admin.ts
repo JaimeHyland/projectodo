@@ -25,6 +25,7 @@ export type AdminBand = {
   id: number;
   name: string;
   description: string;
+    description_translations?: Record<string, string>;
   can_manage: boolean;
   can_delete: boolean;
   contact_email: string;

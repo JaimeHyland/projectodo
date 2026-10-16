@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link"
 import { apiUrl } from "@/lib/api";
+import { localizedText } from "@/lib/localized-content";
 import type { AdminUser, AdminBand } from "@/types/admin";
 
 function getCookie(name: string): string | undefined {
@@ -80,7 +81,7 @@ export default function AdminBandsTable({
   function openEdit(band: AdminBand) {
     setEditingBand(band);
     setName(band.name);
-    setDescription(band.description);
+    setDescription(localizedText(band.description_translations, locale, band.description));
     setContactEmail(band.contact_email);
     setContactTel(band.contact_tel);
     setWebsiteUrl(band.website_url);
@@ -102,6 +103,7 @@ export default function AdminBandsTable({
       body: JSON.stringify({
         name,
         description,
+        description_translations: { [locale]: description },
         band_leader_id: bandLeaderId ? Number(bandLeaderId) : null,
         contact_email: contactEmail,
         contact_tel: contactTel,
@@ -173,7 +175,8 @@ async function confirmEdit() {
       action: "edit",
       name,
       band_leader_id: bandLeaderId ? Number(bandLeaderId) : null,
-      description,
+      description: editingBand.description,
+      description_translations: { [locale]: description },
       contact_email: contactEmail,
       contact_tel: contactTel,
       website_url: websiteUrl,
